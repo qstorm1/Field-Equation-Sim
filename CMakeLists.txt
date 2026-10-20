@@ -3,4 +3,4 @@ project(Gravitational_Lensing_Simulation)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Gravitational_Lensing_Simulation main.cpp)
+add_executable(Gravitational_Lensing_Simulation src/main.cpp)
