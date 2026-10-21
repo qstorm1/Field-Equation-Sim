@@ -23,4 +23,4 @@ add_executable(Gravitational_Lensing_Simulation
 target_link_libraries(Gravitational_Lensing_Simulation PUBLIC glfw)
 
 set(CMAKE_CXX_STANDARD 20)
-
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
