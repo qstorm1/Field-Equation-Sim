@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Logging/logger.h"
+#include "logging/logger.h"
 
 //std library
 #include <iostream>

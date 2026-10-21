@@ -24,9 +24,9 @@ add_executable(Gravitational_Lensing_Simulation
         src/testFile.cpp
         src/testFile.h
         src/config.h
-        src/Object/object.cpp
-        src/Object/object.h
-        src/Logging/logger.h
+        src/objects/object.cpp
+        src/objects/object.h
+        src/logging/logger.h
 )
 target_link_libraries(Gravitational_Lensing_Simulation PUBLIC glfw)
 target_link_libraries(Gravitational_Lensing_Simulation PUBLIC glad)
