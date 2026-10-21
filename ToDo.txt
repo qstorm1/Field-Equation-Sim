@@ -1,0 +1,16 @@
+TO-DO LIST OF CERTAIN STEPS TO BE COMPLETED AND DEADLINE
+
+General:
+
+EVERYONE MUST DOCUMENT THEIR CODE
+EVERYONE MUST ADD TO THE CHANGELOG OF WHAT THEY DID EACH DAY
+
+Arya:
+
+Create render where user can place and remove circular balls in 3D space. MAKE SURE THEY CANNOT OVERLAP
+DUE NOV 30TH
+
+Dima:
+
+Create object class with a general set of parameters and functions of interstellar bodies
+DUE NOV 14TH
