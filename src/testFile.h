@@ -6,12 +6,13 @@
 #define GRAVITATIONAL_LENSING_SIMULATION_TESTFILE_H
 
 
-#include <iostream>
+#include "config.h"
 
 struct testStruct {
 
     void call() {
-        std::cout << "test file ran";
+        std::string filepath = "../coutLog.txt";
+        logConsole(filepath, "test file ran");
     }
 
 };

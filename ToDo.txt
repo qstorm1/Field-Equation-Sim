@@ -4,6 +4,7 @@ General:
 
 EVERYONE MUST DOCUMENT THEIR CODE
 EVERYONE MUST ADD TO THE CHANGELOG OF WHAT THEY DID EACH DAY
+ALL TIME MUST BE IN PST
 
 Arya:
 
@@ -14,3 +15,5 @@ Dima:
 
 Create object class with a general set of parameters and functions of interstellar bodies
 DUE NOV 14TH
+Test Exception Handling Logging
+DUE OCT 24
