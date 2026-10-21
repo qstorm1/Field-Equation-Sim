@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Field-Equation-Sim.iml" filepath="$PROJECT_DIR$/.idea/Field-Equation-Sim.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Gravitational Lensing Simulation.iml" filepath="$PROJECT_DIR$/.idea/Gravitational Lensing Simulation.iml" />
     </modules>
   </component>

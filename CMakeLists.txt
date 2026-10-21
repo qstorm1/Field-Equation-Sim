@@ -11,8 +11,15 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(glfw)
 
-add_executable(Gravitational_Lensing_Simulation src/main.cpp)
-
+add_executable(Gravitational_Lensing_Simulation
+        "src/main.cpp"
+        src/testFile.cpp
+        src/testFile.h
+        src/config.h
+        src/Object/object.cpp
+        src/Object/object.h
+        src/Logging/logger.h
+)
 target_link_libraries(Gravitational_Lensing_Simulation PUBLIC glfw)
 
 set(CMAKE_CXX_STANDARD 20)
