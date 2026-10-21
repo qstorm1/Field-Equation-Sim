@@ -1,4 +1,9 @@
 #include <iostream>
 
-int main()
-{}
+
+
+int main(){
+
+    std::cout << '6' << '7' << std::endl;
+
+}
