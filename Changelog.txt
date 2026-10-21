@@ -1,2 +1,3 @@
 10/20/2026 6:50PM   Dima: added changelog and To-Do list with config.h and some test files
-10/20/2026 9:09PM   Dima: added a error log and console log files
+10/20/2026 9:09PM   Dima: added an error log and console log files
+10/21/2026 2:18PM   Dima: fucked with cmake to get it working for me and tested to check if error log works

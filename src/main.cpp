@@ -5,11 +5,6 @@ int main() {
 
 
 
-
-
-
-
-
     //create files to write to
     std::fstream errorLog;
 
@@ -46,13 +41,17 @@ int main() {
     }
 
     glfwTerminate();
-    return 0;
+
 
 
     //try catch block to log everything that errors
     try {
-        testStruct t;
-        t.call();
+        //test console logger
+        std::string filepath = "../coutLog.txt";
+        logConsole(filepath, "test");
+
+        object o = {0, 0, 0, 2, -4, "test object"};
+
     }catch(const std::invalid_argument& e) {
         logError(errorLog, e);
     }catch(std::exception &e) {
@@ -62,7 +61,7 @@ int main() {
     }
 
     errorLog.close();
-
+    return 0;
 
 }
 

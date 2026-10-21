@@ -1,0 +1,4 @@
+Wed Oct 21 14:17:46 2026
+ mass must be positive
+Wed Oct 21 14:18:18 2026
+ radius must be positive
