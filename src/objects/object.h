@@ -31,6 +31,7 @@ public:
                                   : std::move(name);
     }
 
+    //returns object ID
     unsigned int getID() {
         return id;
     }
