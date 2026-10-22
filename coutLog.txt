@@ -4,3 +4,13 @@ Wed Oct 21 17:46:15 2026
  hi
 Wed Oct 21 17:46:15 2026
  hello
+Wed Oct 21 17:52:20 2026
+ 1test1
+Wed Oct 21 17:52:20 2026
+ 1test1
+Wed Oct 21 17:53:25 2026
+ 1test1
+Wed Oct 21 17:53:25 2026
+ 1test1
+Wed Oct 21 17:53:25 2026
+ Destroyed object: 1

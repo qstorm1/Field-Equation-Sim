@@ -33,8 +33,10 @@ public:
 
     //destructor
     ~object() {
-        std::string filePath = "../../coutLog.txt";
-        logConsole(filePath, "Destroyed object " + std::to_string(id));
+        std::string filePath = "../coutLog.txt";
+        std::stringstream ss;
+        ss << "Destroyed object: " << id;
+        logConsole(filePath, ss);
     }
 
 

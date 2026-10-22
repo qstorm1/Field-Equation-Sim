@@ -2,6 +2,7 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 //logs unknown error
 inline void logError(std::fstream &file) {
@@ -20,14 +21,14 @@ void logError(std::fstream &file, auto &e) {
 }
 
 //puts console output also in file. USE THIS INSTEAD SO WE HAVE OUTPUT LOG OF CONSOLE IN CASE PROGRAM ENDS ABRUPTLY
-inline void logConsole(std::string &filePath, std::string stream) {
+inline void logConsole(std::string &filePath, std::stringstream &stream) {
     std::fstream file;
     file.open(filePath, std::ios::app);
     time_t now = time(nullptr);
-    stream = (std::string) ctime(&now) + " " + stream;
-    std::cout << stream;
+    std::string output = (std::string) ctime(&now) + " " + stream.str();
+    std::cout << output;
     if (file.is_open()) {
-        file << stream << std::endl;
+        file << output << std::endl;
     }
     file.close();
 }

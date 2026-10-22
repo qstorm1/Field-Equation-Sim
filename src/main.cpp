@@ -48,8 +48,10 @@ int main() {
     try {
         //test console logger
         std::string filepath = "../coutLog.txt";
-        logConsole(filepath, "hi");
-        logConsole(filepath, "hello");
+        std::stringstream ss;
+        ss << 1 << "test1";
+        logConsole(filepath, ss);
+        logConsole(filepath, ss);
 
         object o = {0, 0, 0, 2, 4, "test object"};
 
