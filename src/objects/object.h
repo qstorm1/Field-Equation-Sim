@@ -4,12 +4,12 @@
 class object {
 
     //track object ID in case we need that or something
-    static inline int IDs = 0;
+    static inline unsigned int IDs = 0;
 
 private:
     //declare attributes
     double x, y, z, mass, radius;   //METERS, METERS, METERS, KILOGRAMS, METERS FOR NOW
-    int id;
+    unsigned int id;
     std::string name;
 
 public:
@@ -29,6 +29,10 @@ public:
         //gives object of name "unnamed" if name parameter is left blank
         this->name = name.empty() ? "unnamed" + std::to_string(id)
                                   : std::move(name);
+    }
+
+    unsigned int getID() {
+        return id;
     }
 
     //destructor
