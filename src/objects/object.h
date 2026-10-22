@@ -19,7 +19,6 @@ class object {
     //declare attributes
     double x, y, z, mass, radius;   //METERS, METERS, METERS, KILOGRAMS, METERS FOR NOW
     unsigned int id;
-    std::string name;
 
     //checks if 2 objects overlap
     bool isOverlapping(object &other) {
@@ -30,6 +29,7 @@ class object {
 
 public:
 
+    std::string name;
     //constructor with default params using initialiser list
     object(double x = 0, double y = 0, double z = 0,
            double mass = 1, double radius = 1, std::string name = "")

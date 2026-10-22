@@ -60,12 +60,10 @@ int main() {
         ss << std::addressof(object::getObjectByID(2)) << std::endl;
         logConsole(filepath, ss);
         ss.str("");
-        ss.clear();
-        ss << std::addressof(object::getObjectByID(21)) << std::endl;
-        logConsole(filepath, ss);
-
         //OH SWEET JESUS IT WORKS I SPEND LIKE 1.5HRS ON THIS SHIT
         //(I'm Jewish)
+
+
 
 
     }catch (const char* errorMessage){
