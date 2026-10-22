@@ -1,0 +1,7 @@
+List of error codes and what they mean:
+
+1: Invalid Argument Error
+2: Index Out Of Bounds Error
+50: Window fails to launch
+-1: Unknown Error
+-2: Unknown Exception

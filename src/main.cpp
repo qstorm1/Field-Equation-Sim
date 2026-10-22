@@ -67,18 +67,18 @@ int main() {
 
 
 
-
-    }catch (const char* errorMessage){
-        std::string error = errorMessage;
-        logErrorString(errorLog, error);
     }catch (const std::out_of_range &e) {
         logError(errorLog, e);
+        return 2;
     }catch(const std::invalid_argument& e) {
         logError(errorLog, e);
+        return 1;
     }catch(std::exception &e) {
         logError(errorLog, e);
+        return -2;
     }catch(...){
         logError(errorLog);
+        return -1;
     }
 
     errorLog.close();
