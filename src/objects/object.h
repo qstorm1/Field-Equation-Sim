@@ -1,16 +1,32 @@
 #pragma once
-#include "../config.h"
+#include <vector>
+#include <sstream>
+#include <cmath>
+#include <string>
+#include <stdexcept>
+#include <utility>
+#include <map>
 
 class object {
 
     //track object ID in case we need that or something
-    static inline unsigned int IDs = 0;
+    static inline unsigned int totalIDs = 0;
+    //tracks current ID's of each object
 
-private:
+    //creates a map of objects that can be accessed from ID
+    static inline std::map<unsigned int, object*> objects;
+
     //declare attributes
     double x, y, z, mass, radius;   //METERS, METERS, METERS, KILOGRAMS, METERS FOR NOW
     unsigned int id;
     std::string name;
+
+    //checks if 2 objects overlap
+    bool isOverlapping(object &other) {
+        double distanceCenter = calculateDistance(other);
+        double radiusSum = this->radius + other.radius;
+        return radiusSum > distanceCenter;
+    }
 
 public:
 
@@ -20,15 +36,29 @@ public:
         : x(x), y(y), z(z), mass(mass), radius(radius)
     {
         //checks if user has met the preconditions
-        if (mass <= 0)
+        if (mass <= 0) {
             throw std::invalid_argument("mass must be positive");
-        if (radius <= 0)
+        }
+        if (radius <= 0) {
             throw std::invalid_argument("radius must be positive");
+        }
 
-        id = ++IDs;   // gives object custom ID
+        //throws an exception if 2 objects overlap during creation
+        auto it = objects.begin();
+        while (it != objects.end()) {
+            if (isOverlapping(*(it->second) ) ) {
+                throw std::invalid_argument("objects cannot overlap");
+            }
+            it++;
+        }
+
+        id = ++totalIDs;   // gives object custom ID
         //gives object of name "unnamed" if name parameter is left blank
         this->name = name.empty() ? "unnamed" + std::to_string(id)
                                   : std::move(name);
+
+        //adds object to list of objects
+        objects[id] = this;
     }
 
     //returns object ID
@@ -36,12 +66,27 @@ public:
         return id;
     }
 
+    //calculates euclidian distance
+    double calculateDistance(object &other) {
+        return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
+    }
+
     //destructor
     ~object() {
+        objects.erase(id);
         std::string filePath = "../coutLog.txt";
         std::stringstream ss;
-        ss << "Destroyed object: " << id;
+        ss << "Destroyed object: " << id << std::endl;
         logConsole(filePath, ss);
+    }
+
+    //gets object by ID
+    static object& getObjectByID(unsigned int num) {
+        auto it = objects.find(num);
+        if (it == objects.end()) {
+            throw std::out_of_range("ID not found");
+        }
+        return *it->second;
     }
 
 

@@ -4,3 +4,17 @@ Wed Oct 21 14:18:18 2026
  radius must be positive
 Wed Oct 21 17:22:03 2026
  radius must be positive
+Wed Oct 21 20:32:11 2026
+ map::at
+Wed Oct 21 20:32:37 2026
+ map::at
+Wed Oct 21 20:35:52 2026
+ map::at
+Wed Oct 21 20:47:37 2026
+ objects cannot overlap
+Wed Oct 21 21:01:21 2026
+ ID not found
+Wed Oct 21 21:03:24 2026
+ ID not found
+Wed Oct 21 21:04:40 2026
+ ID not found

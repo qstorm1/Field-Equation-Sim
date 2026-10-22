@@ -15,11 +15,20 @@ inline void logError(std::fstream &file) {
 }
 
 //logs error
-void logError(std::fstream &file, auto &e) {
+template <typename T>
+void logError(std::fstream &file, T &e) {
     if (file.is_open()) {
         //get time and log error with timestamp
         const time_t now = time(nullptr);
         file << ctime(&now) << ' ' << e.what() << std::endl;
+    }
+}
+
+void logErrorString(std::fstream &file, std::string &str) {
+    if (file.is_open()) {
+        //get time and log error with timestamp
+        const time_t now = time(nullptr);
+        file << ctime(&now) << ' ' << str << std::endl;
     }
 }
 
