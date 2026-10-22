@@ -27,6 +27,11 @@ class object {
         return radiusSum > distanceCenter;
     }
 
+    //calculates euclidian distance
+    double calculateDistance(object &other) {
+        return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
+    }
+
 public:
 
     std::string name;
@@ -159,9 +164,10 @@ public:
         mass = n;
     }
 
-    //calculates euclidian distance
-    double calculateDistance(object &other) {
-        return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
+    //operator overrides
+
+    bool operator==(object &other) {
+        return x == other.x && y == other.y && z == other.z;
     }
 
     //destructor
@@ -172,6 +178,8 @@ public:
         ss << "Destroyed object: " << id << std::endl;
         logConsole(filePath, ss);
     }
+
+    //static methods
 
     //gets object by ID
     static object& getObjectByID(unsigned int num) {

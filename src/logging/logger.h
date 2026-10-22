@@ -10,7 +10,7 @@ inline void logError(std::fstream &file) {
         //get time
         const time_t now = time(nullptr);
         //log error with timestamp
-        file << ctime(&now) << ' ' << "An Unknown Error Occurred" << std::endl;
+        file << ctime(&now) << "\b" << ' ' << "An Unknown Error Occurred" << std::endl;
     }
 }
 
@@ -39,7 +39,7 @@ inline void logConsole(std::string &filePath, std::stringstream &stream) {
     file.open(filePath, std::ios::app);
     //get current time
     time_t now = time(nullptr);
-    std::string output = (std::string) ctime(&now) + " " + stream.str();
+    std::string output = (std::string) ctime(&now) + "\b " + stream.str();
     //write to cout and output
     std::cout << output;
     if (file.is_open()) {

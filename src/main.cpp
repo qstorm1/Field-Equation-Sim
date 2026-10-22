@@ -52,13 +52,15 @@ int main() {
         object o = {0, 0, 0, 2, 4, "test object"};
         object p = {1, 1, 111, 2, 11};
 
-        //test getObjectById
-        std::stringstream ss;
-        ss << std::addressof(object::getObjectByID(1)) << std::endl;
+        //test equals operator
         std::string filepath = "../coutLog.txt";
+
+        std::stringstream ss;
+        ss << (o == p) << std::endl;
         logConsole(filepath, ss);
+
         ss.str("");
-        ss << std::addressof(object::getObjectByID(2)) << std::endl;
+        ss << (o == o) << std::endl;
         logConsole(filepath, ss);
         ss.str("");
 
