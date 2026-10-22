@@ -47,7 +47,9 @@ public:
         auto it = objects.begin();
         while (it != objects.end()) {
             if (isOverlapping(*(it->second) ) ) {
-                throw std::invalid_argument("objects cannot overlap");
+                std::stringstream errorMessage;
+                errorMessage << "objects cannot overlap: overlapping with: " << (*(it->second)).name + " id: " <<  (*(it->second)).id;
+                throw std::invalid_argument(errorMessage.str());
             }
             it++;
         }
@@ -88,6 +90,74 @@ public:
     }
 
     //setter functions
+
+    void setX(double n) {
+        double oldX = x;
+        x = n;
+        //throw exception if 2 objects overlap
+        auto it = objects.begin();
+        while (it != objects.end()) {
+            if (isOverlapping(*(it->second) ) ) {
+                x = oldX;
+                std::stringstream errorMessage;
+                errorMessage << "objects cannot overlap: overlapping with: " << (*(it->second)).name + " id: " <<  (*(it->second)).id;
+                throw std::invalid_argument(errorMessage.str());
+            }
+            it++;
+        }
+    }
+
+    void setY(double n) {
+        double oldY = y;
+        y = n;
+        //throw exception if 2 objects overlap
+        auto it = objects.begin();
+        while (it != objects.end()) {
+            if (isOverlapping(*(it->second) ) ) {
+                y = oldY;
+                std::stringstream errorMessage;
+                errorMessage << "objects cannot overlap: overlapping with: " << (*(it->second)).name + " id: " <<  (*(it->second)).id;
+                throw std::invalid_argument(errorMessage.str());
+            }
+            it++;
+        }
+    }
+
+    void setZ(double n) {
+        double oldZ = z;
+        z = n;
+        //throw exception if 2 objects overlap during
+        auto it = objects.begin();
+        while (it != objects.end()) {
+            if (isOverlapping(*(it->second) ) ) {
+                z = oldZ;
+                std::stringstream errorMessage;
+                errorMessage << "objects cannot overlap: overlapping with: " << (*(it->second)).name + " id: " <<  (*(it->second)).id;
+                throw std::invalid_argument(errorMessage.str());
+            }
+            it++;
+        }
+    }
+
+    void setRadius(double n) {
+        double oldRadius = radius;
+        radius = n;
+        //throw exception if 2 objects overlap during
+        auto it = objects.begin();
+        while (it != objects.end()) {
+            if (isOverlapping(*(it->second) ) ) {
+                radius = oldRadius;
+                std::stringstream errorMessage;
+                errorMessage << "objects cannot overlap: overlapping with: " << (*(it->second)).name + " id: " <<  (*(it->second)).id;
+                throw std::invalid_argument(errorMessage.str());
+            }
+            it++;
+        }
+    }
+
+    void setMass(double n) {
+        mass = n;
+    }
 
     //calculates euclidian distance
     double calculateDistance(object &other) {

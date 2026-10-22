@@ -126,3 +126,19 @@ Thu Oct 22 14:38:21 2026
  Destroyed object: 2
 Thu Oct 22 14:38:21 2026
  Destroyed object: 1
+Thu Oct 22 14:50:34 2026
+ 0x8751fff380
+Thu Oct 22 14:50:34 2026
+ 0x8751fff3d0
+Thu Oct 22 14:50:34 2026
+ Destroyed object: 2
+Thu Oct 22 14:50:34 2026
+ Destroyed object: 1
+Thu Oct 22 14:50:59 2026
+ 0xd78c5ff450
+Thu Oct 22 14:50:59 2026
+ 0xd78c5ff4a0
+Thu Oct 22 14:50:59 2026
+ Destroyed object: 2
+Thu Oct 22 14:50:59 2026
+ Destroyed object: 1

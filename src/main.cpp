@@ -63,6 +63,8 @@ int main() {
         //OH SWEET JESUS IT WORKS I SPEND LIKE 1.5HRS ON THIS SHIT
         //(I'm Jewish)
 
+        o.setZ(1);
+
 
 
 
