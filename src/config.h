@@ -2,7 +2,7 @@
 
 //include our own headers
 #include "Logging/logger.h"
-#include "Object/object.h"
+#include "objects/object.h"
 
 //std library
 #include <iostream>
