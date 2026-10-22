@@ -49,8 +49,7 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(Gravitational_Lensing_Simulation
                 "src/main.cpp"
                 src/config.h
-                src/Object/object.cpp
-                src/Object/object.h
+        src/Object/object.h
                 src/Logging/logger.h
 )
 
