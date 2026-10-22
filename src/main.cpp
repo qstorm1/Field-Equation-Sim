@@ -1,22 +1,21 @@
 #include "config.h"
-#include <GLFW/glfw3.h>
 
 int main() {
-
-
-
     //create files to write to
     std::fstream errorLog;
 
     errorLog.open("../ErrorLog.txt", std::ios::app);
 
     GLFWwindow* window= nullptr;
+
     try
     {
         //creates a window
         //check if the library is initialized
         if (!glfwInit())
         {
+            std::string errorMessage = "Window Failed to Launch";
+            logErrorString(errorLog, errorMessage);
             return 50;
         }
 
@@ -25,6 +24,8 @@ int main() {
         //if there was an error in window creation, terminate all processes
         if (!window)
         {
+            std::string errorMessage = "Window Failed to Launch";
+            logErrorString(errorLog, errorMessage);
             glfwTerminate();
             return 50;
         }
@@ -60,10 +61,8 @@ int main() {
         ss << std::addressof(object::getObjectByID(2)) << std::endl;
         logConsole(filepath, ss);
         ss.str("");
-        //OH SWEET JESUS IT WORKS I SPEND LIKE 1.5HRS ON THIS SHIT
-        //(I'm Jewish)
 
-        o.setZ(1);
+        p.name = "testing object 2";
 
 
 

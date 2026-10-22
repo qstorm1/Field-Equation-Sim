@@ -150,3 +150,59 @@ Thu Oct 22 15:01:29 2026
  Destroyed object: 2
 Thu Oct 22 15:01:29 2026
  Destroyed object: 1
+Thu Oct 22 15:04:44 2026
+ 0x155a7ff140
+Thu Oct 22 15:04:44 2026
+ 0x155a7ff190
+Thu Oct 22 15:04:44 2026
+ Destroyed object: 2
+Thu Oct 22 15:04:44 2026
+ Destroyed object: 1
+Thu Oct 22 15:06:21 2026
+ 0xc451ff920
+Thu Oct 22 15:06:21 2026
+ 0xc451ff970
+Thu Oct 22 15:06:21 2026
+ Destroyed object: 2
+Thu Oct 22 15:06:21 2026
+ Destroyed object: 1
+Thu Oct 22 15:06:30 2026
+ 0x7a1b7ff4e0
+Thu Oct 22 15:06:30 2026
+ 0x7a1b7ff530
+Thu Oct 22 15:06:30 2026
+ Destroyed object: 2
+Thu Oct 22 15:06:30 2026
+ Destroyed object: 1
+Thu Oct 22 15:07:31 2026
+ 0xfa9e7ff400
+Thu Oct 22 15:07:31 2026
+ 0xfa9e7ff450
+Thu Oct 22 15:07:31 2026
+ Destroyed object: 2
+Thu Oct 22 15:07:31 2026
+ Destroyed object: 1
+Thu Oct 22 15:07:57 2026
+ 0x751bbff280
+Thu Oct 22 15:07:57 2026
+ 0x751bbff2d0
+Thu Oct 22 15:07:57 2026
+ Destroyed object: 2
+Thu Oct 22 15:07:57 2026
+ Destroyed object: 1
+Thu Oct 22 15:09:43 2026
+ 0x4f207ff550
+Thu Oct 22 15:09:43 2026
+ 0x4f207ff5a0
+Thu Oct 22 15:09:43 2026
+ Destroyed object: 2
+Thu Oct 22 15:09:43 2026
+ Destroyed object: 1
+Thu Oct 22 15:12:53 2026
+ 0x58605ff760
+Thu Oct 22 15:12:53 2026
+ 0x58605ff7b0
+Thu Oct 22 15:12:53 2026
+ Destroyed object: 2
+Thu Oct 22 15:12:53 2026
+ Destroyed object: 1
