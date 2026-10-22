@@ -61,10 +61,33 @@ public:
         objects[id] = this;
     }
 
-    //returns object ID
+    //getter functions
+
     unsigned int getID() {
         return id;
     }
+
+    double getX() {
+        return x;
+    }
+
+    double getY() {
+        return y;
+    }
+
+    double getZ() {
+        return z;
+    }
+
+    double getMass() {
+        return mass;
+    }
+
+    double getRadius(){
+        return radius;
+    }
+
+    //setter functions
 
     //calculates euclidian distance
     double calculateDistance(object &other) {
