@@ -50,7 +50,7 @@ int main() {
         std::string filepath = "../coutLog.txt";
         logConsole(filepath, "test");
 
-        object o = {0, 0, 0, 2, -4, "test object"};
+        object o = {0, 0, 0, 2, 4, "test object"};
 
     }catch(const std::invalid_argument& e) {
         logError(errorLog, e);
