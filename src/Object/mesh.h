@@ -1,6 +1,4 @@
-//
-// Created by anahita on 10/25/26.
-//
+#pragma once
 
 #ifndef MESH_H
 #define MESH_H

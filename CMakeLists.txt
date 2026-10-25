@@ -55,7 +55,6 @@ elseif(WIN32 OR WIN64)
             src/Object/sphere.h
             src/Object/mesh.cpp
             src/Object/mesh.h
-            src/Object/object.cpp
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 
