@@ -50,6 +50,7 @@ elseif(WIN32 OR WIN64)
             src/Object/object.h
             src/Logging/logger.h
             src/Graphics/graphics.h
+            src/GlobalVariables.h
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 

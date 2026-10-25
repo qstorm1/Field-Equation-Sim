@@ -1,5 +1,6 @@
 #include "config.h"
 
+
 int main() {
     //create files to write to
     std::fstream errorLog;
@@ -45,7 +46,10 @@ int main() {
     }
 
 
-    glViewport(0, 0, 640, 480);
+
+
+    glViewport(0, 0, GlobalVariables::initWidth, GlobalVariables::initHeight);
+
 
     while (!glfwWindowShouldClose(window))
     {
@@ -98,8 +102,15 @@ int main() {
 
 }
 
+
+
 void loop()
 {
 
+}
+
+void onResize(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
 }
 
