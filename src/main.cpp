@@ -7,8 +7,9 @@ int main() {
 
     errorLog.open("../ErrorLog.txt", std::ios::app);
 
-    GLFWwindow* window= nullptr;
 
+
+    GLFWwindow* window= nullptr;
     try
     {
         //creates a window
@@ -45,14 +46,28 @@ int main() {
         return 50;
     }
 
+    //from what I understand, this loads the openGL context onto the glfw window so the window can do glfw stuff
+    glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        return 50;
+    }
 
 
 
+
+    //make the starting size of the window
     glViewport(0, 0, GlobalVariables::initWidth, GlobalVariables::initHeight);
 
+    //run the onResize() llambda whenever the window is resized
+    glfwSetFramebufferSizeCallback(window,onResize);
 
+    //the loop that runs so long as the window is open
     while (!glfwWindowShouldClose(window))
     {
+        runSimulationLoop(window);
+        glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
@@ -104,12 +119,12 @@ int main() {
 
 
 
-void loop()
+void runSimulationLoop(GLFWwindow* window)
 {
 
 }
 
-void onResize(GLFWwindow* window, int width, int height)
+void onResize(GLFWwindow* window,int width, int height)
 {
     glViewport(0, 0, width, height);
 }

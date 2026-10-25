@@ -8,6 +8,5 @@
 
 struct GLFWwindow;
 
-
-void loop();
+void runSimulationLoop(GLFWwindow* window);
 void onResize(GLFWwindow* window, int width, int height);
