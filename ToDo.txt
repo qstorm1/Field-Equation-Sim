@@ -13,5 +13,9 @@ DUE NOV 30TH
 
 Dima:
 
+(from arya (i don't wanna use discord if I can help it cause it crashed my computer too often)):
+    yo the fetch method for linux that I did does work. The stuff you have to manually install is only for building, not for running
+    we'll build the file into an exe so we don't have to worry about that
+
 Create object class with a general set of parameters and functions of interstellar bodies
 DUE NOV 14TH
