@@ -1,6 +1,8 @@
 #include "config.h"
 
 
+
+
 int main() {
     //create files to write to
     std::fstream errorLog;
@@ -73,6 +75,31 @@ int main() {
     glGenBuffers(1, &VBO);
     //set openGL's vertex buffer to be VBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+
+    //set the vertex shader (shader responsible for moving points to the correct location)
+    unsigned int vertexShader;
+    //create a shader of type vertex shader cause we're making a vertex shader.
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+    //sets the code for the shader that we're making to be the one set in graphics.h. the second and fourth parameters are unimportant because we are not using multiple strings
+    glShaderSource(vertexShader, 1, &vertextShaderSource, NULL);
+    //compile the shader's code
+    glCompileShader(vertexShader);
+
+
+    int shaderSucess;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &shaderSucess);
+    if(!shaderSucess)
+    {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        return 512;
+    }
+
+
+
 
 
     //the loop that runs so long as the window is open
