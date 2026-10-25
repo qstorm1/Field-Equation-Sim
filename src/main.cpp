@@ -121,6 +121,11 @@ int main() {
 
 void runSimulationLoop(GLFWwindow* window)
 {
+    //this sets the color used when clearing
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    //this clears the color
+    glClear(GL_COLOR_BUFFER_BIT);
+
 
 }
 
