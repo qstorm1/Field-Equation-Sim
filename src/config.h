@@ -8,6 +8,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "Graphics/graphics.h"
+
 //std library
 #include <iostream>
 #include <string>
