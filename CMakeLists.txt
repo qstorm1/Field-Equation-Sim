@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.15.0)
 project(Gravitational_Lensing_Simulation)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
+find_package(OpenGL REQUIRED)
+
 if(UNIX AND NOT APPLE)
 
     include(FetchContent)
@@ -28,8 +30,11 @@ if(UNIX AND NOT APPLE)
             src/Object/object.h
             src/Logging/logger.h
     )
-    target_link_libraries(Gravitational_Lensing_Simulation PUBLIC glfw)
-    target_link_libraries(Gravitational_Lensing_Simulation PUBLIC glad)
+    target_link_libraries(Gravitational_Lensing_Simulation PUBLIC
+            glfw
+            glad
+            OpenGL::GL
+    )
 
     set(CMAKE_CXX_STANDARD 20)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
