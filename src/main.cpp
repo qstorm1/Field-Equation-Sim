@@ -11,6 +11,7 @@ int main() {
     try
     {
         //creates a window
+
         //check if the library is initialized
         if (!glfwInit())
         {

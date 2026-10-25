@@ -7,6 +7,7 @@
 #include <utility>
 #include <map>
 
+//this should be in a .cpp file
 class object {
 
     //track object ID in case we need that or something
