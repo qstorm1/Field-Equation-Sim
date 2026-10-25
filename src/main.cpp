@@ -20,6 +20,13 @@ int main() {
             return 50;
         }
 
+        //settings for window (pre init)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+
+
         //set the window
         window = glfwCreateWindow(640, 480, "Hello World", nullptr, nullptr);
         //if there was an error in window creation, terminate all processes
@@ -34,8 +41,11 @@ int main() {
     catch (const std::exception& e)
     {
         logError(errorLog, e);
+        return 50;
     }
 
+
+    glViewport(0, 0, 640, 480);
 
     while (!glfwWindowShouldClose(window))
     {
