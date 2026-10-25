@@ -95,6 +95,17 @@ public:
         return radius;
     }
 
+    static int getTotalNumbOfObjects()
+    {
+        return objects.size();
+    }
+
+
+    static std::vector<double[3]> getAllObjectsPosition()
+    {
+
+    }
+
     //setter functions
 
     void setX(double n) {

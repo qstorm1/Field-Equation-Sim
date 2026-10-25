@@ -56,12 +56,24 @@ int main() {
 
 
 
-
     //make the starting size of the window
     glViewport(0, 0, GlobalVariables::initWidth, GlobalVariables::initHeight);
 
     //run the onResize() llambda whenever the window is resized
     glfwSetFramebufferSizeCallback(window,onResize);
+
+
+    //object used for testing
+    object3d testObj = {0, 0, 0, 2, 4, "test object M"};
+
+
+    //A vertex buffer is a list of vertex's that we then send to the gpu to do it's calculations
+    unsigned int VBO;
+    //assign a specific ID that turns this int into a buffer
+    glGenBuffers(1, &VBO);
+    //set openGL's vertex buffer to be VBO
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
 
     //the loop that runs so long as the window is open
     while (!glfwWindowShouldClose(window))
@@ -125,6 +137,23 @@ void runSimulationLoop(GLFWwindow* window)
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     //this clears the color
     glClear(GL_COLOR_BUFFER_BIT);
+
+    float vertices[object3d::getTotalNumbOfObjects()][3];
+
+    //TODO: normalize these verticies onto screen space
+
+    float testVertices[] = {
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f
+    };
+
+    //change whatever the GL_ARRAY_BUFFER is (the VBO in the main function) to a buffer with our vertices
+    //GL_STATIC_DRAW is a configuration given to the graphics card that says the data(testVertices) will only be set once and used a bunch
+    //we will likely switch to GL_DYNAMIC_DRAW because we'll be using objects who's coordinates are moving
+    glBufferData(GL_ARRAY_BUFFER, sizeof(testVertices), testVertices, GL_STATIC_DRAW);
+
+
 
 
 }
