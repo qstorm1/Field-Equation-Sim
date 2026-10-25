@@ -27,7 +27,7 @@ if(UNIX AND NOT APPLE)
     add_executable(Gravitational_Lensing_Simulation
             "src/main.cpp"
             src/config.h
-            src/Object/object.h
+            src/Object/object3d.h
             src/Logging/logger.h
     )
     target_link_libraries(Gravitational_Lensing_Simulation PUBLIC
@@ -47,7 +47,7 @@ elseif(WIN32 OR WIN64)
     add_executable(Gravitational_Lensing_Simulation
             "src/main.cpp"
             src/config.h
-            src/Object/object.h
+            src/Object/object3d.h
             src/Logging/logger.h
             src/Graphics/graphics.h
             src/GlobalVariables.h

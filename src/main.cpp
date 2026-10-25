@@ -79,8 +79,8 @@ int main() {
     try {
 
         //test objects for overlap checking
-        object o = {0, 0, 0, 2, 4, "test object"};
-        object p = {1, 1, 111, 2, 11};
+        object3d o = {0, 0, 0, 2, 4, "test object"};
+        object3d p = {1, 1, 111, 2, 11};
 
         //test equals operator
         std::string filepath = "../coutLog.txt";

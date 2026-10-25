@@ -2,7 +2,7 @@
 
 //include our own headers
 #include "Logging/logger.h"
-#include "Object/object.h"
+#include "Object/object3d.h"
 #include "Graphics/graphics.h"
 #include "GlobalVariables.h"
 
