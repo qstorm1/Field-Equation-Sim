@@ -33,7 +33,7 @@ int main() {
 
 
         //set the window
-        window = glfwCreateWindow(640, 480, "Hello World", nullptr, nullptr);
+        window = glfwCreateWindow(GlobalVariables::initWidth, GlobalVariables::initHeight, "Hello World", nullptr, nullptr);
         //if there was an error in window creation, terminate all processes
         if (!window)
         {
@@ -290,6 +290,9 @@ int setupShaders()
     glBindBuffer(GL_ARRAY_BUFFER, 0);//this is allowed because we already have the VBO saved to the VOA
     //glBindVertexArray(0);
 
+
+    //set wireframe mode
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     return 0;
 }
