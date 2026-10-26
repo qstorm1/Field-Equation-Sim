@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <utility>
 #include <map>
+#include "../matrix.hpp"
 
 //TODO: move code to .cpp file
 class object3d {
@@ -28,10 +29,7 @@ class object3d {
         return radiusSum > distanceCenter;
     }
 
-    //calculates euclidian distance
-    double calculateDistance(object3d &other) {
-        return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
-    }
+
 
 public:
 
@@ -68,6 +66,18 @@ public:
         //adds object to list of objects
         objects[id] = this;
     }
+
+    //normal functions
+
+    //calculates euclidian distance
+    double calculateDistance(object &other) {
+        return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
+    }
+
+    // //return a distance vector from this to other
+    // Matrix* calculateDistanceVector(object &other) {
+    //     Matrix* m = initMatrix(1, 3);
+    // }
 
     //getter functions
 

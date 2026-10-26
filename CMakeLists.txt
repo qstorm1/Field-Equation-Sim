@@ -27,7 +27,7 @@ if(UNIX AND NOT APPLE)
     add_executable(Gravitational_Lensing_Simulation
             "src/main.cpp"
             src/config.h
-            src/Object/object3d.h
+            src/Object/object.h
             src/Logging/logger.h
     )
     target_link_libraries(Gravitational_Lensing_Simulation PUBLIC
@@ -51,10 +51,10 @@ elseif(WIN32 OR WIN64)
             src/Logging/logger.h
             src/Graphics/graphics.h
             src/GlobalVariables.h
-            src/Object/sphere.cpp
-            src/Object/sphere.h
-            src/Object/mesh.cpp
-            src/Object/mesh.h
+            dependencies/windows/glad/glad.c
+            #https://github.com/XingGao-cn/FreeMatrix-C
+            src/matrix.hpp
+            src/matrix.h
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 
