@@ -45,17 +45,18 @@ elseif(WIN32 OR WIN64)
     set(CMAKE_CXX_STANDARD 20)
 
     add_executable(Gravitational_Lensing_Simulation
-            "src/main.cpp"
+            src/main.cpp
             src/config.h
             src/Object/object.h
             src/Logging/logger.h
             src/Graphics/graphics.h
             src/GlobalVariables.h
+            dependencies/windows/glad/glad.c
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 
     target_link_libraries(Gravitational_Lensing_Simulation
-            ${CMAKE_SOURCE_DIR}/dependencies/GLFW/libglfw3.a
+            ${CMAKE_SOURCE_DIR}/dependencies/windows/GLFW/libglfw3.a
             opengl32)
     #gdi32 doesn't work on linux so we shouldn't import it, you can still install it if it says it needs it but don't include it in any header files
 endif ()
