@@ -1,0 +1,23 @@
+# Hashes of file build rules.
+92e03a5c118ce55a22e46a95ec491b95 _deps/glad-build/CMakeFiles/glad-generate-files
+aa3fd86d6503c3d13ff1a32c806e24a3 _deps/glad-build/include/glad/glad.h
+28e0b400984cd77fdbfc3bf110ff824b _deps/glfw-build/CMakeFiles/uninstall
+8d158d676fb170abe1c98c5db466045a _deps/glfw-build/src/CMakeFiles/update_mappings
+2b1e04acf37d819923e532136d07931a _deps/glfw-build/src/fractional-scale-v1-client-protocol-code.h
+0edd424f2a95f7c42ffadf7719b48693 _deps/glfw-build/src/fractional-scale-v1-client-protocol.h
+c006aa1df1fbf0e53655b86cf247dea9 _deps/glfw-build/src/idle-inhibit-unstable-v1-client-protocol-code.h
+400bbcebe9b57ad00e2347ae3bbadf32 _deps/glfw-build/src/idle-inhibit-unstable-v1-client-protocol.h
+a801350727786e1bb59cc6ef86234b08 _deps/glfw-build/src/pointer-constraints-unstable-v1-client-protocol-code.h
+2c4b37198522b12a36cb9e11b06eaf7d _deps/glfw-build/src/pointer-constraints-unstable-v1-client-protocol.h
+e4d413e5f362e50c455cdf3c4fd7d1ee _deps/glfw-build/src/relative-pointer-unstable-v1-client-protocol-code.h
+dc3c0378752006e287bcb96b1807ac3f _deps/glfw-build/src/relative-pointer-unstable-v1-client-protocol.h
+28191a00114782a17e65f2056505053a _deps/glfw-build/src/viewporter-client-protocol-code.h
+49890bf3ec16089e819c33a2b77f1ab9 _deps/glfw-build/src/viewporter-client-protocol.h
+cd3f1f59560806063323abac4748c221 _deps/glfw-build/src/wayland-client-protocol-code.h
+5ca8fe7b34c7edf75548eb657b0e1488 _deps/glfw-build/src/wayland-client-protocol.h
+703ff0450eff40ca1a16aa98b8e84850 _deps/glfw-build/src/xdg-activation-v1-client-protocol-code.h
+3beaf131a6d3e86a499aa313dd804fa1 _deps/glfw-build/src/xdg-activation-v1-client-protocol.h
+c086a225aa87c60c31021585d1df0185 _deps/glfw-build/src/xdg-decoration-unstable-v1-client-protocol-code.h
+884554f697595d56f711c54294771ab4 _deps/glfw-build/src/xdg-decoration-unstable-v1-client-protocol.h
+fb1a66f3168664aecd9933f44c5a8754 _deps/glfw-build/src/xdg-shell-client-protocol-code.h
+c5dae1b1555d5a57df18c08bb5a8b986 _deps/glfw-build/src/xdg-shell-client-protocol.h
