@@ -28,10 +28,7 @@ class object {
         return radiusSum > distanceCenter;
     }
 
-    //calculates euclidian distance
-    double calculateDistance(object &other) {
-        return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
-    }
+
 
 public:
 
@@ -67,6 +64,18 @@ public:
 
         //adds object to list of objects
         objects[id] = this;
+    }
+
+    //normal functions
+
+    //calculates euclidian distance
+    double calculateDistance(object &other) {
+        return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
+    }
+
+    //
+    std::tuple<double, double, double> calculateNewtonianForce() {
+        
     }
 
     //getter functions

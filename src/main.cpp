@@ -55,8 +55,6 @@ int main() {
     }
 
 
-
-
     //make the starting size of the window
     glViewport(0, 0, GlobalVariables::initWidth, GlobalVariables::initHeight);
 
@@ -90,7 +88,7 @@ int main() {
         std::string filepath = "../coutLog.txt";
 
         std::stringstream ss;
-        ss << (o == p) << std::endl;
+        ss << (o != p) << std::endl;
         logConsole(filepath, ss);
 
         ss.str("");
