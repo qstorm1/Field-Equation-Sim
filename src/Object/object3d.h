@@ -19,7 +19,9 @@
 #include <stdexcept>
 #include <utility>
 #include <map>
-#include "../matrix.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define G (6.6743 * pow(10,-11))
 
@@ -90,11 +92,9 @@ public:
     }
 
     //return a distance vector from this to other
-    Matrix* calculateDistanceVector(object3d &other) {
-        Matrix* m = initMatrix(3, 1);
-        double array[] = {other.x-x, other.y-y, other.z-z};
-        assignMatrix(m, array);
-        return m;
+     glm::vec3 calculateDistanceVector(object3d &other) {
+        glm::vec3 distance(other.x-x, other.y-y, other.z-z);
+        return distance;
     }
 
     //gets magnitude of newtonian force
@@ -103,25 +103,20 @@ public:
     }
 
     //return a force vector to another object
-    Matrix* calculateNewtonForceVector(object3d &other) {
-        Matrix* force = calculateDistanceVector(other);
-        double normalisedForce = calculateNewtonForceMagnitude(other)/calculateDistance(other);
-        for (int i = 0; i < 3; i++) {
-            force->data[i] *= normalisedForce;   // scale the direction vector
-        }
+    glm::vec3 calculateNewtonForceVector(object3d &other) {
+        glm::vec3 force = glm::normalize(calculateDistanceVector(other));
+        force*=calculateNewtonForceMagnitude(other);
         return force;
     }
 
     //returns the total force being exerted on each object
-    Matrix* calculateNewtonTotalForce() {
-        Matrix* total = initMatrix(3, 1);
+    glm::vec3 calculateNewtonTotalForce() {
+        glm::vec3 total(0.0, 0.0, 0.0);
+        //adds each force vector to total
         for (auto& [otherId, other] : objects) {
             if (otherId == id) continue;
-            Matrix* force = calculateNewtonForceVector(*other);
-            Matrix* sum = addMatrix(total, force);
-            freeMatrix(force);
-            freeMatrix(total);
-            total = sum;
+            glm::vec3 force = calculateNewtonForceVector(*other);
+            total+=force;
         }
         return total;
     }
@@ -149,17 +144,6 @@ public:
 
     double getRadius(){
         return radius;
-    }
-
-    static int getTotalNumbOfObjects()
-    {
-        return objects.size();
-    }
-
-
-    static std::vector<double[3]> getAllObjectsPosition()
-    {
-
     }
 
     //setter functions
@@ -258,6 +242,16 @@ public:
         return *it->second;
     }
 
+    static int getTotalNumbOfObjects()
+    {
+        return objects.size();
+    }
+
+
+    static std::vector<double[3]> getAllObjectsPosition()
+    {
+
+    }
 
 };
 

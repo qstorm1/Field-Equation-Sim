@@ -38,8 +38,6 @@ if(UNIX AND NOT APPLE)
             src/Logging/logger.h
             src/Graphics/graphics.h
             src/GlobalVariables.h
-            src/matrix.hpp
-            src/matrix.h
     )
     target_link_libraries(Gravitational_Lensing_Simulation PUBLIC
             glfw
@@ -66,8 +64,6 @@ elseif(WIN32 OR WIN64)
             src/GlobalVariables.h
             dependencies/windows/glad/glad.c
             #https://github.com/XingGao-cn/FreeMatrix-C
-            src/matrix.hpp
-            src/matrix.h
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 

@@ -1,5 +1,4 @@
 #include "config.h"
-#include "matrix.h"
 
 
 int main() {
@@ -65,7 +64,7 @@ int main() {
 
 
     //object used for testing
-    object3d testObj = {0, 0, 0, 2, 4, "test object M"};
+    //object3d testObj = {0, 0, 0, 2, 4, "test object M"};
 
 
     //set up the shaders (the code that is run on the graphics card) and link them to openGL
@@ -102,10 +101,13 @@ int main() {
         object3d Earth = {0, 0, 0, 5.97*pow(10, 24), 6371000, "Earth"};
         object3d Person = {0, 6371002, 0, 70, 1};
 
-        Matrix* m;
-        m = Earth.calculateNewtonTotalForce();
 
-        printMatrix(m);
+        glm::vec3 testVector = Earth.calculateNewtonTotalForce();
+        std::stringstream ss;
+
+        ss << testVector.x << ' ' << testVector.y << ' ' << testVector.z << std::endl;
+        std::string filepath = "../coutLog.txt";
+        logConsole(filepath, ss);
 
         //OH MY GAWD WE GET LITTLE G IT WORKS
 
