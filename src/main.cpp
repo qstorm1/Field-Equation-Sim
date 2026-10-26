@@ -78,6 +78,7 @@ int main() {
 
 
 
+
     //the loop that runs so long as the window is open
     while (!glfwWindowShouldClose(window))
     {
@@ -132,17 +133,12 @@ int main() {
 
 }
 
+
 int setupShaders()
 {
     //*many of these comments are @qstorm's interpretation and could possibly be wrong
 
 
-    //A vertex buffer is a list of vertex's that we then send to the gpu to do it's calculations
-    unsigned int VBO;
-    //assign a specific ID that turns this int into a buffer
-    glGenBuffers(1, &VBO);
-    //set openGL's vertex buffer to be VBO
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 
     //set the vertex shader (shader responsible for moving points to the correct location)
@@ -151,7 +147,7 @@ int setupShaders()
 
 
     //sets the code for the shader that we're making to be the one set in graphics.h. the second and fourth parameters are unimportant because we are not using multiple strings
-    glShaderSource(vertexShader, 1, &vertextShaderSource, NULL);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     //compile the shader's code
     glCompileShader(vertexShader);
 
@@ -162,7 +158,7 @@ int setupShaders()
     glCompileShader(fragmentShader);
 
 
-    //check if shader loaded
+    //check if shader loaded correctly
     int shaderSuccess;
     char infoLog[512];
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &shaderSuccess);
@@ -183,11 +179,14 @@ int setupShaders()
 
 
     //this is a shader program that brings the other shaders together in a single program that will run every time we render an object
-    unsigned int shaderProgram = glCreateProgram();
+    shaderProgram = glCreateProgram();
+    //connect the 2 shaders to the shader program
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
+    //makes shaderProgram a full shader by A) checking to make sure everything is fit correctly and B) bringing it together
     glLinkProgram(shaderProgram);
 
+    //check if final shader loaded correctly
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &shaderSuccess);
     if(!shaderSuccess)
     {
@@ -196,38 +195,100 @@ int setupShaders()
         return 512;
     }
 
-    //the thing that tells openGL to use the shader whenever rendering something
-    glUseProgram(shaderProgram);
-
     //delete shaders from local memoery?
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
 
-    return 0;
-}
+    //A vertex buffer (VBO) is a list of vertex's that we then send to the gpu to do it's calculations
+    //it is used to manage the graphics cards memory which is able to store large numbers of vertex
 
-void runSimulationLoop(GLFWwindow* window)
-{
-    //this sets the color used when clearing
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    //this clears the color
-    glClear(GL_COLOR_BUFFER_BIT);
+    //assign a specific ID that turns this int into a unique buffer
+    glGenBuffers(1, &VBO);
 
-    float vertices[object3d::getTotalNumbOfObjects()][3];
+
+    //A Vertex Array (VAO)
+
+    //assign the specific ID that turns this int into a unique buffer
+    glGenVertexArrays(1, &VAO);
+
+
+    //set openGL's vertex buffer to be VBO
+    //GL_ARRAY_BUFFER just means it will send an array as a buffer
+    //this means the graphics card will need to deal with an array when it gets the data
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+
+    //tells openGL that we want to use this VAO
+    glBindVertexArray(VAO);
+
+
+
+
 
     //TODO: normalize these verticies onto screen space
-
     float testVertices[] = {
         -0.5f, -0.5f, 0.0f,
          0.5f, -0.5f, 0.0f,
          0.0f,  0.5f, 0.0f
     };
 
+    //sends the data that is set in the VBO to the GPU
     //change whatever the GL_ARRAY_BUFFER is (the VBO in the main function) to a buffer with our vertices
     //GL_STATIC_DRAW is a configuration given to the graphics card that says the data(testVertices) will only be set once and used a bunch
     //we will likely switch to GL_DYNAMIC_DRAW because we'll be using objects who's coordinates are moving
     glBufferData(GL_ARRAY_BUFFER, sizeof(testVertices), testVertices, GL_STATIC_DRAW);
+
+
+
+    //tells openGL how to interpret the value from the VBO
+    //VBO definition in setupShaders()
+    //we assume the VBO is a long set of memory clumped together
+    //the first value is related to vertexShaderSource in graphics.h. it specifies that we want to set the aPos to be whatever the input is
+    //the second value states how many items we want for every aPos (x,y,z is 3 items total so 3)
+    //the third represents what the type of the items inside the value is (float)
+    //the fourth is weather we should normalize the point (ex: screen space = 500-500 , openGL space = 0.5,0.2 (not to scale))
+    //the fifth is the distance in memory before making a new aPos
+    //the sixth is the offset, meaning the memory distance from the start of the VBO
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), static_cast<void*>(nullptr));
+
+    //Enable vertex attributes??? The value 0 represents the location of the VBO defined in graphics.h
+    glEnableVertexAttribArray(0);
+
+
+    //unbind buffers
+    glBindBuffer(GL_ARRAY_BUFFER, 0);//this is allowed because we already have the VBO saved to the VOA
+    //glBindVertexArray(0);
+
+
+    return 0;
+}
+
+void runRenderLoop()
+{
+    float vertices[object3d::getTotalNumbOfObjects()][3];
+
+    //the thing that tells openGL to use the shader whenever rendering something
+    glUseProgram(shaderProgram);
+    glBindVertexArray(VAO);
+    //the first element states where in the current VBO we want to start with and the second states how many we want to draw
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+void runPhysicsLoop()
+{
+
+}
+
+void runSimulationLoop(GLFWwindow* window)
+{
+    //this sets the background color used when clearing
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    //this clears the color
+    glClear(GL_COLOR_BUFFER_BIT);
+
+
+    runRenderLoop();
+
 
 
 
