@@ -63,10 +63,14 @@ int main() {
     //run the onResize() llambda whenever the window is resized
     glfwSetFramebufferSizeCallback(window,onResize);
 
+    //test colour to make sure window works on windows (ba-dum tsss)
+    glClearColor(0.75f, 0.5f, 0.75f, 1.0f);
+
     //the loop that runs so long as the window is open
     while (!glfwWindowShouldClose(window))
     {
         runSimulationLoop(window);
+        glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
