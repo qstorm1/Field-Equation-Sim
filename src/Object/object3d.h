@@ -70,7 +70,7 @@ public:
     //normal functions
 
     //calculates euclidian distance
-    double calculateDistance(object &other) {
+    double calculateDistance(object3d &other) {
         return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
     }
 
