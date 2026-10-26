@@ -139,6 +139,23 @@ int setupShaders()
     //*many of these comments are @qstorm's interpretation and could possibly be wrong
 
 
+    //the data points
+    //TODO: normalize these verticies onto screen space
+    float testVertices[] = {
+        // first triangle
+        0.5f,  0.5f, 0.0f,  // top right
+        0.5f, -0.5f, 0.0f,  // bottom right
+       -0.5f,  0.5f, 0.0f,  // top left
+       // second triangle
+        0.5f, -0.5f, 0.0f,  // bottom right
+       -0.5f, -0.5f, 0.0f,  // bottom left
+       -0.5f,  0.5f, 0.0f   // top left
+    };
+    unsigned int indices[] = {
+        0,1,3,
+        1,2,3
+    };
+
 
 
     //set the vertex shader (shader responsible for moving points to the correct location)
@@ -195,7 +212,7 @@ int setupShaders()
         return 512;
     }
 
-    //delete shaders from local memoery?
+    //delete shaders from local memory?
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
@@ -226,18 +243,20 @@ int setupShaders()
 
 
 
-    //TODO: normalize these verticies onto screen space
-    float testVertices[] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
-    };
+
 
     //sends the data that is set in the VBO to the GPU
     //change whatever the GL_ARRAY_BUFFER is (the VBO in the main function) to a buffer with our vertices
     //GL_STATIC_DRAW is a configuration given to the graphics card that says the data(testVertices) will only be set once and used a bunch
     //we will likely switch to GL_DYNAMIC_DRAW because we'll be using objects who's coordinates are moving
     glBufferData(GL_ARRAY_BUFFER, sizeof(testVertices), testVertices, GL_STATIC_DRAW);
+
+
+
+    //EBO's are used to handle indices (lines connecting vertexes)
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 
 
@@ -252,7 +271,7 @@ int setupShaders()
     //the sixth is the offset, meaning the memory distance from the start of the VBO
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), static_cast<void*>(nullptr));
 
-    //Enable vertex attributes??? The value 0 represents the location of the VBO defined in graphics.h
+    //Enables the VBO located at index 0 of the VAO (makes the shader we just set turn on)
     glEnableVertexAttribArray(0);
 
 
@@ -270,8 +289,11 @@ void runRenderLoop()
 
     //the thing that tells openGL to use the shader whenever rendering something
     glUseProgram(shaderProgram);
+    //tells openGL to pull the data from the VAO inputed
     glBindVertexArray(VAO);
     //the first element states where in the current VBO we want to start with and the second states how many we want to draw
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 void runPhysicsLoop()

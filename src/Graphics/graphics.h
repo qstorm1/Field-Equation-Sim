@@ -21,7 +21,7 @@ inline const char *fragShaderSource = "#version 330 core\n"
     "{\n"
     "   FragColor=vec4(1.0f,1.0f,1.0f,1.0f);\n"
     "}\0";
-inline unsigned int shaderProgram,VBO,VAO;
+inline unsigned int shaderProgram,VBO,VAO,EBO;
 
 
 int setupShaders();
