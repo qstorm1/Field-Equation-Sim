@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <utility>
 #include <map>
+#include "../matrix.hpp"
 
 //this should be in a .cpp file
 class object {
@@ -73,9 +74,9 @@ public:
         return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
     }
 
-    //
-    // std::tuple<double, double, double> calculateNewtonianForce() {
-    //
+    // //return a distance vector from this to other
+    // Matrix* calculateDistanceVector(object &other) {
+    //     Matrix* m = initMatrix(1, 3);
     // }
 
     //getter functions
