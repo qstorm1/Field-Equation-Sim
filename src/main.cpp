@@ -1,4 +1,5 @@
 #include "config.h"
+#include "matrix.h"
 
 
 int main() {
@@ -84,19 +85,7 @@ int main() {
         object o = {0, 0, 0, 2, 4, "test object"};
         object p = {1, 1, 111, 2, 11};
 
-        //test equals operator
-        std::string filepath = "../coutLog.txt";
 
-        std::stringstream ss;
-        ss << (o != p) << std::endl;
-        logConsole(filepath, ss);
-
-        ss.str("");
-        ss << (o == o) << std::endl;
-        logConsole(filepath, ss);
-        ss.str("");
-
-        p.name = "testing object 2";
 
 
 

@@ -52,6 +52,9 @@ elseif(WIN32 OR WIN64)
             src/Graphics/graphics.h
             src/GlobalVariables.h
             dependencies/windows/glad/glad.c
+            #https://github.com/XingGao-cn/FreeMatrix-C
+            src/matrix.hpp
+            src/matrix.h
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 

@@ -11,6 +11,12 @@ Arya:
 Create render where user can place and remove circular balls in 3D space. MAKE SURE THEY CANNOT OVERLAP
 DUE NOV 30TH
 
+
+***IMPORTANT***
+MAKE SURE TO IMPORT THE MATRIX LIBRARY FOR LINUX AND SEE IF IT WORKS (I had to modify some of the import process for windows)
+***IMPORTANT***
+(also it's in Chinese but it's the only one that I found that works so imma translate it)
+
 Dima:
 
 (from arya (i don't wanna use discord if I can help it cause it crashed my computer too often)):

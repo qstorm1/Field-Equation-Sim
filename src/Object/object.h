@@ -74,9 +74,9 @@ public:
     }
 
     //
-    std::tuple<double, double, double> calculateNewtonianForce() {
-        
-    }
+    // std::tuple<double, double, double> calculateNewtonianForce() {
+    //
+    // }
 
     //getter functions
 
