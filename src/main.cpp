@@ -314,6 +314,27 @@ void runPhysicsLoop()
 {
 
 }
+void handleInput(GLFWwindow* window)
+{
+    if (glfwGetKey(window, GLFW_KEY_W)==GLFW_PRESS)
+        camera[0] += GlobalVariables::forwardMoveExcel;
+
+    if (glfwGetKey(window, GLFW_KEY_S)==GLFW_PRESS)
+        camera[0] -= GlobalVariables::backwardMoveExcel;
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE)==GLFW_PRESS)
+        camera[1] += GlobalVariables::yMoveExcel;
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT)==GLFW_PRESS)
+        camera[1] -= GlobalVariables::yMoveExcel;
+
+    if (glfwGetKey(window, GLFW_KEY_A)==GLFW_PRESS)
+        camera[2] += GlobalVariables::sideMoveExcel;
+
+    if (glfwGetKey(window, GLFW_KEY_D)==GLFW_PRESS)
+        camera[2] -= GlobalVariables::sideMoveExcel;
+
+}
 
 void runSimulationLoop(GLFWwindow* window)
 {
@@ -330,6 +351,8 @@ void runSimulationLoop(GLFWwindow* window)
 
 
 }
+
+
 
 void onResize(GLFWwindow* window,int width, int height)
 {

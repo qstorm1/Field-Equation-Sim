@@ -23,6 +23,7 @@ inline const char *fragShaderSource = "#version 330 core\n"
     "}\0";
 inline unsigned int shaderProgram,VBO,VAO,EBO;
 
+inline double camera[] = {0,0,0};
 
 int setupShaders();
 void runSimulationLoop(GLFWwindow* window);

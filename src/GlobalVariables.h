@@ -16,6 +16,7 @@ struct GlobalVariables{
     inline static float forwardMoveExcel=10;
     inline static float backwardMoveExcel=10;
     inline static float sideMoveExcel=10;
+    inline static float yMoveExcel=10;
 
     static void resetGlobalVariables()
     {
