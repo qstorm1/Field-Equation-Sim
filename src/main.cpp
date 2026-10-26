@@ -99,8 +99,8 @@ int main() {
     try {
 
         //test objects for overlap checking
-        object Earth = {0, 0, 0, 5.97*pow(10, 24), 6371000, "Earth"};
-        object Person = {0, 6371002, 0, 70, 1};
+        object3d Earth = {0, 0, 0, 5.97*pow(10, 24), 6371000, "Earth"};
+        object3d Person = {0, 6371002, 0, 70, 1};
 
         Matrix* m;
         m = Earth.calculateNewtonTotalForce();

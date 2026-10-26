@@ -90,7 +90,7 @@ public:
     }
 
     //return a distance vector from this to other
-    Matrix* calculateDistanceVector(object &other) {
+    Matrix* calculateDistanceVector(object3d &other) {
         Matrix* m = initMatrix(3, 1);
         double array[] = {other.x-x, other.y-y, other.z-z};
         assignMatrix(m, array);
@@ -98,12 +98,12 @@ public:
     }
 
     //gets magnitude of newtonian force
-    double calculateNewtonForceMagnitude(object &other) {
+    double calculateNewtonForceMagnitude(object3d &other) {
         return (mass * other.mass * G)/(calculateDistance(other) * calculateDistance(other));
     }
 
     //return a force vector to another object
-    Matrix* calculateNewtonForceVector(object &other) {
+    Matrix* calculateNewtonForceVector(object3d &other) {
         Matrix* force = calculateDistanceVector(other);
         double normalisedForce = calculateNewtonForceMagnitude(other)/calculateDistance(other);
         for (int i = 0; i < 3; i++) {
