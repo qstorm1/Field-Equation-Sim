@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.15.0)
 project(Gravitational_Lensing_Simulation)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(OpenGL REQUIRED)
 
 if(UNIX AND NOT APPLE)
@@ -11,9 +15,8 @@ if(UNIX AND NOT APPLE)
     FetchContent_Declare(
             glfw
             GIT_REPOSITORY https://github.com/glfw/glfw.git
-            GIT_TAG
+            GIT_TAG 3.4
     )
-    FetchContent_MakeAvailable(glfw)
 
     FetchContent_Declare(
             glad
@@ -26,13 +29,10 @@ if(UNIX AND NOT APPLE)
             GIT_TAG
     )
 
-    FetchContent_MakeAvailable(glm)
-
-
-    FetchContent_MakeAvailable(glad)
+    FetchContent_MakeAvailable(glfw glad glm)
 
     add_executable(Gravitational_Lensing_Simulation
-            "src/main.cpp"
+            src/main.cpp
             src/config.h
             src/Object/object3d.h
             src/Logging/logger.h
@@ -45,11 +45,33 @@ if(UNIX AND NOT APPLE)
             glfw
             glad
             OpenGL::GL
-            glm
+            glm::glm
     )
 
-    set(CMAKE_CXX_STANDARD 20)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    #got this from AI (CMake has trash documentation :/)
+
+    install(TARGETS Gravitational_Lensing_Simulation
+            RUNTIME DESTINATION bin
+            COMPONENT app)
+
+    set(CPACK_DEB_COMPONENT_INSTALL ON)
+    set(CPACK_COMPONENTS_ALL app)
+    set(CPACK_DEBIAN_APP_FILE_NAME DEB-DEFAULT)
+    set(CPACK_DEBIAN_APP_PACKAGE_NAME "gravitational-lensing-simulation")
+    set(CPACK_GENERATOR "DEB")
+    set(CPACK_PACKAGE_NAME "gravitational-lensing-simulation")
+    set(CPACK_PACKAGE_VERSION "0.1.1")
+    set(CPACK_PACKAGE_CONTACT "Qstorm don't email")
+    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Gravitational lensing simulation")
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Qstorm don't email")
+    set(CPACK_DEBIAN_PACKAGE_SECTION "science")
+    set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
+    set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)  # auto-detect runtime deps (needs dpkg-shlibdeps)
+    include(CPack)
+
+
+
+    
 
 elseif(WIN32 OR WIN64)
 
