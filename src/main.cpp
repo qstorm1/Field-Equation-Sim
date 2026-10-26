@@ -69,35 +69,11 @@ int main() {
     object3d testObj = {0, 0, 0, 2, 4, "test object M"};
 
 
-    //A vertex buffer is a list of vertex's that we then send to the gpu to do it's calculations
-    unsigned int VBO;
-    //assign a specific ID that turns this int into a buffer
-    glGenBuffers(1, &VBO);
-    //set openGL's vertex buffer to be VBO
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-
-    //set the vertex shader (shader responsible for moving points to the correct location)
-    unsigned int vertexShader;
-    //create a shader of type vertex shader cause we're making a vertex shader.
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-    //sets the code for the shader that we're making to be the one set in graphics.h. the second and fourth parameters are unimportant because we are not using multiple strings
-    glShaderSource(vertexShader, 1, &vertextShaderSource, NULL);
-    //compile the shader's code
-    glCompileShader(vertexShader);
-
-
-    int shaderSucess;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &shaderSucess);
-    if(!shaderSucess)
+    //set up the shaders (the code that is run on the graphics card) and link them to openGL
+    if (setupShaders()==512)
     {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
         return 512;
     }
-
 
 
 
@@ -156,7 +132,80 @@ int main() {
 
 }
 
+int setupShaders()
+{
+    //*many of these comments are @qstorm's interpretation and could possibly be wrong
 
+
+    //A vertex buffer is a list of vertex's that we then send to the gpu to do it's calculations
+    unsigned int VBO;
+    //assign a specific ID that turns this int into a buffer
+    glGenBuffers(1, &VBO);
+    //set openGL's vertex buffer to be VBO
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+
+    //set the vertex shader (shader responsible for moving points to the correct location)
+    //create a shader of type vertex shader cause we're making a vertex shader.
+    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+
+    //sets the code for the shader that we're making to be the one set in graphics.h. the second and fourth parameters are unimportant because we are not using multiple strings
+    glShaderSource(vertexShader, 1, &vertextShaderSource, NULL);
+    //compile the shader's code
+    glCompileShader(vertexShader);
+
+
+    //this shader is responsible for the functionality behind (look at vertex shader for explanation on what each function do)
+    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragShaderSource, NULL);
+    glCompileShader(fragmentShader);
+
+
+    //check if shader loaded
+    int shaderSuccess;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &shaderSuccess);
+    if(!shaderSuccess)
+    {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        return 512;
+    }
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &shaderSuccess);
+    if(!shaderSuccess)
+    {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        return 512;
+    }
+
+
+
+    //this is a shader program that brings the other shaders together in a single program that will run every time we render an object
+    unsigned int shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &shaderSuccess);
+    if(!shaderSuccess)
+    {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        return 512;
+    }
+
+    //the thing that tells openGL to use the shader whenever rendering something
+    glUseProgram(shaderProgram);
+
+    //delete shaders from local memoery?
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+
+    return 0;
+}
 
 void runSimulationLoop(GLFWwindow* window)
 {

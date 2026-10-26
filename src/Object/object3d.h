@@ -7,7 +7,7 @@
 #include <utility>
 #include <map>
 
-
+//TODO: move code to .cpp file
 class object3d {
 
     //track object ID in case we need that or something
