@@ -8,6 +8,9 @@ This is a project focused on simulating gravity accurately using Einstein's Fiel
 - go to the installation folder
 - run `sudo apt install ./gravitational-lensing-simulation_0.1.1_linux.deb`
 - run `Gravitational_Lensing_Simulation` to start
+### WINDOWS 10/11:
+- download the exe from the webpage
+- run it on your device
 
 ## How to use:
 - currently, the build will only generate a window with a square
