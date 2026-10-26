@@ -86,6 +86,11 @@ int main() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+    //de-allocate remaining processes
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
 
     glfwTerminate();
 
@@ -142,18 +147,14 @@ int setupShaders()
     //the data points
     //TODO: normalize these verticies onto screen space
     float testVertices[] = {
-        // first triangle
         0.5f,  0.5f, 0.0f,  // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-       -0.5f,  0.5f, 0.0f,  // top left
-       // second triangle
         0.5f, -0.5f, 0.0f,  // bottom right
        -0.5f, -0.5f, 0.0f,  // bottom left
        -0.5f,  0.5f, 0.0f   // top left
-    };
-    unsigned int indices[] = {
-        0,1,3,
-        1,2,3
+   };
+    unsigned int indices[] = {  // note that we start from 0!
+        0, 1, 3,  // first Triangle
+        1, 2, 3   // second Triangle
     };
 
 
@@ -217,6 +218,19 @@ int setupShaders()
     glDeleteShader(fragmentShader);
 
 
+
+
+    //vertex handling
+
+
+    //A Vertex Array (VAO) it is the super array that handles all of the type's of shader. This specific one is just for triangles
+
+    //assign the specific ID that turns this int into a unique buffer
+    glGenVertexArrays(1, &VAO);
+
+
+
+
     //A vertex buffer (VBO) is a list of vertex's that we then send to the gpu to do it's calculations
     //it is used to manage the graphics cards memory which is able to store large numbers of vertex
 
@@ -224,10 +238,6 @@ int setupShaders()
     glGenBuffers(1, &VBO);
 
 
-    //A Vertex Array (VAO)
-
-    //assign the specific ID that turns this int into a unique buffer
-    glGenVertexArrays(1, &VAO);
 
 
     //set openGL's vertex buffer to be VBO
@@ -289,7 +299,7 @@ void runRenderLoop()
 
     //the thing that tells openGL to use the shader whenever rendering something
     glUseProgram(shaderProgram);
-    //tells openGL to pull the data from the VAO inputed
+    //tells openGL to pull the data from the VAO inputted
     glBindVertexArray(VAO);
     //the first element states where in the current VBO we want to start with and the second states how many we want to draw
 
