@@ -20,6 +20,13 @@ if(UNIX AND NOT APPLE)
             GIT_REPOSITORY https://github.com/Dav1dde/glad.git
             GIT_TAG
     )
+    FetchContent_Declare(
+            glm
+            GIT_REPOSITORY https://github.com/g-truc/glm.git
+            GIT_TAG
+    )
+
+    FetchContent_MakeAvailable(glm)
 
 
     FetchContent_MakeAvailable(glad)
@@ -29,11 +36,16 @@ if(UNIX AND NOT APPLE)
             src/config.h
             src/Object/object3d.h
             src/Logging/logger.h
+            src/Graphics/graphics.h
+            src/GlobalVariables.h
+            src/matrix.hpp
+            src/matrix.h
     )
     target_link_libraries(Gravitational_Lensing_Simulation PUBLIC
             glfw
             glad
             OpenGL::GL
+            glm
     )
 
     set(CMAKE_CXX_STANDARD 20)
@@ -41,6 +53,7 @@ if(UNIX AND NOT APPLE)
 
 elseif(WIN32 OR WIN64)
 
+    #idk how to import glm using files
 
     set(CMAKE_CXX_STANDARD 20)
 
