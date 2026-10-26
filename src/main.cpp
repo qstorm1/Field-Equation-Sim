@@ -1,6 +1,5 @@
 #include "config.h"
-#include "matrix.h"
-#include <glm/glm.hpp>
+
 
 
 
@@ -76,7 +75,6 @@ int main() {
     {
         return 512;
     }
-
 
 
 
@@ -293,13 +291,22 @@ int setupShaders()
 
 
     //set wireframe mode
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     return 0;
 }
 
 void runRenderLoop()
 {
+
+    glm::mat4 transform = glm::mat4(1.0f);
+    transform = glm::translate(transform, glm::vec3(0.1f,-0.1f,0.0f));
+    transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f,0.0f,1.0f));
+
+
+
+
+
     float vertices[object3d::getTotalNumbOfObjects()][3];
 
     //the thing that tells openGL to use the shader whenever rendering something
@@ -310,6 +317,8 @@ void runRenderLoop()
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
 }
 void runPhysicsLoop()
 {
@@ -340,7 +349,7 @@ void handleInput(GLFWwindow* window)
 void runSimulationLoop(GLFWwindow* window)
 {
     //this sets the background color used when clearing
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
     //this clears the color
     glClear(GL_COLOR_BUFFER_BIT);
 
