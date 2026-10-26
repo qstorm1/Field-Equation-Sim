@@ -2,7 +2,7 @@
 
 //include our own headers
 #include "Logging/logger.h"
-#include "Object/object.h"
+#include "Object/object3d.h"
 #include "Graphics/graphics.h"
 #include "GlobalVariables.h"
 
@@ -11,6 +11,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+//graphics matrix library
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 //std library
@@ -20,3 +24,4 @@
 #include <ctime>
 #include <sstream>
 #include <vector>
+

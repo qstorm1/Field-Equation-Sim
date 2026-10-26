@@ -24,21 +24,21 @@
 #define G (6.6743 * pow(10,-11))
 
 //this should be in a .cpp file
-class object {
+class object3d {
 
     //track object ID in case we need that or something
     static inline unsigned int totalIDs = 0;
     //tracks current ID's of each object
 
     //creates a map of objects that can be accessed from ID
-    static inline std::map<unsigned int, object*> objects;
+    static inline std::map<unsigned int, object3d*> objects;
 
     //declare attributes
     double x, y, z, mass, radius;   //METERS, METERS, METERS, KILOGRAMS, METERS FOR NOW
     unsigned int id;
 
     //checks if 2 objects overlap
-    bool isOverlapping(object &other) {
+    bool isOverlapping(object3d &other) {
         double distanceCenter = calculateDistance(other);
         double radiusSum = this->radius + other.radius;
         return radiusSum > distanceCenter;
@@ -50,7 +50,7 @@ public:
 
     std::string name;
     //constructor with default params using initialiser list
-    object(double x = 0, double y = 0, double z = 0,
+    object3d(double x = 0, double y = 0, double z = 0,
            double mass = 1, double radius = 1, std::string name = "")
         : x(x), y(y), z(z), mass(mass), radius(radius)
     {
@@ -85,7 +85,7 @@ public:
     //normal functions
 
     //calculates euclidian distance
-    double calculateDistance(object &other) {
+    double calculateDistance(object3d &other) {
         return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
     }
 
@@ -149,6 +149,17 @@ public:
 
     double getRadius(){
         return radius;
+    }
+
+    static int getTotalNumbOfObjects()
+    {
+        return objects.size();
+    }
+
+
+    static std::vector<double[3]> getAllObjectsPosition()
+    {
+
     }
 
     //setter functions
@@ -223,12 +234,12 @@ public:
 
     //operator overrides
 
-    bool operator==(object &other) {
+    bool operator==(object3d &other) {
         return x == other.x && y == other.y && z == other.z;
     }
 
     //destructor
-    ~object() {
+    ~object3d() {
         objects.erase(id);
         std::string filePath = "../coutLog.txt";
         std::stringstream ss;
@@ -239,7 +250,7 @@ public:
     //static methods
 
     //gets object by ID
-    static object& getObjectByID(unsigned int num) {
+    static object3d& getObjectByID(unsigned int num) {
         auto it = objects.find(num);
         if (it == objects.end()) {
             throw std::out_of_range("ID not found");
