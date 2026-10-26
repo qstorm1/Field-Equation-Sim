@@ -7,3 +7,14 @@ This is a project focused on simulating gravity accurately using Einstein's Fiel
 
 ## How to use:
 - currently, the build will only generate a window with a square
+
+# AI usage
+We use AI in order to teach us how c++ concepts work or deal with things we don't understand.
+We rarely use AI to generate code.
+
+# How and why we built it:
+@qstorm and @panda_noob have built this project mostly cause it's fun! We are doing it to improve our math and coding skills!
+While I would rather not explain all of the issues and hurtles we faced in building it (you can look at the commit log for that)
+do know that this is our first c++ project (not coding project though) and it's quite a lot so it will probably be trash
+
+I'm so sleep deprived
