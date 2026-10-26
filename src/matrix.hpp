@@ -200,7 +200,7 @@ Matrix* mulMatrix(Matrix *matrix_A,Matrix *matrix_B)
 				sum = 0.0;
 				for (k=0; k<matrix_A->columns; k++)
 				{
-					sum += matrix_A->data[i * matrix_A->columns + k] * matrix_B->data[k * matrix_B->rows + j];
+					sum += matrix_A->data[i * matrix_A->columns + k] * matrix_B->data[k * matrix_B->columns + j];
 				}
 				matrix_C->data[i*matrix_C->columns + j] = sum;
 			}

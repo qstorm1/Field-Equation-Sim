@@ -1,3 +1,16 @@
+/*  OBJECT CLASS STRUCTURE
+ *  So far the main differences are a different obj file being rendered (for visual purposes)
+ *
+ *  Object
+ *  ->Black Hole
+ *  ->Neutron Star
+ *  ->Galaxy
+ *  ->Star
+ *  ->Planet
+ *      ->Mercury, Venus, Earth, ... (+ more if we want)
+ *  ->Other
+ */
+
 #pragma once
 #include <vector>
 #include <sstream>
@@ -7,6 +20,8 @@
 #include <utility>
 #include <map>
 #include "../matrix.hpp"
+
+#define G (6.6743 * pow(10,-11))
 
 //this should be in a .cpp file
 class object {
@@ -74,13 +89,44 @@ public:
         return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
     }
 
-    // //return a distance vector from this to other
-    // Matrix* calculateDistanceVector(object &other) {
-    //     Matrix* m = initMatrix(1, 3);
-    // }
+    //return a distance vector from this to other
+    Matrix* calculateDistanceVector(object &other) {
+        Matrix* m = initMatrix(3, 1);
+        double array[] = {other.x-x, other.y-y, other.z-z};
+        assignMatrix(m, array);
+        return m;
+    }
+
+    //gets magnitude of newtonian force
+    double calculateNewtonForceMagnitude(object &other) {
+        return (mass * other.mass * G)/(calculateDistance(other) * calculateDistance(other));
+    }
+
+    //return a force vector to another object
+    Matrix* calculateNewtonForceVector(object &other) {
+        Matrix* force = calculateDistanceVector(other);
+        double normalisedForce = calculateNewtonForceMagnitude(other)/calculateDistance(other);
+        for (int i = 0; i < 3; i++) {
+            force->data[i] *= normalisedForce;   // scale the direction vector
+        }
+        return force;
+    }
+
+    //returns the total force being exerted on each object
+    Matrix* calculateNewtonTotalForce() {
+        Matrix* total = initMatrix(3, 1);
+        for (auto& [otherId, other] : objects) {
+            if (otherId == id) continue;
+            Matrix* force = calculateNewtonForceVector(*other);
+            Matrix* sum = addMatrix(total, force);
+            freeMatrix(force);
+            freeMatrix(total);
+            total = sum;
+        }
+        return total;
+    }
 
     //getter functions
-
     unsigned int getID() {
         return id;
     }

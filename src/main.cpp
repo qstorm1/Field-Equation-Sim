@@ -1,5 +1,4 @@
 #include "config.h"
-#include "matrix.h"
 
 
 int main() {
@@ -82,11 +81,15 @@ int main() {
     try {
 
         //test objects for overlap checking
-        object o = {0, 0, 0, 2, 4, "test object"};
-        object p = {1, 1, 111, 2, 11};
+        object Earth = {0, 0, 0, 5.97*pow(10, 24), 6371000, "Earth"};
+        object Person = {0, 6371002, 0, 70, 1};
 
+        Matrix* m;
+        m = Earth.calculateNewtonTotalForce();
 
+        printMatrix(m);
 
+        //OH MY GAWD WE GET LITTLE G IT WORKS
 
 
 
