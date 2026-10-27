@@ -260,10 +260,40 @@ public:
 
     }
 
+    //deletes all objects
     static void deleteAllObjects() {
-        for (std::pair<unsigned int, object3d*> pair: objects) {
+        for (const std::pair<unsigned int, object3d*> &pair: objects) {
             (*(pair.second)).~object3d();
         }
+    }
+
+    //perhaps change this to have custom point struct as an argument
+    static double calculateMassDensity(double xStart, double yStart, double zStart, double xEnd, double yEnd, double zEnd) {
+        double mass = 0;
+
+        if (xStart > xEnd) {
+            throw std::invalid_argument("Starting X value cannot be larger than ending X value.");
+        }
+        if (yStart > yEnd) {
+            throw std::invalid_argument("Starting Y value cannot be larger than ending Y value.");
+        }
+        if (zStart > zEnd) {
+            throw std::invalid_argument("Starting Z value cannot be larger than ending Z value.");
+        }
+
+        //adds mass of objects
+        for (const std::pair<unsigned int, object3d*> &pair : objects) {
+            //checks if object is inside
+            if (pair.second->x > xStart && pair.second->x < xEnd) {
+                if (pair.second->y > yStart && pair.second->y < yEnd) {
+                    if (pair.second->z > zStart && pair.second->z < zEnd) {
+                        mass += pair.second->mass;
+                    }
+                }
+            }
+        }
+        //Perhaps include calculation for circular segment IF NECESSARY
+
     }
 
 
