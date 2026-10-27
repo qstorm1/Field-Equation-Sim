@@ -109,8 +109,8 @@ public:
         return force;
     }
 
-    //returns the total force being exerted on each object
-    glm::vec3 calculateNewtonTotalForce() {
+    //returns the net force being exerted on each object
+    glm::vec3 calculateGravitationalField() {
         glm::vec3 total(0.0, 0.0, 0.0);
         //adds each force vector to total
         for (auto& [otherId, other] : objects) {
@@ -119,6 +119,13 @@ public:
             total+=force;
         }
         return total;
+    }
+
+    //returns net acceleration on the object
+    glm::vec3 calculateAccelerationField() {
+        glm::vec3 force = calculateGravitationalField();
+        force/=mass;
+        return force;
     }
 
     //getter functions
@@ -252,6 +259,13 @@ public:
     {
 
     }
+
+    static void deleteAllObjects() {
+        for (std::pair<unsigned int, object3d*> pair: objects) {
+            (*(pair.second)).~object3d();
+        }
+    }
+
 
 };
 

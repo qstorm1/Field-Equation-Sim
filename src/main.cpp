@@ -64,7 +64,7 @@ int main() {
 
 
     //object used for testing
-    //object3d testObj = {0, 0, 0, 2, 4, "test object M"};
+    object3d testObj = {0, 0, 0, 2, 4, "test object M"};
 
 
     //set up the shaders (the code that is run on the graphics card) and link them to openGL
@@ -92,6 +92,9 @@ int main() {
 
     glfwTerminate();
 
+    //deletes all objects after window closes for test objects
+    object3d::deleteAllObjects();
+
 
 
     //try catch block to log everything that errors
@@ -102,7 +105,7 @@ int main() {
         object3d Person = {0, 6371002, 0, 70, 1};
 
 
-        glm::vec3 testVector = Earth.calculateNewtonTotalForce();
+        glm::vec3 testVector = Person.calculateAccelerationField();
         std::stringstream ss;
 
         ss << testVector.x << ' ' << testVector.y << ' ' << testVector.z << std::endl;

@@ -487,3 +487,59 @@ Mon Oct 26 15:02:59 2026
  Destroyed object: 2
 Mon Oct 26 15:02:59 2026
  Destroyed object: 1
+Mon Oct 26 15:04:17 2026
+ 0 687.167 0
+Mon Oct 26 15:04:17 2026
+ Destroyed object: 2
+Mon Oct 26 15:04:17 2026
+ Destroyed object: 1
+Mon Oct 26 17:41:01 2026
+ Destroyed object: 1
+Mon Oct 26 17:41:19 2026
+ 0 687.167 0
+Mon Oct 26 17:41:19 2026
+ Destroyed object: 2
+Mon Oct 26 17:41:19 2026
+ Destroyed object: 1
+Mon Oct 26 17:41:42 2026
+ 0 687.167 0
+Mon Oct 26 17:41:42 2026
+ Destroyed object: 2
+Mon Oct 26 17:41:42 2026
+ Destroyed object: 1
+Mon Oct 26 17:42:52 2026
+ 0 687.167 0
+Mon Oct 26 17:42:52 2026
+ Destroyed object: 2
+Mon Oct 26 17:42:52 2026
+ Destroyed object: 1
+Mon Oct 26 17:51:17 2026
+ Destroyed object: 1
+Mon Oct 26 17:51:17 2026
+ 0 687.167 0
+Mon Oct 26 17:51:17 2026
+ Destroyed object: 3
+Mon Oct 26 17:51:17 2026
+ Destroyed object: 2
+Mon Oct 26 17:51:17 2026
+ Destroyed object: 1
+Mon Oct 26 17:52:19 2026
+ Destroyed object: 1
+Mon Oct 26 17:52:19 2026
+ 0 1.15103e-22 0
+Mon Oct 26 17:52:19 2026
+ Destroyed object: 3
+Mon Oct 26 17:52:19 2026
+ Destroyed object: 2
+Mon Oct 26 17:52:19 2026
+ Destroyed object: 1
+Mon Oct 26 17:52:53 2026
+ Destroyed object: 1
+Mon Oct 26 17:52:53 2026
+ 0 -9.81668 0
+Mon Oct 26 17:52:53 2026
+ Destroyed object: 3
+Mon Oct 26 17:52:53 2026
+ Destroyed object: 2
+Mon Oct 26 17:52:53 2026
+ Destroyed object: 1
