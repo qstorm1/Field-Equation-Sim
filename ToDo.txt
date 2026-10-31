@@ -27,5 +27,5 @@ Lol alr
 Create object class with a general set of parameters and functions of interstellar bodies
 DUE NOV 14TH
 
-Create/import class for linear algebra operations
+Test Linear Algebra Code and Newtonian Force
 DUE NOV 28TH

@@ -1,3 +1,16 @@
+/*  OBJECT CLASS STRUCTURE
+ *  So far the main differences are a different obj file being rendered (for visual purposes)
+ *
+ *  Object
+ *  ->Black Hole
+ *  ->Neutron Star
+ *  ->Galaxy
+ *  ->Star
+ *  ->Planet
+ *      ->Mercury, Venus, Earth, ... (+ more if we want)
+ *  ->Other
+ */
+
 #pragma once
 #include <vector>
 #include <sstream>
@@ -6,9 +19,13 @@
 #include <stdexcept>
 #include <utility>
 #include <map>
-#include "../matrix.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-//TODO: move code to .cpp file
+#define G (6.6743 * pow(10,-11))
+
+//this should be in a .cpp file
 class object3d {
 
     //track object ID in case we need that or something
@@ -74,13 +91,44 @@ public:
         return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
     }
 
-    // //return a distance vector from this to other
-    // Matrix* calculateDistanceVector(object &other) {
-    //     Matrix* m = initMatrix(1, 3);
-    // }
+    //return a distance vector from this to other
+     glm::vec3 calculateDistanceVector(object3d &other) {
+        glm::vec3 distance(other.x-x, other.y-y, other.z-z);
+        return distance;
+    }
+
+    //gets magnitude of newtonian force
+    double calculateNewtonForceMagnitude(object3d &other) {
+        return (mass * other.mass * G)/(calculateDistance(other) * calculateDistance(other));
+    }
+
+    //return a force vector to another object
+    glm::vec3 calculateNewtonForceVector(object3d &other) {
+        glm::vec3 force = glm::normalize(calculateDistanceVector(other));
+        force*=calculateNewtonForceMagnitude(other);
+        return force;
+    }
+
+    //returns the net force being exerted on each object
+    glm::vec3 calculateGravitationalField() {
+        glm::vec3 total(0.0, 0.0, 0.0);
+        //adds each force vector to total
+        for (auto& [otherId, other] : objects) {
+            if (otherId == id) continue;
+            glm::vec3 force = calculateNewtonForceVector(*other);
+            total+=force;
+        }
+        return total;
+    }
+
+    //returns net acceleration on the object
+    glm::vec3 calculateAccelerationField() {
+        glm::vec3 force = calculateGravitationalField();
+        force/=mass;
+        return force;
+    }
 
     //getter functions
-
     unsigned int getID() {
         return id;
     }
@@ -103,17 +151,6 @@ public:
 
     double getRadius(){
         return radius;
-    }
-
-    static int getTotalNumbOfObjects()
-    {
-        return objects.size();
-    }
-
-
-    static std::vector<double[3]> getAllObjectsPosition()
-    {
-
     }
 
     //setter functions
@@ -210,6 +247,53 @@ public:
             throw std::out_of_range("ID not found");
         }
         return *it->second;
+    }
+
+    static int getTotalNumbOfObjects()
+    {
+        return objects.size();
+    }
+
+
+    static std::vector<double[3]> getAllObjectsPosition()
+    {
+
+    }
+
+    //deletes all objects
+    static void deleteAllObjects() {
+        for (const std::pair<unsigned int, object3d*> &pair: objects) {
+            (*(pair.second)).~object3d();
+        }
+    }
+
+    //perhaps change this to have custom point struct as an argument
+    static double calculateMassDensity(double xStart, double yStart, double zStart, double xEnd, double yEnd, double zEnd) {
+        double mass = 0;
+
+        if (xStart > xEnd) {
+            throw std::invalid_argument("Starting X value cannot be larger than ending X value.");
+        }
+        if (yStart > yEnd) {
+            throw std::invalid_argument("Starting Y value cannot be larger than ending Y value.");
+        }
+        if (zStart > zEnd) {
+            throw std::invalid_argument("Starting Z value cannot be larger than ending Z value.");
+        }
+
+        //adds mass of objects
+        for (const std::pair<unsigned int, object3d*> &pair : objects) {
+            //checks if object is inside
+            if (pair.second->x > xStart && pair.second->x < xEnd) {
+                if (pair.second->y > yStart && pair.second->y < yEnd) {
+                    if (pair.second->z > zStart && pair.second->z < zEnd) {
+                        mass += pair.second->mass;
+                    }
+                }
+            }
+        }
+        //Perhaps include calculation for circular segment IF NECESSARY
+
     }
 
 

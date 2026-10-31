@@ -38,8 +38,6 @@ if(UNIX AND NOT APPLE)
             src/Logging/logger.h
             src/Graphics/graphics.h
             src/GlobalVariables.h
-            src/matrix.hpp
-            src/matrix.h
     )
     target_link_libraries(Gravitational_Lensing_Simulation PUBLIC
             glfw
@@ -88,13 +86,11 @@ elseif(WIN32 OR WIN64)
             src/GlobalVariables.h
             dependencies/windows/glad/glad.c
             #https://github.com/XingGao-cn/FreeMatrix-C
-            src/matrix.hpp
-            src/matrix.h
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 
     target_link_libraries(Gravitational_Lensing_Simulation
-            ${CMAKE_SOURCE_DIR}/dependencies/GLFW/libglfw3.a
+            ${CMAKE_SOURCE_DIR}/dependencies/windows/GLFW/libglfw3.a
             opengl32)
     #gdi32 doesn't work on linux so we shouldn't import it, you can still install it if it says it needs it but don't include it in any header files
 endif ()

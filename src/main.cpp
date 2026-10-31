@@ -1,9 +1,6 @@
 #include "config.h"
 
 
-
-
-
 int main() {
     //create files to write to
     std::fstream errorLog;
@@ -83,6 +80,7 @@ int main() {
     while (!glfwWindowShouldClose(window))
     {
         runSimulationLoop(window);
+        glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -94,28 +92,27 @@ int main() {
 
     glfwTerminate();
 
+    //deletes all objects after window closes for test objects
+    object3d::deleteAllObjects();
+
 
 
     //try catch block to log everything that errors
     try {
 
         //test objects for overlap checking
-        object3d o = {0, 0, 0, 2, 4, "test object"};
-        object3d p = {1, 1, 111, 2, 11};
+        object3d Earth = {0, 0, 0, 5.97*pow(10, 24), 6371000, "Earth"};
+        object3d Person = {0, 6371002, 0, 70, 1};
 
-        //test equals operator
-        std::string filepath = "../coutLog.txt";
 
+        glm::vec3 testVector = Person.calculateAccelerationField();
         std::stringstream ss;
-        ss << (o == p) << std::endl;
+
+        ss << testVector.x << ' ' << testVector.y << ' ' << testVector.z << std::endl;
+        std::string filepath = "../coutLog.txt";
         logConsole(filepath, ss);
 
-        ss.str("");
-        ss << (o == o) << std::endl;
-        logConsole(filepath, ss);
-        ss.str("");
-
-        p.name = "testing object 2";
+        //OH MY GAWD WE GET LITTLE G IT WORKS
 
 
 
