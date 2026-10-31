@@ -8,6 +8,24 @@ int main() {
     errorLog.open("../ErrorLog.txt", std::ios::app);
 
 
+    //we use a translation matrix instead of just adding because for thousands of objects that are all being translated
+    //the same way, it's easier to combine the rotation and translation matrix before adding it
+    //to all objects in one step then repeatedly adding the same vector and then multiplying by the rotation matrix
+
+    //we will eventually get these vectors from some form of file
+    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+    //first we create the correct translation matrix by taking a normal coordinate system (as in the unit matrix)
+    //and adding some vector to it. This gives us a translation matrix that we can multiply with vec to get vec in a translated coordinate system
+    vec = glm::translate( glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 0.0f)) * vec;
+    std::cout << vec.x << vec.y << vec.z << std::endl;
+
+
+
+    // this will move all coordinates pi radiants clockwise, scale the object to half it's size, and move the object up 1
+    glm::mat4 finalTrans = glm::mat4(1.0f);
+    finalTrans = glm::translate(finalTrans,glm::vec3(0.0f,1.0f, 0.0f));
+    //finalTrans = glm::rotate(finalTrans,std::numbers::pi,gkn::vec3))
+    finalTrans = glm::scale(finalTrans,glm::vec3(0.5f, 0.5f, 0.5f));
 
     GLFWwindow* window= nullptr;
     try
@@ -79,11 +97,14 @@ int main() {
     //the loop that runs so long as the window is open
     while (!glfwWindowShouldClose(window))
     {
+
         runSimulationLoop(window);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+
+        glfwSwapBuffers(window);//swap the old buffers with updated one's (like change the monitor data)
+        glfwPollEvents();//handle IO events
     }
+
+
     //de-allocate remaining processes
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &EBO);
@@ -156,20 +177,19 @@ int setupShaders()
 
 
 
-    //set the vertex shader (shader responsible for moving points to the correct location)
-    //create a shader of type vertex shader cause we're making a vertex shader.
+    //create the vertex shader (shader responsible for moving points to the correct location)
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
 
     //sets the code for the shader that we're making to be the one set in graphics.h. the second and fourth parameters are unimportant because we are not using multiple strings
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
     //compile the shader's code
     glCompileShader(vertexShader);
 
 
-    //this shader is responsible for the functionality behind (look at vertex shader for explanation on what each function do)
+    //this shader is responsible for handling color (look at vertex shader for explanation on what each function do)
     unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragShaderSource, NULL);
+    glShaderSource(fragmentShader, 1, &fragShaderSource, nullptr);
     glCompileShader(fragmentShader);
 
 
@@ -220,7 +240,7 @@ int setupShaders()
     //vertex handling
 
 
-    //A Vertex Array (VAO) it is the super array that handles all of the type's of shader. This specific one is just for triangles
+    //A Vertex Array (VAO) it is the super array that handles all the type's of shader. This specific one is just for triangles
 
     //assign the specific ID that turns this int into a unique buffer
     glGenVertexArrays(1, &VAO);
@@ -236,15 +256,19 @@ int setupShaders()
 
 
 
+    //EBO's are used to handle indices (lines connecting vertexes)
+    glGenBuffers(1, &EBO);
+
+
+    //tells openGL that we want to use this VAO
+    glBindVertexArray(VAO);
+
+
 
     //set openGL's vertex buffer to be VBO
     //GL_ARRAY_BUFFER just means it will send an array as a buffer
     //this means the graphics card will need to deal with an array when it gets the data
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-
-    //tells openGL that we want to use this VAO
-    glBindVertexArray(VAO);
 
 
 
@@ -260,8 +284,6 @@ int setupShaders()
 
 
 
-    //EBO's are used to handle indices (lines connecting vertexes)
-    glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
@@ -284,7 +306,7 @@ int setupShaders()
 
     //unbind buffers
     glBindBuffer(GL_ARRAY_BUFFER, 0);//this is allowed because we already have the VBO saved to the VOA
-    //glBindVertexArray(0);
+    glBindVertexArray(0);
 
 
     //set wireframe mode
@@ -295,11 +317,10 @@ int setupShaders()
 
 void runRenderLoop()
 {
-
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, glm::vec3(0.1f,-0.1f,0.0f));
-    transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f,0.0f,1.0f));
-
+    //this sets the background color used when clearing
+    glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
+    //this clears the color
+    glClear(GL_COLOR_BUFFER_BIT);
 
 
 
@@ -308,13 +329,23 @@ void runRenderLoop()
 
     //the thing that tells openGL to use the shader whenever rendering something
     glUseProgram(shaderProgram);
-    //tells openGL to pull the data from the VAO inputted
-    glBindVertexArray(VAO);
+
+
+    const double time = glfwGetTime();
+    float greenness = sin(time)/2.0f+0.5f;
+    int vertexColorLocation = glGetUniformLocation(shaderProgram, "greenColor");
+    glUniform4f(vertexColorLocation, 0.0f, greenness, 0.0f, 1.0f);
+
+
+
     //the first element states where in the current VBO we want to start with and the second states how many we want to draw
 
+    //draw 6 triangles???
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+
+    //tells openGL to pull the data from the VAO inputted
+    glBindVertexArray(VAO);
 
 }
 void runPhysicsLoop()
@@ -345,10 +376,6 @@ void handleInput(GLFWwindow* window)
 
 void runSimulationLoop(GLFWwindow* window)
 {
-    //this sets the background color used when clearing
-    glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
-    //this clears the color
-    glClear(GL_COLOR_BUFFER_BIT);
 
 
     runRenderLoop();
