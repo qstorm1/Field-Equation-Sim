@@ -280,6 +280,7 @@ int setUpVertices()
 
 void runRenderLoop(const shader* currentShader)
 {
+
     //this sets the background color used when clearing
     glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
     //this clears the color
@@ -302,9 +303,9 @@ void runRenderLoop(const shader* currentShader)
 
 
     auto trans = glm::mat4(1.0f);
-    //trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
+    trans = glm::translate(trans, glm::vec3(sin(time)/2, 0.0f, 0.0f));
     //first value = matrix we want to transform, second value = angle change, third value = which axis to transform about
-    trans = glm::rotate(trans, glm::radians(45.0f+static_cast<float>(rotation)), glm::vec3(0.0f, 0.0f, 1.0f));
+    trans = glm::rotate(trans, static_cast<float>(time), glm::vec3(0.0f, 0.0f, 1.0f));
     trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
 
     glUniformMatrix4fv(currentShader->getUniform("worldTransform"),1,GL_FALSE, glm::value_ptr(trans));

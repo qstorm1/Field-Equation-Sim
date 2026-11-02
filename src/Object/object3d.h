@@ -145,6 +145,11 @@ public:
         return z;
     }
 
+    glm::vec3 getPos()
+    {
+        return {getX(),getY,getZ};
+    }
+
     double getMass() {
         return mass;
     }
@@ -255,10 +260,18 @@ public:
     }
 
 
-    // static std::vector<double[3]> getAllObjectsPosition()
-    // {
-    //
-    // }
+    static std::vector<glm::vec3> getAllObjectsPosition()
+    {
+        std::vector <glm::vec3> result;
+        auto it = objects.begin();
+        while (it != objects.end())
+        {
+            result.push_back(it->second->getPos());//add the position to the end
+            ++it;//++ before just means that the result is ignored
+        }
+
+        return result;
+    }
 
     //deletes all objects
     static void deleteAllObjects() {
