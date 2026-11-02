@@ -296,13 +296,29 @@ void runRenderLoop(const shader* currentShader)
 
 
 
-    auto trans = glm::mat4(1.0f);
-    trans = glm::translate(trans, glm::vec3(sin(time)/2, 0.0f, 0.0f));
-    //first value = matrix we want to transform, second value = angle change, third value = which axis to transform about
-    trans = glm::rotate(trans, static_cast<float>(time), glm::vec3(0.0f, 0.0f, 1.0f));
-    trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+    //This matrix is responsible from moving objects at (0,0,0) to their correct positions in 3D space.
+    //For instance, if you want to rotate an object around it's center, you need to make sure the object
+    //is centered around (0,0,0) before rotating. Then you can move the object to it's position in 3D space.
 
-    glUniformMatrix4fv(currentShader->getUniform("worldTransform"),1,GL_FALSE, glm::value_ptr(trans));
+    auto transLocal = glm::mat4(1.0f);
+    //first value = matrix we want to transform, second value = angle change, third value = which axis to transform about
+    //transLocal = glm::scale(transLocal, glm::vec3(0.5f, 0.5f, 0.5f));
+    transLocal = glm::rotate(transLocal, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+    // The object is in the camera (which is located at (0,0,0)), so we need to move it in front of the camera by
+    // moving it down some amount. Remember that the camera is facing the z axis so we move it backwards on the z axis
+    auto transView = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+
+    //this makes far things smaller and large things larger.
+    auto transProjection = glm::perspective(GlobalVariables::cameraFOV, GlobalVariables::aspectRatio, GlobalVariables::zNear,GlobalVariables::zFar);
+
+
+    //transLocal = glm::translate(transLocal, glm::vec3(0.9f, 0.0f, 0.0f));
+    //transLocal = glm::rotate(transLocal, static_cast<float>(time), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    glUniformMatrix4fv(currentShader->getUniform("local"),1,GL_FALSE, glm::value_ptr(transLocal));
+    glUniformMatrix4fv(currentShader->getUniform("view"),1,GL_FALSE, glm::value_ptr(transView));
+    glUniformMatrix4fv(currentShader->getUniform("projection"),1,GL_FALSE, glm::value_ptr(transProjection));
 
 
 

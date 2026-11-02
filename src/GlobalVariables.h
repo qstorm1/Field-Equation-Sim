@@ -5,10 +5,10 @@
 
 struct GlobalVariables{
     //TODO: make settings menu to change the variables that may need changing
-    static constexpr int initWidth = 640;
-    static constexpr int initHeight = 640;
+    static constexpr int initWidth = 800;
+    static constexpr int initHeight = 600;
 
-    inline static float cameraFOV=90;//degree's
+    inline static float cameraFOV=90.0f*std::numbers::pi/180.0f;//radiant's
     inline static float zNear=0.1;
     inline static float zFar=100;
     inline static float sensX=10;
@@ -17,6 +17,7 @@ struct GlobalVariables{
     inline static float backwardMoveExcel=10;
     inline static float sideMoveExcel=10;
     inline static float yMoveExcel=10;
+    inline static float aspectRatio=800.0f/600.0f;
 
     static void resetGlobalVariables()
     {

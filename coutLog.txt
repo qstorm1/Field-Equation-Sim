@@ -953,3 +953,83 @@ Sun Nov  1 22:05:00 2026
  Destroyed object: 3
 Sun Nov  1 22:05:00 2026
  Destroyed object: 2
+Sun Nov  1 22:14:45 2026
+ Destroyed object: 1
+Sun Nov  1 22:14:45 2026
+ 0 -9.81668 0
+Sun Nov  1 22:14:45 2026
+ Destroyed object: 3
+Sun Nov  1 22:14:45 2026
+ Destroyed object: 2
+Sun Nov  1 22:15:49 2026
+ Destroyed object: 1
+Sun Nov  1 22:15:49 2026
+ 0 -9.81668 0
+Sun Nov  1 22:15:49 2026
+ Destroyed object: 3
+Sun Nov  1 22:15:49 2026
+ Destroyed object: 2
+Sun Nov  1 22:16:03 2026
+ Destroyed object: 1
+Sun Nov  1 22:16:03 2026
+ 0 -9.81668 0
+Sun Nov  1 22:16:03 2026
+ Destroyed object: 3
+Sun Nov  1 22:16:03 2026
+ Destroyed object: 2
+Sun Nov  1 22:16:15 2026
+ Destroyed object: 1
+Sun Nov  1 22:16:15 2026
+ 0 -9.81668 0
+Sun Nov  1 22:16:15 2026
+ Destroyed object: 3
+Sun Nov  1 22:16:15 2026
+ Destroyed object: 2
+Sun Nov  1 22:28:43 2026
+ Destroyed object: 1
+Sun Nov  1 22:28:43 2026
+ 0 -9.81668 0
+Sun Nov  1 22:28:43 2026
+ Destroyed object: 3
+Sun Nov  1 22:28:43 2026
+ Destroyed object: 2
+Sun Nov  1 22:29:36 2026
+ Destroyed object: 1
+Sun Nov  1 22:29:36 2026
+ 0 -9.81668 0
+Sun Nov  1 22:29:36 2026
+ Destroyed object: 3
+Sun Nov  1 22:29:36 2026
+ Destroyed object: 2
+Sun Nov  1 22:29:49 2026
+ Destroyed object: 1
+Sun Nov  1 22:29:49 2026
+ 0 -9.81668 0
+Sun Nov  1 22:29:49 2026
+ Destroyed object: 3
+Sun Nov  1 22:29:49 2026
+ Destroyed object: 2
+Sun Nov  1 22:29:59 2026
+ Destroyed object: 1
+Sun Nov  1 22:29:59 2026
+ 0 -9.81668 0
+Sun Nov  1 22:29:59 2026
+ Destroyed object: 3
+Sun Nov  1 22:29:59 2026
+ Destroyed object: 2
+Sun Nov  1 22:30:46 2026
+ Destroyed object: 1
+Sun Nov  1 22:30:46 2026
+ 0 -9.81668 0
+Sun Nov  1 22:30:46 2026
+ Destroyed object: 3
+Sun Nov  1 22:30:46 2026
+ Destroyed object: 2
+Sun Nov  1 22:31:36 2026
+ Destroyed object: 1
+Sun Nov  1 22:31:36 2026
+ 0 -9.81668 0
+Sun Nov  1 22:31:36 2026
+ Destroyed object: 3
+Sun Nov  1 22:31:36 2026
+ Destroyed object: 2

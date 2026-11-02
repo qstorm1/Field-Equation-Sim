@@ -15,7 +15,6 @@ shader::shader(const char* verShadPath, const char* fragShadPath)
     std::ifstream vertexShaderFile;
     std::ifstream fragmentShaderFile;
 
-    std::cout << std::filesystem::current_path() << std::endl;
 
 
 
