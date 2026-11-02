@@ -432,14 +432,14 @@ void handleInput(GLFWwindow* window)
         cameraPos-=(GlobalVariables::backwardMoveExcel*cameraDirection);
 
     if (glfwGetKey(window, GLFW_KEY_SPACE)==GLFW_PRESS)
-        //camera->operator+=(GlobalVariables::yMoveExcel);
+        cameraPos+=(GlobalVariables::yMoveExcel*cameraUp);
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT)==GLFW_PRESS)
-        //camera->y -= GlobalVariables::yMoveExcel;
+        cameraPos-= (GlobalVariables::yMoveExcel*cameraUp);
 
             //move sideMoveExcel distance in the camera Right vector
     if (glfwGetKey(window, GLFW_KEY_A)==GLFW_PRESS)
-        cameraPos+=(GlobalVariables::sideMoveExcel*glm::cross(cameraDirection, cameraUp));
+        cameraPos-=(GlobalVariables::sideMoveExcel*glm::cross(cameraDirection, cameraUp));
 
 
     //move sideMoveExcel distance in the camera Right vector
