@@ -255,10 +255,10 @@ public:
     }
 
 
-    static std::vector<double[3]> getAllObjectsPosition()
-    {
-
-    }
+    // static std::vector<double[3]> getAllObjectsPosition()
+    // {
+    //
+    // }
 
     //deletes all objects
     static void deleteAllObjects() {

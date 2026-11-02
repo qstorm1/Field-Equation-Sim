@@ -5,6 +5,7 @@
 #include "Object/object3d.h"
 #include "Graphics/graphics.h"
 #include "GlobalVariables.h"
+#include "Shader/shader.h"
 
 
 //include graphics library
@@ -25,3 +26,5 @@
 #include <sstream>
 #include <vector>
 
+
+void runSimulationLoop(GLFWwindow* window, const shader* currentShader);

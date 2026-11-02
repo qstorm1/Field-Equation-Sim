@@ -1,11 +1,20 @@
 #include "config.h"
 
 
+
 int main() {
     //create files to write to
     std::fstream errorLog;
 
     errorLog.open("../ErrorLog.txt", std::ios::app);
+
+
+
+
+    //TO BE DELETED:
+
+    //{
+
 
 
     //we use a translation matrix instead of just adding because for thousands of objects that are all being translated
@@ -21,11 +30,19 @@ int main() {
 
 
 
-    // this will move all coordinates pi radiants clockwise, scale the object to half it's size, and move the object up 1
-    glm::mat4 finalTrans = glm::mat4(1.0f);
+    // this will move all coordinates pi radians clockwise, scale the object to half it's size, and move the object up 1
+    auto finalTrans = glm::mat4(1.0f);
     finalTrans = glm::translate(finalTrans,glm::vec3(0.0f,1.0f, 0.0f));
     //finalTrans = glm::rotate(finalTrans,std::numbers::pi,gkn::vec3))
     finalTrans = glm::scale(finalTrans,glm::vec3(0.5f, 0.5f, 0.5f));
+
+
+
+
+    //} END DELETE
+
+
+
 
     GLFWwindow* window= nullptr;
     try
@@ -86,10 +103,12 @@ int main() {
 
 
     //set up the shaders (the code that is run on the graphics card) and link them to openGL
-    if (setupShaders()==512)
-    {
-        return 512;
-    }
+    //this is a shader, a tool responsable for dictating how the graphics card handles inputed information.
+    //The first file is the vertex shader, the second file is the fragment shader. More explanation in the constructor
+    shader currentShade(SHADER_DIR "vertex-shader", SHADER_DIR "fragment-shader");
+
+    //set up graphics card communication things
+    setUpVertices();
 
 
 
@@ -98,7 +117,7 @@ int main() {
     while (!glfwWindowShouldClose(window))
     {
 
-        runSimulationLoop(window);
+        runSimulationLoop(window,&currentShade);
 
         glfwSwapBuffers(window);//swap the old buffers with updated one's (like change the monitor data)
         glfwPollEvents();//handle IO events
@@ -157,87 +176,31 @@ int main() {
 }
 
 
-int setupShaders()
+
+
+
+int setUpVertices()
 {
     //*many of these comments are @qstorm's interpretation and could possibly be wrong
 
 
+
+
+
+
     //the data points
-    //TODO: normalize these verticies onto screen space
-    float testVertices[] = {
+    //TODO: normalize these vertices onto screen space
+    constexpr float testVertices[] = {
         0.5f,  0.5f, 0.0f,  // top right
         0.5f, -0.5f, 0.0f,  // bottom right
        -0.5f, -0.5f, 0.0f,  // bottom left
        -0.5f,  0.5f, 0.0f   // top left
    };
-    unsigned int indices[] = {  // note that we start from 0!
+    const unsigned int indices[] = {  // note that we start from 0!
         0, 1, 3,  // first Triangle
         1, 2, 3   // second Triangle
     };
 
-
-
-    //create the vertex shader (shader responsible for moving points to the correct location)
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-
-    //sets the code for the shader that we're making to be the one set in graphics.h. the second and fourth parameters are unimportant because we are not using multiple strings
-    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
-    //compile the shader's code
-    glCompileShader(vertexShader);
-
-
-    //this shader is responsible for handling color (look at vertex shader for explanation on what each function do)
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragShaderSource, nullptr);
-    glCompileShader(fragmentShader);
-
-
-    //check if shader loaded correctly
-    int shaderSuccess;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &shaderSuccess);
-    if(!shaderSuccess)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-        return 512;
-    }
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &shaderSuccess);
-    if(!shaderSuccess)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-        return 512;
-    }
-
-
-
-    //this is a shader program that brings the other shaders together in a single program that will run every time we render an object
-    shaderProgram = glCreateProgram();
-    //connect the 2 shaders to the shader program
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    //makes shaderProgram a full shader by A) checking to make sure everything is fit correctly and B) bringing it together
-    glLinkProgram(shaderProgram);
-
-    //check if final shader loaded correctly
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &shaderSuccess);
-    if(!shaderSuccess)
-    {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-        return 512;
-    }
-
-    //delete shaders from local memory?
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-
-
-
-    //vertex handling
 
 
     //A Vertex Array (VAO) it is the super array that handles all the type's of shader. This specific one is just for triangles
@@ -250,6 +213,7 @@ int setupShaders()
 
     //A vertex buffer (VBO) is a list of vertex's that we then send to the gpu to do it's calculations
     //it is used to manage the graphics cards memory which is able to store large numbers of vertex
+
 
     //assign a specific ID that turns this int into a unique buffer
     glGenBuffers(1, &VBO);
@@ -315,7 +279,7 @@ int setupShaders()
     return 0;
 }
 
-void runRenderLoop()
+void runRenderLoop(const shader* currentShader)
 {
     //this sets the background color used when clearing
     glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
@@ -327,13 +291,12 @@ void runRenderLoop()
 
     float vertices[object3d::getTotalNumbOfObjects()][3];
 
-    //the thing that tells openGL to use the shader whenever rendering something
-    glUseProgram(shaderProgram);
 
+    currentShader->use();
 
     const double time = glfwGetTime();
     float greenness = sin(time)/2.0f+0.5f;
-    int vertexColorLocation = glGetUniformLocation(shaderProgram, "greenColor");
+    int vertexColorLocation = glGetUniformLocation(shaderProgram, "primaryColor");
     glUniform4f(vertexColorLocation, 0.0f, greenness, 0.0f, 1.0f);
 
 
@@ -374,11 +337,11 @@ void handleInput(GLFWwindow* window)
 
 }
 
-void runSimulationLoop(GLFWwindow* window)
+void runSimulationLoop(GLFWwindow* window, const shader* currentShader)
 {
 
 
-    runRenderLoop();
+    runRenderLoop(currentShader);
 
 
 

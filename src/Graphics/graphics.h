@@ -10,25 +10,21 @@ struct GLFWwindow;
 
 inline const char *vertexShaderSource = "#version 330 core\n"
     "layout (location=0) in vec3 aPos;\n"
-
-    "out vec4 vertexColor;"//sent to the in of the frag shader right now
     "void main()\n"
     "{\n"
     "   gl_Position = vec4(aPos.x,aPos.y,aPos.z,1.0);"
-    "   vertexColor = vec4(0.5,0.0,0.0,1.0);"
     "}\0";
 
 inline const char *fragShaderSource = "#version 330 core\n"
-    "in vec4 vertexColor;"
+    "uniform vec4 primaryColor;"
     "out vec4 FragColor;\n"
     "void main()\n"
     "{\n"
-    "   FragColor=vertexColor;\n"
+    "   FragColor=primaryColor;\n"
     "}\0";
 inline unsigned int shaderProgram,VBO,VAO,EBO;
 
 inline double camera[] = {0,0,0};
 
-int setupShaders();
-void runSimulationLoop(GLFWwindow* window);
+int setUpVertices();
 void onResize(GLFWwindow* window, int width, int height);
