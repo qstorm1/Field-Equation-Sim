@@ -19,9 +19,6 @@ shader::shader(const char* verShadPath, const char* fragShadPath)
 
 
 
-    std::ifstream f(verShadPath);
-    if (!f.is_open()) std::cout <<"failed opening " << verShadPath << std::endl;
-
 
     //I lokey stole this from the tutorial I have no idea why we need it, but it's related to errors
     vertexShaderFile.exceptions( std::ifstream::failbit| std::ifstream::badbit);
@@ -121,4 +118,7 @@ void shader::use() const
     //the thing that tells openGL to use the shader whenever rendering something
     glUseProgram(shaderProgram);
 }
-
+shader::~shader()
+{
+    glDeleteProgram(shaderProgram);
+}

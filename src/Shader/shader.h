@@ -17,9 +17,11 @@ class shader{
 public:
     int shaderProgram,vertex,fragment;
     shader(const char*, const char*);
+    ~shader();
 
     //const means read-only
     void use() const;
+
 
 
 };

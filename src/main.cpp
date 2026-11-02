@@ -116,7 +116,7 @@ int main() {
     //the loop that runs so long as the window is open
     while (!glfwWindowShouldClose(window))
     {
-
+        //the simulation loop, everything repeated check happens in here
         runSimulationLoop(window,&currentShade);
 
         glfwSwapBuffers(window);//swap the old buffers with updated one's (like change the monitor data)
@@ -128,7 +128,6 @@ int main() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &EBO);
     glDeleteBuffers(1, &VBO);
-    glDeleteProgram(shaderProgram);
 
     glfwTerminate();
 
@@ -296,7 +295,7 @@ void runRenderLoop(const shader* currentShader)
 
     const double time = glfwGetTime();
     float greenness = sin(time)/2.0f+0.5f;
-    int vertexColorLocation = glGetUniformLocation(shaderProgram, "primaryColor");
+    int vertexColorLocation = glGetUniformLocation(currentShader->shaderProgram, "primaryColor");
     glUniform4f(vertexColorLocation, 0.0f, greenness, 0.0f, 1.0f);
 
 
