@@ -11,38 +11,6 @@ int main() {
 
 
 
-    //TO BE DELETED:
-
-    //{
-
-
-
-    //we use a translation matrix instead of just adding because for thousands of objects that are all being translated
-    //the same way, it's easier to combine the rotation and translation matrix before adding it
-    // //to all objects in one step then repeatedly adding the same vector and then multiplying by the rotation matrix
-    //
-    // //we will eventually get these vectors from some form of file
-    // glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-    // //First, we create the correct translation matrix by taking a normal coordinate system (as in the unit matrix)
-    // //and adding some vector to it. This gives us a translation matrix that we can multiply with vec to get vec in a translated coordinate system
-    // vec = glm::translate( glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 0.0f)) * vec;
-    // std::cout << vec.x << vec.y << vec.z << std::endl;
-    //
-    //
-    //
-    // // this will move all coordinates pi radians clockwise, scale the object to half it's size, and move the object up 1
-    // auto finalTrans = glm::mat4(1.0f);
-    // finalTrans = glm::translate(finalTrans,glm::vec3(0.0f,1.0f, 0.0f));
-    // //finalTrans = glm::rotate(finalTrans,std::numbers::pi,gkn::vec3))
-    // finalTrans = glm::scale(finalTrans,glm::vec3(0.5f, 0.5f, 0.5f));
-    //
-
-
-
-    //} END DELETE
-
-
-
 
     GLFWwindow* window= nullptr;
     try
@@ -84,31 +52,31 @@ int main() {
     //from what I understand, this loads the openGL context onto the glfw window so the window can do glfw stuff
     glfwMakeContextCurrent(window);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
     {
         return 50;
     }
 
 
 
-    //make the starting size of the window
+    //Make the starting size of the window
     glViewport(0, 0, GlobalVariables::initWidth, GlobalVariables::initHeight);
 
-    //run the onResize() llambda whenever the window is resized
+    //Run the onResize() llambda whenever the window is resized
     glfwSetFramebufferSizeCallback(window,onResize);
 
 
     //object used for testing
-    object3d testObj = {0, 0, 0, 2, 4, "test object M"};
+    object3d testObj = {0, 0.5, 0, 2, 4, "test object M"};
 
 
-    //set up the shaders (the code that is run on the graphics card) and link them to openGL
-    //this is a shader, a tool responsable for dictating how the graphics card handles inputed information.
+    //Set up the shaders (the code that is run on the graphics card) and link them to openGL
+    //this is a shader, a tool responsible for dictating how the graphics card handles inputted information.
     //The first file is the vertex shader, the second file is the fragment shader. More explanation in the constructor
     shader currentShade(SHADER_DIR "vertex-shader", SHADER_DIR "fragment-shader");
 
     //set up graphics card communication things
-    setUpVertices();
+    setUpVertices(object3d::getAllObjectsPosition().front());
 
 
 
@@ -133,6 +101,14 @@ int main() {
 
     //deletes all objects after window closes for test objects
     object3d::deleteAllObjects();
+
+
+
+
+
+
+    //panda tests
+
 
 
 
@@ -178,7 +154,7 @@ int main() {
 
 
 
-int setUpVertices()
+int setUpVertices(const glm::vec3 objectPos)
 {
     //*many of these comments are @qstorm's interpretation and could possibly be wrong
 
@@ -187,18 +163,7 @@ int setUpVertices()
 
 
 
-    //the data points
-    //TODO: normalize these vertices onto screen space
-    constexpr float testVertices[] = {
-        0.5f,  0.5f, 0.0f,  // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-       -0.5f, -0.5f, 0.0f,  // bottom left
-       -0.5f,  0.5f, 0.0f   // top left
-   };
-    const unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 3,  // first Triangle
-        1, 2, 3   // second Triangle
-    };
+
 
 
 
@@ -235,8 +200,26 @@ int setUpVertices()
 
 
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 
+
+
+    //TODO: normalize these vertices onto screen space
+    //currently there are a dummy set of coordinates given the objectPositions vector will return a single object with position (0,0,0)
+    //it's coordinates of (0,0,0) will turn into these coordinates (A square centered around whatever the point is) ->
+
+    const float testVertices[] = {
+        objectPos.x+0.5f, objectPos.y+0.5f, objectPos.z, // top right
+        objectPos.x+0.5f, objectPos.y-0.5f, objectPos.z, // bottom right
+        objectPos.x-0.5f, objectPos.y-0.5f, objectPos.z, // bottom left
+        objectPos.x-0.5f, objectPos.y+0.5f, objectPos.z  // top left
+    };
+
+    const unsigned int indices[] = {  // note that we start from 0!
+        0, 1, 3,  // first Triangle
+        1, 2, 3   // second Triangle
+    };
 
 
     //sends the data that is set in the VBO to the GPU
@@ -247,7 +230,7 @@ int setUpVertices()
 
 
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 
@@ -278,6 +261,11 @@ int setUpVertices()
     return 0;
 }
 
+void updateCurrentVerticies()
+{
+    //TODO: this updates the vbo and vao
+}
+
 void runRenderLoop(const shader* currentShader)
 {
 
@@ -289,17 +277,23 @@ void runRenderLoop(const shader* currentShader)
 
 
 
-    float vertices[object3d::getTotalNumbOfObjects()][3];
-
-
     currentShader->use();
+
+
+    //loop through each object and render them
+    std::vector<glm::vec3> objectPositions = object3d::getAllObjectsPosition();
+    for (glm::vec3& objectPos : objectPositions)
+    {
+
+
+
+    }
 
     const double time = glfwGetTime();
     float greenness = sin(time)/2.0f+0.5f;
     int vertexColorLocation = glGetUniformLocation(currentShader->shaderProgram, "primaryColor");
     glUniform4f(vertexColorLocation, 0.0f, greenness, 0.0f, 1.0f);
 
-    double rotation = sin(time)*20.0;
 
 
     auto trans = glm::mat4(1.0f);

@@ -147,7 +147,7 @@ public:
 
     glm::vec3 getPos()
     {
-        return {getX(),getY,getZ};
+        return glm::vec3(getX(),getY(),getZ());
     }
 
     double getMass() {
