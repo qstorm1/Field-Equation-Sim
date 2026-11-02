@@ -67,7 +67,8 @@ int main() {
 
 
     //object used for testing
-    object3d testObj = {0, 0.5, 0, 2, 4, "test object M"};
+    object3d testObj = {0, 0.5, 0, 2, 0.1, "test object M"};
+    object3d testObj2 = {0, 0, -3, 2, 0.1, "test object M"};
 
 
     //Set up the shaders (the code that is run on the graphics card) and link them to openGL
@@ -185,7 +186,7 @@ int setUpVertices(const glm::vec3 objectPos)
 
 
     //EBO's are used to handle indices (lines connecting vertexes)
-    glGenBuffers(1, &EBO);
+    //glGenBuffers(1, &EBO);
 
 
     //tells openGL that we want to use this VAO
@@ -200,7 +201,7 @@ int setUpVertices(const glm::vec3 objectPos)
 
 
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 
 
@@ -209,29 +210,73 @@ int setUpVertices(const glm::vec3 objectPos)
     //currently there are a dummy set of coordinates given the objectPositions vector will return a single object with position (0,0,0)
     //it's coordinates of (0,0,0) will turn into these coordinates (A square centered around whatever the point is) ->
 
-    const float testVertices[] = {
-        objectPos.x+0.5f, objectPos.y+0.5f, objectPos.z, // top right
-        objectPos.x+0.5f, objectPos.y-0.5f, objectPos.z, // bottom right
-        objectPos.x-0.5f, objectPos.y-0.5f, objectPos.z, // bottom left
-        objectPos.x-0.5f, objectPos.y+0.5f, objectPos.z  // top left
+    constexpr float square[] = {
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
-    const unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 3,  // first Triangle
-        1, 2, 3   // second Triangle
-    };
+    //     {
+    //     objectPos.x+0.5f, objectPos.y+0.5f, objectPos.z, // top right
+    //     objectPos.x+0.5f, objectPos.y-0.5f, objectPos.z, // bottom right
+    //     objectPos.x-0.5f, objectPos.y-0.5f, objectPos.z, // bottom left
+    //     objectPos.x-0.5f, objectPos.y+0.5f, objectPos.z  // top left
+    // };
+
+    // const unsigned int indices[] = {  // note that we start from 0!
+    //     0, 1, 3,  // first Triangle
+    //     1, 2, 3   // second Triangle
+    // };
 
 
     //sends the data that is set in the VBO to the GPU
     //change whatever the GL_ARRAY_BUFFER is (the VBO in the main function) to a buffer with our vertices
     //GL_STATIC_DRAW is a configuration given to the graphics card that says the data(testVertices) will only be set once and used a bunch
     //we will likely switch to GL_DYNAMIC_DRAW because we'll be using objects who's coordinates are moving
-    glBufferData(GL_ARRAY_BUFFER, sizeof(testVertices), testVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(square), square, GL_STATIC_DRAW);
 
 
 
 
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 
 
@@ -244,7 +289,7 @@ int setUpVertices(const glm::vec3 objectPos)
     //the fourth is weather we should normalize the point (ex: screen space = 500-500 , openGL space = 0.5,0.2 (not to scale))
     //the fifth is the distance in memory before making a new aPos
     //the sixth is the offset, meaning the memory distance from the start of the VBO
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), static_cast<void*>(nullptr));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), static_cast<void*>(nullptr));
 
     //Enables the VBO located at index 0 of the VAO (makes the shader we just set turn on)
     glEnableVertexAttribArray(0);
@@ -258,10 +303,14 @@ int setUpVertices(const glm::vec3 objectPos)
     //set wireframe mode
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+
+
+    glEnable(GL_DEPTH_TEST);
+
     return 0;
 }
 
-void updateCurrentVerticies()
+void updateCurrentVertices()
 {
     //TODO: this updates the vbo and vao
 }
@@ -270,66 +319,74 @@ void runRenderLoop(const shader* currentShader)
 {
 
     //this sets the background color used when clearing
-    glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     //this clears the color
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 
 
     currentShader->use();
 
-
-    //loop through each object and render them
-    std::vector<glm::vec3> objectPositions = object3d::getAllObjectsPosition();
-    for (glm::vec3& objectPos : objectPositions)
-    {
-
-
-
-    }
+    //tells openGL to pull the data from the VAO inputted
+    glBindVertexArray(VAO);
 
     const double time = glfwGetTime();
-    float greenness = sin(time)/2.0f+0.5f;
+    float greenness = sin(time)/4.0f+0.5f;
     int vertexColorLocation = glGetUniformLocation(currentShader->shaderProgram, "primaryColor");
     glUniform4f(vertexColorLocation, 0.0f, greenness, 0.0f, 1.0f);
 
 
 
-    //This matrix is responsible from moving objects at (0,0,0) to their correct positions in 3D space.
-    //For instance, if you want to rotate an object around it's center, you need to make sure the object
-    //is centered around (0,0,0) before rotating. Then you can move the object to it's position in 3D space.
 
-    auto transLocal = glm::mat4(1.0f);
-    //first value = matrix we want to transform, second value = angle change, third value = which axis to transform about
-    //transLocal = glm::scale(transLocal, glm::vec3(0.5f, 0.5f, 0.5f));
-    transLocal = glm::rotate(transLocal, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-    // The object is in the camera (which is located at (0,0,0)), so we need to move it in front of the camera by
-    // moving it down some amount. Remember that the camera is facing the z axis so we move it backwards on the z axis
-    auto transView = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-
-    //this makes far things smaller and large things larger.
-    auto transProjection = glm::perspective(GlobalVariables::cameraFOV, GlobalVariables::aspectRatio, GlobalVariables::zNear,GlobalVariables::zFar);
+    //loop through each object and render them
+    std::vector<glm::vec3> objectPositions = object3d::getAllObjectsPosition();
+    for (glm::vec3& objectPos : objectPositions)
+    {
+        //This matrix is responsible from moving objects at (0,0,0) to their correct positions in 3D space.
+        //For instance, if you want to rotate an object around it's center, you need to make sure the object
+        //is centered around (0,0,0) before rotating. Then you can move the object to it's position in 3D space.
+        auto transLocal = glm::mat4(1.0f);
+        //first value = matrix we want to transform, second value = angle change, third value = which axis to transform about
+        transLocal = glm::translate(transLocal, objectPos);
+        transLocal = glm::rotate(transLocal, glm::radians(static_cast<float>(time)*20.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        transLocal = glm::rotate(transLocal, glm::radians(static_cast<float>(time)*5.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 
-    //transLocal = glm::translate(transLocal, glm::vec3(0.9f, 0.0f, 0.0f));
-    //transLocal = glm::rotate(transLocal, static_cast<float>(time), glm::vec3(0.0f, 0.0f, 1.0f));
-
-    glUniformMatrix4fv(currentShader->getUniform("local"),1,GL_FALSE, glm::value_ptr(transLocal));
-    glUniformMatrix4fv(currentShader->getUniform("view"),1,GL_FALSE, glm::value_ptr(transView));
-    glUniformMatrix4fv(currentShader->getUniform("projection"),1,GL_FALSE, glm::value_ptr(transProjection));
+        //This basically just moves the camera backwards. Technically it moves the world away from the camera, which is something that is a lot easier to do
+        auto transView = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
 
 
-
-    //the first element states where in the current VBO we want to start with and the second states how many we want to draw
-
-    //draw 6 triangles???
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        //This makes far things smaller and large things larger. Also normalizes points for us :D
+        auto transProjection = glm::perspective(GlobalVariables::cameraFOV, GlobalVariables::aspectRatio, GlobalVariables::zNear,GlobalVariables::zFar);
 
 
-    //tells openGL to pull the data from the VAO inputted
-    glBindVertexArray(VAO);
+        //set the matrix values in the shader to be whatever these values are
+        glUniformMatrix4fv(currentShader->getUniform("local"),1,GL_FALSE, glm::value_ptr(transLocal));
+        glUniformMatrix4fv(currentShader->getUniform("view"),1,GL_FALSE, glm::value_ptr(transView));
+        glUniformMatrix4fv(currentShader->getUniform("projection"),1,GL_FALSE, glm::value_ptr(transProjection));
+
+
+        //idk what this comment is
+        //the first element states where in the current VBO we want to start with and the second states how many we want to draw
+
+        //draw 6 triangles??? this is related to the EBO or whatever it's called.
+        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+        //draw the triangles on the screen
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+
+    }
+
+
+
+
+
+
+
+
 
 }
 void runPhysicsLoop()
