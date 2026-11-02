@@ -28,10 +28,10 @@ inline std::vector<float> sphereToCartesian(const float radius, const float thet
 /**
  * this is just a helper function for the generateSphere thing
  */
-inline void generateSphereFromPoint(std::vector<float>* points, const float radius, const int i, const int j)
+inline void generateSpherePoint(std::vector<float>* points, const float radius,const float stepAngleCol,const float stepAngleRow,
+    const int i, const int j)
 {
-    std::vector<float> r =  sphereToCartesian(radius,static_cast<float>(2*std::numbers::pi/i),
-                    static_cast<float>(std::numbers::pi/2-std::numbers::pi/j));
+    std::vector<float> r =  sphereToCartesian(radius,stepAngleRow*static_cast<float>(i),static_cast<float>((std::numbers::pi/2.0)-(stepAngleCol*static_cast<float>(j))));
     points->insert(points->end(), r.begin(), r.end());
 }
 
@@ -49,47 +49,80 @@ inline std::vector<float> generateSphere(const float radius, const int rows,cons
 {
     std::vector<float> result;
     std::vector<float> r1;
+
+    constexpr auto stepAngleCol=static_cast<float>(std::numbers::pi/columns);
+    constexpr auto stepAngleRow=static_cast<float>(2.0*std::numbers::pi/rows);
+
+
     //start at one to prevent 0 division
-    for (int i = 1; i<=rows; i++)
+    for (int i = 0; i<rows; i++)
     {
-        for (int j = 1; j<=columns; j++)
+        for (int j = 0; j<columns; j++)
         {
             //the top and bottom of spheres are 1 triangle
-            if (j==1)
+            if (j==0)
             {
-                //the bottom right
-                generateSphereFromPoint(&result,radius,i,j);
+                //    i   i+1
+                //j     O = i and i+1
+                //     | |
+                //    |   |
+                //   O-----O
+                //j+1
 
                 //the top
-                r1 = sphereToCartesian(radius,0,std::numbers::pi/2.0f);
-                result.insert(result.end(),r1.begin(), r1.end());
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i,j);
 
                 //the bottom left
-                generateSphereFromPoint(&result,radius,i-1,j);
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i,j+1);
+
+                //the bottom right
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i+1,j+1);
 
             }
             else if (j==columns-1)
             {
+                //  i     i+1
+                //j  O-----O
+                //    |   |
+                //     | |
+                //j+1   O = i and i+1
+
+                //top left
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i,j);
+
                 //bottom
-                r1 = sphereToCartesian(radius,0,std::numbers::pi/2.0f);
-                result.insert(result.end(),r1.begin(),r1.end());
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i,j+1);
 
                 //top right
-                generateSphereFromPoint(&result,radius,i,j+1);
-                //top left
-                r1 = sphereToCartesian(radius,static_cast<float>(2*std::numbers::pi/i),
-                    static_cast<float>(std::numbers::pi/2-std::numbers::pi/j));
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i+1,j);
+
+
             }
             else
             {
+                //    i  i+1
+                //j   O--O
+                //    |  |
+                //    |  |
+                //    O--O
+                //j+1
 
+                //first triangle
+                //top left
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i,j);
+                //bottom left
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i,j+1);
+                //bottom right
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i+1,j+1);
+
+                //second triangle
+                //top left
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i,j);
+                //bottom right
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i+1,j+1);
+                //top right
+                generateSpherePoint(&result,stepAngleCol,stepAngleRow,radius,i+1,j);
             }
-            //new coordinates:
-            //
-            // x = cos(phi)*cos(theta)
-            // y = cos(phi)*sin(theta)
-            // z = r*sin(theta)
-            result.push_back(0);
         }
     }
     return result;
