@@ -19,23 +19,23 @@ int main() {
 
     //we use a translation matrix instead of just adding because for thousands of objects that are all being translated
     //the same way, it's easier to combine the rotation and translation matrix before adding it
-    //to all objects in one step then repeatedly adding the same vector and then multiplying by the rotation matrix
-
-    //we will eventually get these vectors from some form of file
-    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-    //first we create the correct translation matrix by taking a normal coordinate system (as in the unit matrix)
-    //and adding some vector to it. This gives us a translation matrix that we can multiply with vec to get vec in a translated coordinate system
-    vec = glm::translate( glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 0.0f)) * vec;
-    std::cout << vec.x << vec.y << vec.z << std::endl;
-
-
-
-    // this will move all coordinates pi radians clockwise, scale the object to half it's size, and move the object up 1
-    auto finalTrans = glm::mat4(1.0f);
-    finalTrans = glm::translate(finalTrans,glm::vec3(0.0f,1.0f, 0.0f));
-    //finalTrans = glm::rotate(finalTrans,std::numbers::pi,gkn::vec3))
-    finalTrans = glm::scale(finalTrans,glm::vec3(0.5f, 0.5f, 0.5f));
-
+    // //to all objects in one step then repeatedly adding the same vector and then multiplying by the rotation matrix
+    //
+    // //we will eventually get these vectors from some form of file
+    // glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+    // //First, we create the correct translation matrix by taking a normal coordinate system (as in the unit matrix)
+    // //and adding some vector to it. This gives us a translation matrix that we can multiply with vec to get vec in a translated coordinate system
+    // vec = glm::translate( glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 0.0f)) * vec;
+    // std::cout << vec.x << vec.y << vec.z << std::endl;
+    //
+    //
+    //
+    // // this will move all coordinates pi radians clockwise, scale the object to half it's size, and move the object up 1
+    // auto finalTrans = glm::mat4(1.0f);
+    // finalTrans = glm::translate(finalTrans,glm::vec3(0.0f,1.0f, 0.0f));
+    // //finalTrans = glm::rotate(finalTrans,std::numbers::pi,gkn::vec3))
+    // finalTrans = glm::scale(finalTrans,glm::vec3(0.5f, 0.5f, 0.5f));
+    //
 
 
 
@@ -298,6 +298,17 @@ void runRenderLoop(const shader* currentShader)
     int vertexColorLocation = glGetUniformLocation(currentShader->shaderProgram, "primaryColor");
     glUniform4f(vertexColorLocation, 0.0f, greenness, 0.0f, 1.0f);
 
+    double rotation = sin(time)*20.0;
+
+
+    auto trans = glm::mat4(1.0f);
+    //trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
+    //first value = matrix we want to transform, second value = angle change, third value = which axis to transform about
+    trans = glm::rotate(trans, glm::radians(45.0f+static_cast<float>(rotation)), glm::vec3(0.0f, 0.0f, 1.0f));
+    trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+
+    glUniformMatrix4fv(currentShader->getUniform("worldTransform"),1,GL_FALSE, glm::value_ptr(trans));
+
 
 
     //the first element states where in the current VBO we want to start with and the second states how many we want to draw
@@ -341,9 +352,6 @@ void runSimulationLoop(GLFWwindow* window, const shader* currentShader)
 
 
     runRenderLoop(currentShader);
-
-
-
 
 
 }

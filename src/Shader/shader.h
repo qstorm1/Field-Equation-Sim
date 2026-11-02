@@ -21,7 +21,7 @@ public:
 
     //const means read-only
     void use() const;
-
+    GLint getUniform(const char* uniformName) const;
 
 
 };

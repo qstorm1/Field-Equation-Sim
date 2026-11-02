@@ -118,6 +118,15 @@ void shader::use() const
     //the thing that tells openGL to use the shader whenever rendering something
     glUseProgram(shaderProgram);
 }
+GLint shader::getUniform(const char* uniformName) const
+{
+    const GLint location = glGetUniformLocation(shaderProgram, uniformName);
+    if (location == -1)
+        std::cout << uniformName << " not found" << std::endl;
+    return location;
+}
+
+
 shader::~shader()
 {
     glDeleteProgram(shaderProgram);
