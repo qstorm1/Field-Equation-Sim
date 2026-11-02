@@ -66,9 +66,18 @@ int main() {
     glfwSetFramebufferSizeCallback(window,onResize);
 
 
+    //the position the camera is at
+    cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    //the direction vector of the camera
+    cameraDirection = glm::vec3(0.0f,0.0f,-1.0f);
+    //the vector pointing up from the camera
+    cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+
+
     //object used for testing
     object3d testObj = {0, 0.5, 0, 2, 0.1, "test object M"};
-    object3d testObj2 = {0, 0, -3, 2, 0.1, "test object M"};
+    object3d testObj2 = {2.0, 0, -3, 2, 0.1, "test object N"};
 
 
     //Set up the shaders (the code that is run on the graphics card) and link them to openGL
@@ -155,7 +164,7 @@ int main() {
 
 
 
-int setUpVertices(const glm::vec3 objectPos)
+int setUpVertices(glm::vec3 objectPos)
 {
     //*many of these comments are @qstorm's interpretation and could possibly be wrong
 
@@ -312,7 +321,7 @@ int setUpVertices(const glm::vec3 objectPos)
 
 void updateCurrentVertices()
 {
-    //TODO: this updates the vbo and vao
+
 }
 
 void runRenderLoop(const shader* currentShader)
@@ -331,10 +340,37 @@ void runRenderLoop(const shader* currentShader)
     //tells openGL to pull the data from the VAO inputted
     glBindVertexArray(VAO);
 
+
+
+
+    //current time
     const double time = glfwGetTime();
-    float greenness = sin(time)/4.0f+0.5f;
-    int vertexColorLocation = glGetUniformLocation(currentShader->shaderProgram, "primaryColor");
-    glUniform4f(vertexColorLocation, 0.0f, greenness, 0.0f, 1.0f);
+    // float greenness = sin(time)/4.0f+0.5f;
+    // int vertexColorLocation = glGetUniformLocation(currentShader->shaderProgram, "primaryColor");
+    // glUniform4f(vertexColorLocation, 0.0f, greenness, 0.0f, 1.0f);
+
+
+
+
+
+
+
+    const auto camX = static_cast<float>(sin(time)) ;
+    const auto camZ = static_cast<float>(cos(time)) ;
+    //Moves all the stuff to where the camera is, this is done using the magic lookAt matrix which I have already done the math for in other projects.
+    //The first is the position vector (where the camera is) the second is where the camera is looking at, and the third is where the camera's up direction is.
+    auto transView = glm::lookAt(cameraPos,cameraPos+cameraDirection, cameraUp);
+
+
+    //This makes far things smaller and large things larger. Also normalizes points for us :D
+    auto transProjection = glm::perspective(GlobalVariables::cameraFOV, GlobalVariables::aspectRatio, GlobalVariables::zNear,GlobalVariables::zFar);
+
+
+
+    //set the matrix values in the shader to be whatever these values are
+    glUniformMatrix4fv(currentShader->getUniform("view"),1,GL_FALSE, glm::value_ptr(transView));
+    glUniformMatrix4fv(currentShader->getUniform("projection"),1,GL_FALSE, glm::value_ptr(transProjection));
+
 
 
 
@@ -353,18 +389,9 @@ void runRenderLoop(const shader* currentShader)
         transLocal = glm::rotate(transLocal, glm::radians(static_cast<float>(time)*5.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 
-        //This basically just moves the camera backwards. Technically it moves the world away from the camera, which is something that is a lot easier to do
-        auto transView = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-
-
-        //This makes far things smaller and large things larger. Also normalizes points for us :D
-        auto transProjection = glm::perspective(GlobalVariables::cameraFOV, GlobalVariables::aspectRatio, GlobalVariables::zNear,GlobalVariables::zFar);
-
 
         //set the matrix values in the shader to be whatever these values are
         glUniformMatrix4fv(currentShader->getUniform("local"),1,GL_FALSE, glm::value_ptr(transLocal));
-        glUniformMatrix4fv(currentShader->getUniform("view"),1,GL_FALSE, glm::value_ptr(transView));
-        glUniformMatrix4fv(currentShader->getUniform("projection"),1,GL_FALSE, glm::value_ptr(transProjection));
 
 
         //idk what this comment is
@@ -393,32 +420,41 @@ void runPhysicsLoop()
 {
 
 }
+
 void handleInput(GLFWwindow* window)
 {
+    //move forwardMoveExcel distance in the camera forward vector
     if (glfwGetKey(window, GLFW_KEY_W)==GLFW_PRESS)
-        camera[0] += GlobalVariables::forwardMoveExcel;
+        cameraPos+=(GlobalVariables::forwardMoveExcel * cameraDirection);
 
+    //move forwardMoveExcel distance in the camera forward vector
     if (glfwGetKey(window, GLFW_KEY_S)==GLFW_PRESS)
-        camera[0] -= GlobalVariables::backwardMoveExcel;
+        cameraPos-=(GlobalVariables::backwardMoveExcel*cameraDirection);
 
     if (glfwGetKey(window, GLFW_KEY_SPACE)==GLFW_PRESS)
-        camera[1] += GlobalVariables::yMoveExcel;
+        //camera->operator+=(GlobalVariables::yMoveExcel);
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT)==GLFW_PRESS)
-        camera[1] -= GlobalVariables::yMoveExcel;
+        //camera->y -= GlobalVariables::yMoveExcel;
 
+            //move sideMoveExcel distance in the camera Right vector
     if (glfwGetKey(window, GLFW_KEY_A)==GLFW_PRESS)
-        camera[2] += GlobalVariables::sideMoveExcel;
+        cameraPos+=(GlobalVariables::sideMoveExcel*glm::cross(cameraDirection, cameraUp));
 
+
+    //move sideMoveExcel distance in the camera Right vector
     if (glfwGetKey(window, GLFW_KEY_D)==GLFW_PRESS)
-        camera[2] -= GlobalVariables::sideMoveExcel;
+        cameraPos+=(GlobalVariables::sideMoveExcel*glm::cross(cameraDirection, cameraUp));
+
+
 
 }
+
 
 void runSimulationLoop(GLFWwindow* window, const shader* currentShader)
 {
 
-
+    handleInput(window);
     runRenderLoop(currentShader);
 
 

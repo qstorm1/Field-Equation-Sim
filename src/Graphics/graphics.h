@@ -12,9 +12,8 @@ struct GLFWwindow;
 
 
 inline unsigned int shaderProgram,VBO,VAO,EBO;
+inline glm::vec3 cameraPos,cameraDirection,cameraUp;
 
-//the location of the camera
-inline double camera[] = {0,0,0};
-
-int setUpVertices(const glm::vec3 objectPos);
+int setUpVertices(glm::vec3 objectPos);
 void onResize(GLFWwindow* window, int width, int height);
+void handleInput(GLFWwindow* window);
