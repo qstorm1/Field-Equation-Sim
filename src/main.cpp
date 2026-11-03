@@ -5,14 +5,6 @@
 #include "configSym.h"
 
 int main() {
-    //create files to write to
-    std::fstream errorLog;
-
-    errorLog.open("../ErrorLog.txt", std::ios::app);
-
-
-
-
 
     GLFWwindow* window= nullptr;
     try
@@ -23,7 +15,7 @@ int main() {
         if (!glfwInit())
         {
             std::string errorMessage = "Window Failed to Launch";
-            logErrorString(errorLog, errorMessage);
+            logErrorString(errorMessage);
             return 50;
         }
 
@@ -40,14 +32,14 @@ int main() {
         if (!window)
         {
             std::string errorMessage = "Window Failed to Launch";
-            logErrorString(errorLog, errorMessage);
+            logErrorString(errorMessage);
             glfwTerminate();
             return 50;
         }
     }
     catch (const std::exception& e)
     {
-        logError(errorLog, e);
+        logError(e);
         return 50;
     }
 
@@ -137,7 +129,7 @@ int main() {
 
         ss << testVector.x << ' ' << testVector.y << ' ' << testVector.z << std::endl;
         std::string filepath = "../coutLog.txt";
-        logConsole(filepath, ss);
+        logConsole(ss);
 
         //OH MY GAWD WE GET LITTLE G IT WORKS
 
@@ -152,20 +144,19 @@ int main() {
 
 
     }catch (const std::out_of_range &e) {
-        logError(errorLog, e);
+        logError(e);
         return 2;
     }catch(const std::invalid_argument& e) {
-        logError(errorLog, e);
+        logError(e);
         return 1;
     }catch(std::exception &e) {
-        logError(errorLog, e);
+        logError(e);
         return -2;
     }catch(...){
-        logError(errorLog);
+        logError();
         return -1;
     }
 
-    errorLog.close();
     return 0;
 
 }

@@ -240,7 +240,7 @@ public:
         std::string filePath = "../coutLog.txt";
         std::stringstream ss;
         ss << "Destroyed object: " << id << std::endl;
-        logConsole(filePath, ss);
+        logConsole(ss);
     }
 
     //static methods
