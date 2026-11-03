@@ -7,7 +7,7 @@
 //logs unknown error
 inline void logError() {
     std::fstream file;
-    file.open("ErrorLog.txt", std::ios::app);
+    file.open("..\\src\\Logging\\ErrorLog.txt", std::ios::app);
     if (file.is_open()) {
         //get time
         const time_t now = time(nullptr);
@@ -21,7 +21,7 @@ inline void logError() {
 template <typename T>
 void logError(T &e) {
     std::fstream file;
-    file.open("ErrorLog.txt", std::ios::app);
+    file.open("..\\src\\Logging\\ErrorLog.txt", std::ios::app);
     if (file.is_open()) {
         //get time and log error with timestamp
         const time_t now = time(nullptr);
@@ -32,7 +32,7 @@ void logError(T &e) {
 
 void logErrorString(std::string &str) {
     std::fstream file;
-    file.open("ErrorLog.txt", std::ios::app);
+    file.open("..\\src\\Logging\\ErrorLog.txt", std::ios::app);
     if (file.is_open()) {
         //get time and log error with timestamp
         const time_t now = time(nullptr);
@@ -45,7 +45,7 @@ void logErrorString(std::string &str) {
 inline void logConsole(std::stringstream &stream) {
     //create file
     std::fstream file;
-    file.open("coutLog.txt", std::ios::app);
+    file.open("..\\src\\Logging\\coutLog.txt", std::ios::app);
     //get current time
     time_t now = time(nullptr);
     std::string output = (std::string) ctime(&now) + stream.str();

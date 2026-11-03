@@ -3,6 +3,7 @@
 //test symbol library   DOUBLE CHECK EVERYTHING WORKS ON LINUX
 //I WILL BE PLAYING AROUND WITH THIS TOMORROW AS MY BEDTIME IS NOT 2AM UNLIKE SOME OTHER PEOPLE
 #include "configSym.h"
+#include "symengine/eval.h"
 
 int main() {
 
@@ -119,24 +120,16 @@ int main() {
     //try catch block to log everything that errors
     try {
 
-        //test objects for overlap checking
-        object3d Earth = {0, 0, 0, 5.97*pow(10, 24), 6371000, "Earth"};
-        object3d Person = {0, 6371002, 0, 70, 1};
 
+        //testing SymEngine functions
 
-        glm::vec3 testVector = Person.calculateAccelerationField();
-        std::stringstream ss;
+        //logError();
 
-        ss << testVector.x << ' ' << testVector.y << ' ' << testVector.z << std::endl;
-        std::string filepath = "../coutLog.txt";
-        logConsole(ss);
-
-        //OH MY GAWD WE GET LITTLE G IT WORKS
-
-        SymEngine::RCP<const SymEngine::Symbol> x = SymEngine::symbol("x");
-        SymEngine::RCP<const SymEngine::Basic> e = pow(add(x, SymEngine::integer(1)), SymEngine::integer(2));   // (x+1)^2
-        std::cout << *expand(e) << '\n';
-        std::cout << *e->diff(x) << '\n';
+        // SymEngine::RCP<const SymEngine::Symbol> x = SymEngine::symbol("x");
+        // SymEngine::RCP<const SymEngine::Basic> e = pow(add(x, SymEngine::integer(1)), SymEngine::integer(2));// (x+1)^2
+        // std::cout << *SymEngine::evalf(*e, 16, SymEngine::EvalfDomain()) << '\n';
+        // std::cout << *expand(e) << '\n';
+        // std::cout << *e->diff(x) << '\n';
 
         //RAAAAAAAAAGH I GOT IT IT TOOK LIKE 2 HOURS
 
