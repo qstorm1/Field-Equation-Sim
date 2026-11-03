@@ -39,7 +39,7 @@ inline void logConsole(std::string &filePath, std::stringstream &stream) {
     file.open(filePath, std::ios::app);
     //get current time
     time_t now = time(nullptr);
-    std::string output = (std::string) ctime(&now) + "\b " + stream.str();
+    std::string output = (std::string) ctime(&now) + stream.str();
     //write to cout and output
     std::cout << output;
     if (file.is_open()) {
