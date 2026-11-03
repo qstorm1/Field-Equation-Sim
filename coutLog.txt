@@ -1,0 +1,92 @@
+Mon Nov 02 20:17:02 2026
+Destroyed object: 1
+Mon Nov 02 20:17:02 2026
+Destroyed object: 2
+Mon Nov 02 20:17:02 2026
+0 -9.81668 0
+Mon Nov 02 20:17:02 2026
+Destroyed object: 4
+Mon Nov 02 20:17:02 2026
+Destroyed object: 3
+Mon Nov 02 20:17:02 2026
+Destroyed object: 2
+Mon Nov 02 20:17:02 2026
+Destroyed object: 1
+Mon Nov 02 21:23:48 2026
+Destroyed object: 1
+Mon Nov 02 21:23:48 2026
+Destroyed object: 2
+Mon Nov 02 21:23:48 2026
+0 -9.81668 0
+Mon Nov 02 21:23:48 2026
+Destroyed object: 4
+Mon Nov 02 21:23:48 2026
+Destroyed object: 3
+Mon Nov 02 21:23:48 2026
+Destroyed object: 2
+Mon Nov 02 21:23:48 2026
+Destroyed object: 1
+Mon Nov 02 21:26:10 2026
+Destroyed object: 1
+Mon Nov 02 21:26:10 2026
+Destroyed object: 2
+Mon Nov 02 21:26:10 2026
+0 -9.81668 0
+Mon Nov 02 21:26:10 2026
+Destroyed object: 4
+Mon Nov 02 21:26:10 2026
+Destroyed object: 3
+Mon Nov 02 21:26:10 2026
+Destroyed object: 2
+Mon Nov 02 21:26:10 2026
+Destroyed object: 1
+Mon Nov 02 21:29:29 2026
+Destroyed object: 1
+Mon Nov 02 21:29:29 2026
+Destroyed object: 2
+Mon Nov 02 21:29:37 2026
+Destroyed object: 1
+Mon Nov 02 21:29:37 2026
+Destroyed object: 2
+Mon Nov 02 21:29:37 2026
+0 -9.81668 0
+Mon Nov 02 21:29:37 2026
+Destroyed object: 4
+Mon Nov 02 21:29:37 2026
+Destroyed object: 3
+Mon Nov 02 21:29:37 2026
+Destroyed object: 2
+Mon Nov 02 21:29:37 2026
+Destroyed object: 1
+Mon Nov 02 21:29:40 2026
+Destroyed object: 1
+Mon Nov 02 21:29:40 2026
+Destroyed object: 2
+Mon Nov 02 21:31:06 2026
+Destroyed object: 1
+Mon Nov 02 21:31:06 2026
+Destroyed object: 2
+Mon Nov 02 21:31:06 2026
+0 -9.81668 0
+Mon Nov 02 21:31:06 2026
+Destroyed object: 4
+Mon Nov 02 21:31:06 2026
+Destroyed object: 3
+Mon Nov 02 21:31:06 2026
+Destroyed object: 2
+Mon Nov 02 21:31:06 2026
+Destroyed object: 1
+Mon Nov 02 21:33:07 2026
+Destroyed object: 1
+Mon Nov 02 21:33:07 2026
+Destroyed object: 2
+Mon Nov 02 21:33:07 2026
+0 -9.81668 0
+Mon Nov 02 21:33:07 2026
+Destroyed object: 4
+Mon Nov 02 21:33:07 2026
+Destroyed object: 3
+Mon Nov 02 21:33:07 2026
+Destroyed object: 2
+Mon Nov 02 21:33:07 2026
+Destroyed object: 1

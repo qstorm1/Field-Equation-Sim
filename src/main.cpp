@@ -1,6 +1,8 @@
 #include "config.h"
 
-
+//test symbol library   DOUBLE CHECK EVERYTHING WORKS ON LINUX
+//I WILL BE PLAYING AROUND WITH THIS TOMORROW AS MY BEDTIME IS NOT 2AM UNLIKE SOME OTHER PEOPLE
+#include "configSym.h"
 
 int main() {
     //create files to write to
@@ -138,6 +140,14 @@ int main() {
         logConsole(filepath, ss);
 
         //OH MY GAWD WE GET LITTLE G IT WORKS
+
+        SymEngine::RCP<const SymEngine::Symbol> x = SymEngine::symbol("x");
+        SymEngine::RCP<const SymEngine::Basic> e = pow(add(x, SymEngine::integer(1)), SymEngine::integer(2));   // (x+1)^2
+        std::cout << *expand(e) << '\n';
+        std::cout << *e->diff(x) << '\n';
+
+        //RAAAAAAAAAGH I GOT IT IT TOOK LIKE 2 HOURS
+
 
 
 
