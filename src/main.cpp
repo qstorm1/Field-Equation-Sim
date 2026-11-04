@@ -173,9 +173,9 @@ int main() {
             }
         }
 
-        Tensor K(Kroneker, "Kroneker Delta", 1, 1);
+        Tensor4 K(Kroneker, "Kroneker Delta", "Cartesian", 1, 1);
 
-        
+
 
 
 
