@@ -6,6 +6,7 @@
 #include "Graphics/graphics.h"
 #include "GlobalVariables.h"
 #include "Shader/shader.h"
+#include "Calculations/Tensors.h"
 
 
 //include graphics library

@@ -8,4 +8,6 @@
 #include <symengine/integer.h>
 #include <symengine/expression.h>
 #include <symengine/eval_double.h>
+#include "symengine/eval.h"
+
 

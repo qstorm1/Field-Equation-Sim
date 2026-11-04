@@ -1,10 +1,11 @@
 #include "config.h"
 
 //test symbol library   DOUBLE CHECK EVERYTHING WORKS ON LINUX
-//I WILL BE PLAYING AROUND WITH THIS TOMORROW AS MY BEDTIME IS NOT 2AM UNLIKE SOME OTHER PEOPLE
+//this library has random seg faults for whatever the fuck reason idk
 #include "configSym.h"
-#include "symengine/eval.h"
-#include "symengine/eval_double.h"
+
+using expression = SymEngine::RCP<const SymEngine::Basic>;
+
 
 int main() {
 
@@ -147,12 +148,34 @@ int main() {
         auto substitutedDiff = differ->subs(subs_map);
         std::cout << *substitutedDiff << '\n';
 
+        //check if f(x) = k allowed
+        //CANNOT USE AUTO HAVE TO USE FULL NAMESPACE
+        expression constant = SymEngine::integer(-2);
+        std::cout << *constant << '\n';
+
 
         //std::cout << value;
         std::cout << *expr << '\n';
         std::cout << *differ << '\n';
 
         //RAAAAAAAAAGH I GOT IT IT TOOK LIKE 2 HOURS
+
+        //Kroneker Delta initialization test
+
+        glm::mat4 Kroneker;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; i < 3; i++) {
+                if (i == j) {
+                    Kroneker[i][j] = 1;
+                }else {
+                    Kroneker[i][j] = 0;
+                }
+            }
+        }
+
+        Tensor K(Kroneker, "Kroneker Delta", 1, 1);
+
+        
 
 
 
