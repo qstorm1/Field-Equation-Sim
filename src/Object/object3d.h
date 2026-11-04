@@ -274,9 +274,7 @@ public:
 
     //deletes all objects
     static void deleteAllObjects() {
-        for (const std::pair<unsigned int, object3d*> &pair: objects) {
-            (*(pair.second)).~object3d();
-        }
+        objects.clear();
     }
 
     //perhaps change this to have custom point struct as an argument
@@ -305,6 +303,10 @@ public:
             }
         }
         //Perhaps include calculation for circular segment IF NECESSARY
+
+        double volume = (xEnd - xStart) * (yEnd - yStart) * (zEnd - zStart);
+
+        return mass/volume;
 
     }
 
