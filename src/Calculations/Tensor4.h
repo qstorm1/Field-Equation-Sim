@@ -30,6 +30,7 @@ class Tensor4 {
 
 
 public:
+    //creates the tensor and seeds with 0's
     expression** entries;
     Tensor4(std::string name, std::string coordinateSystem, short Co, short Ctr) {
         this->name = name;
