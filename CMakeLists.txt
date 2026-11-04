@@ -64,6 +64,7 @@ if(UNIX AND NOT APPLE)
             src/main.cpp
             src/Shader/shader.h
             src/Shader/shader.cpp
+            src/Calculations/TensorMath.h
     )
     target_link_libraries(Gravitational_Lensing_Simulation PUBLIC
             glfw
@@ -110,6 +111,7 @@ elseif(WIN32 OR WIN64)
             src/Shader/shader.cpp
             src/Shader/shader.h
             dependencies/windows/glad/glad.c
+            src/Calculations/TensorMath.h
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 
