@@ -4,6 +4,7 @@
 //I WILL BE PLAYING AROUND WITH THIS TOMORROW AS MY BEDTIME IS NOT 2AM UNLIKE SOME OTHER PEOPLE
 #include "configSym.h"
 #include "symengine/eval.h"
+#include "symengine/eval_double.h"
 
 int main() {
 
@@ -123,13 +124,25 @@ int main() {
 
         //testing SymEngine functions
 
-        //logError();
+        auto x = SymEngine::symbol("x");
 
-        // SymEngine::RCP<const SymEngine::Symbol> x = SymEngine::symbol("x");
-        // SymEngine::RCP<const SymEngine::Basic> e = pow(add(x, SymEngine::integer(1)), SymEngine::integer(2));// (x+1)^2
-        // std::cout << *SymEngine::evalf(*e, 16, SymEngine::EvalfDomain()) << '\n';
-        // std::cout << *expand(e) << '\n';
-        // std::cout << *e->diff(x) << '\n';
+        auto expr = SymEngine::pow(SymEngine::add(x, SymEngine::integer(1)), SymEngine::integer(2));// (x+1)^2
+
+        //create map for substitution
+        SymEngine::map_basic_basic subs_map;
+        //set x symbol to 3
+        subs_map[x] = SymEngine::real_double(3.0);
+        //substitute and evaluate
+        SymEngine::RCP<const SymEngine::Basic> substituted = expr->subs(subs_map);
+        //print result
+        std::cout << *substituted << '\n';
+
+
+
+        //std::cout << value;
+        std::cout << *expr << '\n';
+        std::cout << *expr->diff(x) << '\n';
+        std::cout << *expand(expr) << '\n';
 
         //RAAAAAAAAAGH I GOT IT IT TOOK LIKE 2 HOURS
 

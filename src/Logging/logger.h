@@ -12,7 +12,7 @@ inline void logError() {
         //get time
         const time_t now = time(nullptr);
         //log error with timestamp
-        file << ctime(&now) << "\b" << ' ' << "An Unknown Error Occurred" << std::endl;
+        file << ctime(&now) << ' ' << "An Unknown Error Occurred" << std::endl;
     }
     file.close();
 }

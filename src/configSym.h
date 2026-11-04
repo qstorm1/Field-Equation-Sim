@@ -6,4 +6,6 @@
 #include <symengine/pow.h>
 #include <symengine/symbol.h>
 #include <symengine/integer.h>
+#include <symengine/expression.h>
+#include <symengine/eval_double.h>
 
