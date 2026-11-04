@@ -175,7 +175,7 @@ int main() {
             }
         }
 
-        Tensor2 K(Kroneker, "Kroneker Delta", "Cartesian", 1, 1);
+        Tensor2 K("Kroneker Delta", "Cartesian", 1, 1);
 
         //create conversion functions
         auto r = SymEngine::symbol("r");
