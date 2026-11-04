@@ -40,7 +40,7 @@ public:
     }
 
     //SUPPORTS COVARIANT TENSORS ONLY UNTIL I GET WORKING IMPLICIT FUNCTIONS
-    Tensor2 convertCoordinates(variable &C1, variable &C2, expression &V1, expression &V2) {
+    Tensor2* convertCoordinates(variable &C1, variable &C2, expression &V1, expression &V2) {
         expression expr[2] {V1, V2};
         variable vars[2] {C1, C2};
         auto oldEntries = entries;
@@ -54,9 +54,19 @@ public:
                 }
             }
         }
+        return this;
     }
 
 
-    ~Tensor2(){}
+    ~Tensor2() {
+        //free up 2d array memory
+        for(int i = 0; i < 2; i++){
+            delete[] entries[i];
+            entries[i] = nullptr;
+        }
+
+        delete[] entries;
+        entries = nullptr;
+    }
 
 };
