@@ -148,7 +148,7 @@ int main() {
         PolarMetric.printTensor();
 
         //test Christoffel symbols
-        auto polarSymbols = PolarMetric.getChristoffelSymbol(PolarMetric, rho, theta);
+        auto polarSymbols = PolarMetric.getChristoffelSymbols(PolarMetric, rho, theta);
         std::cout << "0th symbol" << '\n';
         polarSymbols[0]->printTensor();
         std::cout << "1st symbol" << '\n';
@@ -174,9 +174,16 @@ int main() {
         expression zSphere = SymEngine::mul(rho, SymEngine::cos(theta));
 
         Tensor3 SphereMetric = K3.convertCoordinates("Spherical", rho, theta, phi, xSphere, ySphere, zSphere);
-        std::cout << "Spherical Metric" << '\n';
+        std::cout << "Spherical Metric" << "\n\n\n\n";
         SphereMetric.printTensor();
 
+        auto SphereSymbols = SphereMetric.getChristoffelSymbols(SphereMetric, rho, theta, phi);
+        std::cout << "0th symbol" << '\n';
+        SphereSymbols[0]->printTensor();
+        std::cout << "1st symbol" << '\n';
+        SphereSymbols[1]->printTensor();
+        std::cout << "2nd symbol" << '\n';
+        SphereSymbols[2]->printTensor();
 
 
 

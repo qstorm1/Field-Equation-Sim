@@ -11,6 +11,70 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../Logging/logger.h"
 
+//i might put this in tensors.cpp or something
+namespace tensorMath {
+    using matrix = std::vector<std::vector<expression>>;
+
+    // Copy of m with the given row and column removed
+    inline matrix minorMatrix(const matrix &m, size_t row, size_t col) {
+        const size_t n = m.size();
+        matrix out;
+        out.reserve(n - 1);
+        for (size_t i = 0; i < n; i++) {
+            if (i == row) continue;
+            std::vector<expression> r;
+            r.reserve(n - 1);
+            for (size_t j = 0; j < n; j++) {
+                if (j == col) continue;
+                r.push_back(m[i][j]);
+            }
+            out.push_back(std::move(r));
+        }
+        return out;
+    }
+
+    // Determinant by Laplace expansion along the first row
+    inline expression determinant(const matrix &m) {
+        const size_t n = m.size();
+        if (n == 1) return m[0][0];
+        if (n == 2) {
+            return SymEngine::sub(SymEngine::mul(m[0][0], m[1][1]),
+                                  SymEngine::mul(m[0][1], m[1][0]));
+        }
+
+        expression det = SymEngine::zero;
+        for (size_t col = 0; col < n; col++) {
+            // Skipping zero entries makes diagonal/sparse metrics much cheaper
+            if (SymEngine::eq(*m[0][col], *SymEngine::zero)) continue;
+
+            expression term = SymEngine::mul(m[0][col],
+                                             determinant(minorMatrix(m, 0, col)));
+            det = (col % 2 == 0) ? SymEngine::add(det, term)
+                                 : SymEngine::sub(det, term);
+        }
+        return SymEngine::expand(det);
+    }
+
+    // Inverse = adjugate / determinant, where adj[i][j] = (-1)^(i+j) * minor(j, i)
+    inline matrix inverse(const matrix &m, const std::string &label) {
+        const size_t n = m.size();
+        expression det = determinant(m);
+
+        if (SymEngine::eq(*det, *SymEngine::zero)) {
+            throw std::runtime_error("Tensor '" + label + "' is singular (det = 0); cannot invert.");
+        }
+
+        matrix inv(n, std::vector<expression>(n));
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
+                expression cof = determinant(minorMatrix(m, j, i)); // note the (j, i) swap
+                if ((i + j) % 2 == 1) cof = SymEngine::neg(cof);
+                inv[i][j] = SymEngine::expand(SymEngine::div(cof, det));
+            }
+        }
+        return inv;
+    }
+}
 
 using expression = SymEngine::RCP<const SymEngine::Basic>;
 using variable = SymEngine::RCP<const SymEngine::Symbol>;
@@ -42,6 +106,23 @@ public:
                 entries[i][j] = SymEngine::integer(0);
             }
         }
+    }
+
+    Tensor3 getInverse() const {
+        tensorMath::matrix m(3, std::vector<expression>(3));
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                m[i][j] = entries[i][j];
+
+        tensorMath::matrix invM = tensorMath::inverse(m, name);
+
+        // Inverting swaps covariant <-> contravariant (g_ij -> g^ij)
+        Tensor3 inv("Inverse " + name, coordinateSystem, CtrV, CoV);
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                inv.entries[i][j] = invM[i][j];
+
+        return inv;
     }
 
     //SUPPORTS COVARIANT TENSORS ONLY UNTIL I GET WORKING IMPLICIT FUNCTIONS
@@ -93,6 +174,37 @@ public:
         return *this;
     }
 
+    std::array<Tensor3*, 3> getChristoffelSymbols(Tensor3 &metric, variable &C1, variable &C2, variable &C3) {
+        variable vars[3]{C1, C2, C3};
+        Tensor3 inv = metric.getInverse();
+
+        //creates an array of symbols
+        std::array<Tensor3*, 3> symbols{
+            new Tensor3("Christoffel Symbol 1", coordinateSystem, CoV, CtrV),
+            new Tensor3("Christoffel Symbol 2", coordinateSystem, CoV, CtrV),
+            new Tensor3("Christoffel Symbol 3", coordinateSystem, CoV, CtrV)
+        };
+
+        for (int k = 0; k < 3; k++) {           //symbol number
+            for (int m = 0; m < 3; m++) {       //inner index
+                for (int v = 0; v < 3; v++) {   //outer index
+                    SymEngine::RCP<const SymEngine::Basic> sum = SymEngine::zero;
+                    for (int a = 0; a < 3; a++) {       //dummy summation index
+                        auto term = SymEngine::mul(
+                            inv.entries[k][a],
+                            SymEngine::sub(
+                                SymEngine::add(metric.entries[a][v]->diff(vars[m]),
+                                               metric.entries[a][m]->diff(vars[v])),
+                                metric.entries[m][v]->diff(vars[a])));
+                        sum = SymEngine::add(sum, term);
+                    }
+                    symbols[k]->entries[m][v] = SymEngine::div(sum, SymEngine::integer(2));
+                }
+            }
+        }
+        return symbols;
+    }
+
     void printTensor() {
         std::stringstream ss;
         for (int i = 0; i < 3; i++) {
@@ -107,3 +219,4 @@ public:
     ~Tensor3() {    }
 
 };
+

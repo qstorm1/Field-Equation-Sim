@@ -122,7 +122,7 @@ public:
     }
 
     //returns an array of symbol pointers
-    std::array<Tensor2*, 2> getChristoffelSymbol(Tensor2 &metric, variable &C1, variable &C2) {
+    std::array<Tensor2*, 2> getChristoffelSymbols(Tensor2 &metric, variable &C1, variable &C2) {
         variable vars[2]{C1, C2};
         Tensor2 inv = metric.getInverse();
 
