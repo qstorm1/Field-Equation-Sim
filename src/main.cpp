@@ -161,35 +161,25 @@ int main() {
 
         //RAAAAAAAAAGH I GOT IT IT TOOK LIKE 2 HOURS
 
-        //Kroneker Delta initialization test
-        expression one = SymEngine::integer(1);
-        expression zero = SymEngine::integer(0);
-        glm::mat2 Kroneker;
-        for (int i = 0; i < 1; i++) {
-            for (int j = 0; i < 1; i++) {
-                if (i == j) {
-                    Kroneker[i][j] = 1;//one;
-                }else {
-                    Kroneker[i][j] = 0;//zero;
-                }
-            }
-        }
 
+        //Kroneker Delta initialization test
         Tensor2 K("Kroneker Delta", "Cartesian", 1, 1);
+        K.entries[0][0] = SymEngine::integer(1);
+        K.entries[1][1] = SymEngine::integer(1);
 
         //create conversion functions
         auto r = SymEngine::symbol("r");
-        auto θ = SymEngine::symbol("θ");
+        auto θ = SymEngine::symbol("t");
         expression xPolar = SymEngine::mul(r, SymEngine::cos(θ));
         expression yPolar = SymEngine::mul(r, SymEngine::sin(θ));
         //test to see if it works
         std::cout << *xPolar << '\n' << *yPolar << '\n';
 
-        //Tensor2 PolarMetric() = K.convertCoordinates();
+        K.printTensor();
 
-
-
-
+        //test to see if conversion works
+        Tensor2 PolarMetric = K.convertCoordinates(r, θ, xPolar, yPolar);
+        PolarMetric.printTensor();
 
 
     }catch (const std::out_of_range &e) {

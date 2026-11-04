@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "../Logging/logger.h"
 
 
 using expression = SymEngine::RCP<const SymEngine::Basic>;
@@ -19,6 +20,13 @@ class Tensor2 {
     //type of tensor. Metric, Christoffel, Ricci, etc.
     std::string name;
     std::string coordinateSystem;
+
+    //simplifies main trig identity, which not covered by SymEngine Library
+    expression trigSimplifyPyth(const expression &e, const variable &angle) {
+        SymEngine::map_basic_basic rules;
+        rules[SymEngine::pow(SymEngine::sin(angle), SymEngine::integer(2))] = SymEngine::sub(SymEngine::one,SymEngine::pow(SymEngine::cos(angle), SymEngine::integer(2)));
+        return SymEngine::expand(SymEngine::expand(e)->subs(rules));
+    }
 
 
 public:
@@ -40,33 +48,55 @@ public:
     }
 
     //SUPPORTS COVARIANT TENSORS ONLY UNTIL I GET WORKING IMPLICIT FUNCTIONS
-    Tensor2* convertCoordinates(variable &C1, variable &C2, expression &V1, expression &V2) {
+    Tensor2& convertCoordinates(variable &C1, variable &C2, expression &V1, expression &V2) {
         expression expr[2] {V1, V2};
         variable vars[2] {C1, C2};
-        auto oldEntries = entries;
-        //oh god there has to be a better way then 4 nested four loops  (ba-dum tssss)
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                for (int k = 0; k < 2; k++) {
-                    for (int m = 0; m < 2; m++) {
-                        entries[i][j] = SymEngine::mul(SymEngine::mul(expr[k]->diff(vars[i]), expr[m]->diff(vars[j])), oldEntries[k][m]);
-                    }
-                }
+
+        //creates tensor Jacobian
+        expression J[2][2];
+        for (int k = 0; k < 2; k++) {
+            for (int i = 0; i < 2; i++) {
+                J[k][i] = expr[k]->diff(vars[i]);
             }
         }
-        return this;
-    }
-
-
-    ~Tensor2() {
-        //free up 2d array memory
-        for(int i = 0; i < 2; i++){
-            delete[] entries[i];
-            entries[i] = nullptr;
+        //store old entries for future use
+        expression oldEntries[2][2];
+        for (int k = 0; k < 2; k++) {
+            for (int m = 0; m < 2; m++) {
+                oldEntries[k][m] = entries[k][m];
+            }
         }
 
-        delete[] entries;
-        entries = nullptr;
+        //calculate indexes
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                expression sum = SymEngine::zero;
+                for (int k = 0; k < 2; k++)
+                    for (int m = 0; m < 2; m++)
+                        sum = SymEngine::add(sum,
+                              SymEngine::mul(SymEngine::mul(J[k][i], J[m][j]), oldEntries[k][m]));
+                //simplifies normally
+                entries[i][j] = SymEngine::expand(sum);
+                //simplifies trig
+                entries[i][j] = trigSimplifyPyth(entries[i][j], vars[1]);
+            }
+        }
+
+
+        return *this;
     }
+
+    void printTensor() {
+        std::stringstream ss;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                ss << *entries[i][j] << '\t';
+            }
+            ss << '\n';
+        }
+        logConsole(ss);
+    }
+
+    ~Tensor2() {    }
 
 };

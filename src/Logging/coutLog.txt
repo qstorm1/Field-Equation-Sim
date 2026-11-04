@@ -400,3 +400,303 @@ Tue Nov 03 18:27:54 2026
 Destroyed object: 2
 Tue Nov 03 18:27:54 2026
 Destroyed object: 1
+Tue Nov 03 18:30:55 2026
+Destroyed object: 1
+Tue Nov 03 18:30:55 2026
+Destroyed object: 2
+Tue Nov 03 18:30:55 2026
+Destroyed object: 2
+Tue Nov 03 18:30:55 2026
+Destroyed object: 1
+Tue Nov 03 18:35:03 2026
+Destroyed object: 1
+Tue Nov 03 18:35:03 2026
+Destroyed object: 2
+Tue Nov 03 18:35:03 2026
+Destroyed object: 2
+Tue Nov 03 18:35:03 2026
+Destroyed object: 1
+Tue Nov 03 18:36:21 2026
+Destroyed object: 1
+Tue Nov 03 18:36:21 2026
+Destroyed object: 2
+Tue Nov 03 18:36:21 2026
+00
+00
+Tue Nov 03 18:36:21 2026
+Destroyed object: 2
+Tue Nov 03 18:36:21 2026
+Destroyed object: 1
+Tue Nov 03 18:36:34 2026
+Destroyed object: 1
+Tue Nov 03 18:36:34 2026
+Destroyed object: 2
+Tue Nov 03 18:36:34 2026
+0	0	
+0	0	
+Tue Nov 03 18:36:34 2026
+Destroyed object: 2
+Tue Nov 03 18:36:34 2026
+Destroyed object: 1
+Tue Nov 03 18:37:52 2026
+Destroyed object: 1
+Tue Nov 03 18:37:52 2026
+Destroyed object: 2
+Tue Nov 03 18:37:52 2026
+0	0	
+0	0	
+Tue Nov 03 18:37:52 2026
+0	0	
+0	0	
+Tue Nov 03 18:38:11 2026
+Destroyed object: 1
+Tue Nov 03 18:38:11 2026
+Destroyed object: 2
+Tue Nov 03 18:38:11 2026
+0	0	
+0	0	
+Tue Nov 03 18:41:41 2026
+Destroyed object: 1
+Tue Nov 03 18:41:41 2026
+Destroyed object: 2
+Tue Nov 03 18:41:41 2026
+1	1	
+1	1	
+Tue Nov 03 18:42:07 2026
+Destroyed object: 1
+Tue Nov 03 18:42:07 2026
+Destroyed object: 2
+Tue Nov 03 18:42:07 2026
+1	0	
+0	1	
+Tue Nov 03 18:42:24 2026
+Destroyed object: 1
+Tue Nov 03 18:42:24 2026
+Destroyed object: 2
+Tue Nov 03 18:42:24 2026
+1	0	
+0	1	
+Tue Nov 03 18:42:24 2026
+Destroyed object: 2
+Tue Nov 03 18:42:24 2026
+Destroyed object: 1
+Tue Nov 03 18:43:10 2026
+Destroyed object: 1
+Tue Nov 03 18:43:10 2026
+Destroyed object: 2
+Tue Nov 03 18:43:10 2026
+1	0	
+0	1	
+Tue Nov 03 18:43:10 2026
+sin(θ)**2	r*sin(θ)*cos(θ)	
+r*sin(θ)*cos(θ)	-r**5*sin(θ)**2*cos(θ)**4	
+Tue Nov 03 18:46:29 2026
+Destroyed object: 1
+Tue Nov 03 18:46:29 2026
+Destroyed object: 2
+Tue Nov 03 18:46:29 2026
+1	0	
+0	1	
+Tue Nov 03 18:46:44 2026
+Destroyed object: 1
+Tue Nov 03 18:46:44 2026
+Destroyed object: 2
+Tue Nov 03 18:46:44 2026
+1	0	
+0	1	
+Tue Nov 03 18:46:44 2026
+1 + sin(θ)**2 + cos(θ)**2	r*sin(θ)*cos(θ) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ) - r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)**3	
+r*sin(θ)*cos(θ) - r*sin(θ)**2*(r*sin(θ)*cos(θ) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ) - r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)**3) + r*cos(θ)**2*(-r*sin(θ)**2*(r*sin(θ)*cos(θ) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ) - r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)**3) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)	1 + r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)**2 + r**2*cos(θ)**2*(1 + r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)**2 - r**2*sin(θ)*cos(θ)*(r*sin(θ)*cos(θ) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ) - r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)**3) - r**2*sin(θ)*cos(θ)*(r*sin(θ)*cos(θ) - r*sin(θ)**2*(r*sin(θ)*cos(θ) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ) - r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)**3) + r*cos(θ)**2*(-r*sin(θ)**2*(r*sin(θ)*cos(θ) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ) - r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)**3) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ))) - r**2*sin(θ)*cos(θ)*(r*sin(θ)*cos(θ) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ) - r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)**3) - r**2*sin(θ)*cos(θ)*(r*sin(θ)*cos(θ) - r*sin(θ)**2*(r*sin(θ)*cos(θ) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ) - r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)**3) + r*cos(θ)**2*(-r*sin(θ)**2*(r*sin(θ)*cos(θ) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ) - r**2*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)**3) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ)) - r*(1 + sin(θ)**2 + cos(θ)**2)*sin(θ)*cos(θ))	
+Tue Nov 03 18:51:56 2026
+Destroyed object: 1
+Tue Nov 03 18:51:56 2026
+Destroyed object: 2
+Tue Nov 03 18:51:56 2026
+1	0	
+0	1	
+Tue Nov 03 18:52:20 2026
+Destroyed object: 1
+Tue Nov 03 18:52:20 2026
+Destroyed object: 2
+Tue Nov 03 18:52:20 2026
+1	0	
+0	1	
+Tue Nov 03 18:52:29 2026
+Destroyed object: 1
+Tue Nov 03 18:52:29 2026
+Destroyed object: 2
+Tue Nov 03 18:52:29 2026
+1	0	
+0	1	
+Tue Nov 03 18:53:42 2026
+Destroyed object: 1
+Tue Nov 03 18:53:48 2026
+Destroyed object: 1
+Tue Nov 03 18:53:48 2026
+Destroyed object: 2
+Tue Nov 03 18:53:48 2026
+1	0	
+0	1	
+Tue Nov 03 19:02:44 2026
+Destroyed object: 1
+Tue Nov 03 19:02:44 2026
+Destroyed object: 2
+Tue Nov 03 19:02:44 2026
+1	0	
+0	1	
+Tue Nov 03 19:03:08 2026
+Destroyed object: 1
+Tue Nov 03 19:03:08 2026
+Destroyed object: 2
+Tue Nov 03 19:03:08 2026
+1	0	
+0	1	
+Tue Nov 03 19:03:54 2026
+Destroyed object: 1
+Tue Nov 03 19:03:54 2026
+Destroyed object: 2
+Tue Nov 03 19:04:03 2026
+Destroyed object: 1
+Tue Nov 03 19:04:03 2026
+Destroyed object: 2
+Tue Nov 03 19:04:03 2026
+1	0	
+0	1	
+Tue Nov 03 19:05:42 2026
+Destroyed object: 1
+Tue Nov 03 19:05:42 2026
+Destroyed object: 2
+Tue Nov 03 19:05:42 2026
+1	0	
+0	1	
+Tue Nov 03 19:07:46 2026
+Destroyed object: 1
+Tue Nov 03 19:07:46 2026
+Destroyed object: 2
+Tue Nov 03 19:07:46 2026
+1	0	
+0	1	
+Tue Nov 03 19:07:46 2026
+Destroyed object: 2
+Tue Nov 03 19:07:46 2026
+Destroyed object: 1
+Tue Nov 03 19:07:52 2026
+Destroyed object: 1
+Tue Nov 03 19:07:52 2026
+Destroyed object: 2
+Tue Nov 03 19:07:52 2026
+1	0	
+0	1	
+Tue Nov 03 19:07:52 2026
+Destroyed object: 2
+Tue Nov 03 19:07:52 2026
+Destroyed object: 1
+Tue Nov 03 19:08:08 2026
+Destroyed object: 1
+Tue Nov 03 19:08:08 2026
+Destroyed object: 2
+Tue Nov 03 19:08:08 2026
+1	0	
+0	1	
+Tue Nov 03 19:08:08 2026
+Destroyed object: 2
+Tue Nov 03 19:08:08 2026
+Destroyed object: 1
+Tue Nov 03 19:10:07 2026
+Destroyed object: 1
+Tue Nov 03 19:10:07 2026
+Destroyed object: 2
+Tue Nov 03 19:10:07 2026
+1	0	
+0	1	
+Tue Nov 03 19:10:07 2026
+sin(t)**2 + cos(t)**2	r*sin(t)*cos(t) - (sin(t)**2 + cos(t)**2)*r*sin(t)*cos(t)	
+r*sin(t)*cos(t) - r*sin(t)**2*(r*sin(t)*cos(t) - (sin(t)**2 + cos(t)**2)*r*sin(t)*cos(t)) - (sin(t)**2 + cos(t)**2)*r*sin(t)*cos(t)	r**2*cos(t)**2 + (sin(t)**2 + cos(t)**2)*r**2*sin(t)**2 - r**2*sin(t)*cos(t)*(r*sin(t)*cos(t) - (sin(t)**2 + cos(t)**2)*r*sin(t)*cos(t)) - r**2*sin(t)*cos(t)*(r*sin(t)*cos(t) - r*sin(t)**2*(r*sin(t)*cos(t) - (sin(t)**2 + cos(t)**2)*r*sin(t)*cos(t)) - (sin(t)**2 + cos(t)**2)*r*sin(t)*cos(t))	
+Tue Nov 03 19:10:07 2026
+Destroyed object: 2
+Tue Nov 03 19:10:07 2026
+Destroyed object: 1
+Tue Nov 03 19:16:36 2026
+Destroyed object: 1
+Tue Nov 03 19:16:36 2026
+Destroyed object: 2
+Tue Nov 03 19:16:36 2026
+1	0	
+0	1	
+Tue Nov 03 19:16:36 2026
+sin(t)**2 + cos(t)**2	r*sin(t)*cos(t) - r*sin(t)*cos(t)**3 - r*sin(t)**3*cos(t)	
+r*sin(t)*cos(t) - r*sin(t)*cos(t)**3 - r*sin(t)**3*cos(t) - r**2*sin(t)**3*cos(t) + r**2*sin(t)**3*cos(t)**3 + r**2*sin(t)**5*cos(t)	r**2*sin(t)**4 + r**2*cos(t)**2 + r**2*sin(t)**2*cos(t)**2 - 2*r**3*sin(t)**2*cos(t)**2 + 2*r**3*sin(t)**2*cos(t)**4 + 2*r**3*sin(t)**4*cos(t)**2 + r**4*sin(t)**4*cos(t)**2 - r**4*sin(t)**4*cos(t)**4 - r**4*sin(t)**6*cos(t)**2	
+Tue Nov 03 19:16:36 2026
+Destroyed object: 2
+Tue Nov 03 19:16:36 2026
+Destroyed object: 1
+Tue Nov 03 19:17:43 2026
+Destroyed object: 1
+Tue Nov 03 19:17:43 2026
+Destroyed object: 2
+Tue Nov 03 19:17:43 2026
+1	0	
+0	1	
+Tue Nov 03 19:17:43 2026
+sin(t)**2 + cos(t)**2	0	
+0	r**2*sin(t)**2 + r**2*cos(t)**2	
+Tue Nov 03 19:17:43 2026
+Destroyed object: 2
+Tue Nov 03 19:17:43 2026
+Destroyed object: 1
+Tue Nov 03 19:19:36 2026
+Destroyed object: 1
+Tue Nov 03 19:19:36 2026
+Destroyed object: 2
+Tue Nov 03 19:19:36 2026
+1	0	
+0	1	
+Tue Nov 03 19:19:36 2026
+sin(t)**2 + cos(t)**2	0	
+0	r**2*sin(t)**2 + r**2*cos(t)**2	
+Tue Nov 03 19:19:36 2026
+Destroyed object: 2
+Tue Nov 03 19:19:36 2026
+Destroyed object: 1
+Tue Nov 03 19:21:21 2026
+Destroyed object: 1
+Tue Nov 03 19:21:21 2026
+Destroyed object: 2
+Tue Nov 03 19:21:21 2026
+1	0	
+0	1	
+Tue Nov 03 19:21:21 2026
+sin(t)**2 + cos(t)**2	0	
+0	r**2*sin(t)**2 + r**2*cos(t)**2	
+Tue Nov 03 19:21:21 2026
+Destroyed object: 2
+Tue Nov 03 19:21:21 2026
+Destroyed object: 1
+Tue Nov 03 19:26:05 2026
+Destroyed object: 1
+Tue Nov 03 19:26:05 2026
+Destroyed object: 2
+Tue Nov 03 19:26:05 2026
+1	0	
+0	1	
+Tue Nov 03 19:26:05 2026
+1	0	
+0	r**2	
+Tue Nov 03 19:26:05 2026
+Destroyed object: 2
+Tue Nov 03 19:26:05 2026
+Destroyed object: 1
+Tue Nov 03 19:26:55 2026
+Destroyed object: 1
+Tue Nov 03 19:26:55 2026
+Destroyed object: 2
+Tue Nov 03 19:26:55 2026
+1	0	
+0	1	
+Tue Nov 03 19:26:55 2026
+1	0	
+0	r**2	
+Tue Nov 03 19:26:55 2026
+Destroyed object: 2
+Tue Nov 03 19:26:55 2026
+Destroyed object: 1
