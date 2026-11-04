@@ -130,19 +130,27 @@ int main() {
 
         //create map for substitution
         SymEngine::map_basic_basic subs_map;
-        //set x symbol to 3
+        //set x to 3
         subs_map[x] = SymEngine::real_double(3.0);
+
+
         //substitute and evaluate
-        SymEngine::RCP<const SymEngine::Basic> substituted = expr->subs(subs_map);
+        auto substituted = expr->subs(subs_map);
         //print result
         std::cout << *substituted << '\n';
 
 
+        //take derivative
+        auto differ = expr->diff(x);
+        //reset x to 3 to prevent seg fault
+        subs_map[x] = SymEngine::real_double(3.0);
+        auto substitutedDiff = differ->subs(subs_map);
+        std::cout << *substitutedDiff << '\n';
+
 
         //std::cout << value;
         std::cout << *expr << '\n';
-        std::cout << *expr->diff(x) << '\n';
-        std::cout << *expand(expr) << '\n';
+        std::cout << *differ << '\n';
 
         //RAAAAAAAAAGH I GOT IT IT TOOK LIKE 2 HOURS
 
