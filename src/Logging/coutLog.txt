@@ -1210,3 +1210,17 @@ Tue Nov 03 21:29:14 2026
 Destroyed object: 2
 Tue Nov 03 21:29:14 2026
 Destroyed object: 1
+Tue Nov 03 21:31:02 2026
+1	0	
+0	1	
+Tue Nov 03 21:31:02 2026
+1	0	
+0	r**2	
+Tue Nov 03 21:31:02 2026
+1	0	0	
+0	r**2	0	
+0	0	-r**2*cos(t)**2 + r**2	
+Tue Nov 03 21:31:02 2026
+Destroyed object: 2
+Tue Nov 03 21:31:02 2026
+Destroyed object: 1
