@@ -22,9 +22,15 @@ class Tensor4 {
     std::string coordinateSystem;
 
     //simplifies main trig identity, which not covered by SymEngine Library
-    expression trigSimplifyPyth(const expression &e, const variable &angle) {
+    expression trigSimplifyPythSin(const expression &e, const variable &angle) {
         SymEngine::map_basic_basic rules;
         rules[SymEngine::pow(SymEngine::sin(angle), SymEngine::integer(2))] = SymEngine::sub(SymEngine::one,SymEngine::pow(SymEngine::cos(angle), SymEngine::integer(2)));
+        return SymEngine::expand(SymEngine::expand(e)->subs(rules));
+    }
+
+    expression trigSimplifyPythCos(const expression &e, const variable &angle) {
+        SymEngine::map_basic_basic rules;
+        rules[SymEngine::pow(SymEngine::cos(angle), SymEngine::integer(2))] = SymEngine::sub(SymEngine::one,SymEngine::pow(SymEngine::sin(angle), SymEngine::integer(2)));
         return SymEngine::expand(SymEngine::expand(e)->subs(rules));
     }
 
@@ -75,10 +81,14 @@ public:
                 //simplifies normally
                 entries[i][j] = SymEngine::expand(sum);
                 //simplifies trig. ur basically gonna have to hard code any identity for all variables
-                entries[i][j] = trigSimplifyPyth(entries[i][j], vars[0]);
-                entries[i][j] = trigSimplifyPyth(entries[i][j], vars[1]);
-                entries[i][j] = trigSimplifyPyth(entries[i][j], vars[2]);
-                entries[i][j] = trigSimplifyPyth(entries[i][j], vars[3]);
+                entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[0]);
+                entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[1]);
+                entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[2]);
+                entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[3]);
+                entries[i][j] = trigSimplifyPythCos(entries[i][j], vars[0]);
+                entries[i][j] = trigSimplifyPythCos(entries[i][j], vars[1]);
+                entries[i][j] = trigSimplifyPythCos(entries[i][j], vars[2]);
+                entries[i][j] = trigSimplifyPythCos(entries[i][j], vars[3]);
             }
         }
 

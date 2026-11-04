@@ -185,6 +185,7 @@ int main() {
         std::cout << "2nd symbol" << '\n';
         SphereSymbols[2]->printTensor();
 
+        //bro the trig simplification :sob:
 
 
 

@@ -1531,3 +1531,35 @@ Wed Nov 04 15:08:10 2026
 Destroyed object: 2
 Wed Nov 04 15:08:10 2026
 Destroyed object: 1
+Wed Nov 04 15:19:19 2026
+1	0	
+0	1	
+Wed Nov 04 15:19:19 2026
+1	0	
+0	r**2	
+Wed Nov 04 15:19:19 2026
+0	0	
+0	-r	
+Wed Nov 04 15:19:19 2026
+0	r**(-1)	
+r**(-1)	0	
+Wed Nov 04 15:19:19 2026
+1	0	0	
+0	r**2	0	
+0	0	r**2*sin(t)**2	
+Wed Nov 04 15:19:19 2026
+0	0	0	
+0	-r	0	
+0	0	-r*sin(t)**2	
+Wed Nov 04 15:19:19 2026
+0	r**(-1)	0	
+r**(-1)	0	0	
+0	0	-sin(t)*cos(t)	
+Wed Nov 04 15:19:19 2026
+0	0	r**(-1)	
+0	0	cos(t)/sin(t)	
+r**(-1)	cos(t)/sin(t)	0	
+Wed Nov 04 15:19:19 2026
+Destroyed object: 2
+Wed Nov 04 15:19:19 2026
+Destroyed object: 1
