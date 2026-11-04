@@ -77,7 +77,8 @@ public:
                               SymEngine::mul(SymEngine::mul(J[k][i], J[m][j]), oldEntries[k][m]));
                 //simplifies normally
                 entries[i][j] = SymEngine::expand(sum);
-                //simplifies trig
+                //simplifies trig. ur basically gonna have to hard code any identity for all variables
+                entries[i][j] = trigSimplifyPyth(entries[i][j], vars[0]);
                 entries[i][j] = trigSimplifyPyth(entries[i][j], vars[1]);
             }
         }
@@ -86,6 +87,9 @@ public:
         if (this->name == "Kronecker Delta") {
             this->name = "Metric";
         }
+
+        CoV = 2;
+        CtrV = 0;
 
         return *this;
     }

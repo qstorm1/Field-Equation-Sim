@@ -129,22 +129,46 @@ int main() {
 
 
         //Kroneker Delta initialization test
-        Tensor2 K("Kronecker Delta", "Cartesian", 1, 1);
-        K.entries[0][0] = SymEngine::integer(1);
-        K.entries[1][1] = SymEngine::integer(1);
+        Tensor2 K2("Kronecker Delta", "Cartesian", 1, 1);
+        K2.entries[0][0] = SymEngine::integer(1);
+        K2.entries[1][1] = SymEngine::integer(1);
 
         //create conversion functions
-        auto r = SymEngine::symbol("r");
-        auto θ = SymEngine::symbol("t");
-        expression xPolar = SymEngine::mul(r, SymEngine::cos(θ));
-        expression yPolar = SymEngine::mul(r, SymEngine::sin(θ));
+        auto rho = SymEngine::symbol("r");
+        auto theta = SymEngine::symbol("t");
+        expression xPolar = SymEngine::mul(rho, SymEngine::cos(theta));
+        expression yPolar = SymEngine::mul(rho, SymEngine::sin(theta));
         //test to see if it works
         std::cout << *xPolar << '\n' << *yPolar << '\n';
-        K.printTensor();
+        K2.printTensor();
 
         //test to see if conversion works
-        Tensor2 PolarMetric = K.convertCoordinates("Polar", r, θ, xPolar, yPolar);
+        Tensor2 PolarMetric = K2.convertCoordinates("Polar", rho, theta, xPolar, yPolar);
         PolarMetric.printTensor();
+
+        Tensor3 K3("Kronecker Delta", "Cartesian", 1, 1);
+        K3.entries[0][0] = SymEngine::integer(1);
+        K3.entries[1][1] = SymEngine::integer(1);
+        K3.entries[2][2] = SymEngine::integer(1);
+
+        variable z = SymEngine::symbol("z");
+        expression zPolar = z;
+
+
+        //Tensor3 CylMetric = K3.convertCoordinates("Cylindrical", rho, theta, z, xPolar, yPolar, zPolar);
+        //K3.printTensor();
+
+        variable phi = SymEngine::symbol("p");
+
+        expression xSphere = SymEngine::mul(SymEngine::mul(SymEngine::cos(phi), SymEngine::sin(theta)), rho);
+        expression ySphere = SymEngine::mul(SymEngine::mul(SymEngine::sin(phi), SymEngine::sin(theta)), rho);
+        expression zSphere = SymEngine::mul(rho, SymEngine::cos(theta));
+
+        Tensor3 SphereMetric = K3.convertCoordinates("Spherical", rho, theta, phi, xSphere, ySphere, zSphere);
+        SphereMetric.printTensor();
+
+
+
 
 
     }catch (const std::out_of_range &e) {
