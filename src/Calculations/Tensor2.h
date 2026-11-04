@@ -48,7 +48,7 @@ public:
     }
 
     //SUPPORTS COVARIANT TENSORS ONLY UNTIL I GET WORKING IMPLICIT FUNCTIONS
-    Tensor2& convertCoordinates(variable &C1, variable &C2, expression &V1, expression &V2) {
+    Tensor2& convertCoordinates(std::string coordinateSystem, variable &C1, variable &C2, expression &V1, expression &V2) {
         expression expr[2] {V1, V2};
         variable vars[2] {C1, C2};
 
@@ -82,6 +82,10 @@ public:
             }
         }
 
+        this->coordinateSystem = coordinateSystem;
+        if (this->name == "Kronecker Delta") {
+            this->name = "Metric";
+        }
 
         return *this;
     }

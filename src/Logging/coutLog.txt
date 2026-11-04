@@ -700,3 +700,31 @@ Tue Nov 03 19:26:55 2026
 Destroyed object: 2
 Tue Nov 03 19:26:55 2026
 Destroyed object: 1
+Tue Nov 03 19:32:30 2026
+Destroyed object: 1
+Tue Nov 03 19:32:30 2026
+Destroyed object: 2
+Tue Nov 03 19:32:30 2026
+1	0	
+0	1	
+Tue Nov 03 19:32:30 2026
+1	0	
+0	r**2	
+Tue Nov 03 19:32:30 2026
+Destroyed object: 2
+Tue Nov 03 19:32:30 2026
+Destroyed object: 1
+Tue Nov 03 19:36:04 2026
+Destroyed object: 1
+Tue Nov 03 19:36:04 2026
+Destroyed object: 2
+Tue Nov 03 19:36:04 2026
+1	0	
+0	1	
+Tue Nov 03 19:36:04 2026
+1	0	
+0	r**2	
+Tue Nov 03 19:36:04 2026
+Destroyed object: 2
+Tue Nov 03 19:36:04 2026
+Destroyed object: 1

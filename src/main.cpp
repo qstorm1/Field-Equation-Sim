@@ -124,46 +124,12 @@ int main() {
     try {
 
 
-        //testing SymEngine functions
+        //testing Tensors
 
-        variable x = SymEngine::symbol("x");
-
-        expression expr = SymEngine::pow(SymEngine::add(x, SymEngine::integer(1)), SymEngine::integer(2));// (x+1)^2
-
-        //create map for substitution
-        SymEngine::map_basic_basic subs_map;
-        //set x to 3
-        subs_map[x] = SymEngine::real_double(3.0);
-
-
-        //substitute and evaluate
-        expression substituted = expr->subs(subs_map);
-        //print result
-        std::cout << *substituted << '\n';
-
-
-        //take derivative
-        expression differ = expr->diff(x);
-        //reset x to 3 to prevent seg fault
-        subs_map[x] = SymEngine::real_double(3.0);
-        expression substitutedDiff = differ->subs(subs_map);
-        std::cout << *substitutedDiff << '\n';
-
-        //check if f(x) = k allowed
-        //CANNOT USE AUTO HAVE TO USE FULL NAMESPACE
-        expression constant = SymEngine::integer(-2);
-        std::cout << *constant << '\n';
-
-
-        //std::cout << value;
-        std::cout << *expr << '\n';
-        std::cout << *differ << '\n';
-
-        //RAAAAAAAAAGH I GOT IT IT TOOK LIKE 2 HOURS
 
 
         //Kroneker Delta initialization test
-        Tensor2 K("Kroneker Delta", "Cartesian", 1, 1);
+        Tensor2 K("Kronecker Delta", "Cartesian", 1, 1);
         K.entries[0][0] = SymEngine::integer(1);
         K.entries[1][1] = SymEngine::integer(1);
 
@@ -174,11 +140,10 @@ int main() {
         expression yPolar = SymEngine::mul(r, SymEngine::sin(θ));
         //test to see if it works
         std::cout << *xPolar << '\n' << *yPolar << '\n';
-
         K.printTensor();
 
         //test to see if conversion works
-        Tensor2 PolarMetric = K.convertCoordinates(r, θ, xPolar, yPolar);
+        Tensor2 PolarMetric = K.convertCoordinates("Polar", r, θ, xPolar, yPolar);
         PolarMetric.printTensor();
 
 
