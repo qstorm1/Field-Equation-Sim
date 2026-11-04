@@ -62,16 +62,8 @@ if(UNIX AND NOT APPLE)
 
     add_executable(Gravitational_Lensing_Simulation
             src/main.cpp
-            src/config.h
-            src/Object/object3d.h
-            src/Logging/logger.h
-            src/Graphics/graphics.h
-            src/GlobalVariables.h
             src/Shader/shader.h
             src/Shader/shader.cpp
-            src/configSym.h
-            src/Calculations/Tensors.h
-            src/Calculations/Tensor4.h
     )
     target_link_libraries(Gravitational_Lensing_Simulation PUBLIC
             glfw
@@ -115,19 +107,8 @@ elseif(WIN32 OR WIN64)
 
     add_executable(Gravitational_Lensing_Simulation
             "src/main.cpp"
-            src/config.h
-            src/Object/object3d.h
-            src/Logging/logger.h
-            src/Graphics/graphics.h
-            src/GlobalVariables.h
-            dependencies/windows/glad/glad.c
             src/Shader/shader.cpp
             src/Shader/shader.h
-            src/configSym.h
-            src/Calculations/Tensors.h
-            src/Calculations/Tensor4.h
-            src/Calculations/Tensor3.h
-            src/Calculations/Tensor2.h
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 
