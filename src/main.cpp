@@ -5,6 +5,7 @@
 #include "configSym.h"
 
 using expression = SymEngine::RCP<const SymEngine::Basic>;
+using variable = SymEngine::RCP<const SymEngine::Symbol>;
 
 
 int main() {
@@ -125,9 +126,9 @@ int main() {
 
         //testing SymEngine functions
 
-        auto x = SymEngine::symbol("x");
+        variable x = SymEngine::symbol("x");
 
-        auto expr = SymEngine::pow(SymEngine::add(x, SymEngine::integer(1)), SymEngine::integer(2));// (x+1)^2
+        expression expr = SymEngine::pow(SymEngine::add(x, SymEngine::integer(1)), SymEngine::integer(2));// (x+1)^2
 
         //create map for substitution
         SymEngine::map_basic_basic subs_map;
@@ -136,16 +137,16 @@ int main() {
 
 
         //substitute and evaluate
-        auto substituted = expr->subs(subs_map);
+        expression substituted = expr->subs(subs_map);
         //print result
         std::cout << *substituted << '\n';
 
 
         //take derivative
-        auto differ = expr->diff(x);
+        expression differ = expr->diff(x);
         //reset x to 3 to prevent seg fault
         subs_map[x] = SymEngine::real_double(3.0);
-        auto substitutedDiff = differ->subs(subs_map);
+        expression substitutedDiff = differ->subs(subs_map);
         std::cout << *substitutedDiff << '\n';
 
         //check if f(x) = k allowed
@@ -161,19 +162,30 @@ int main() {
         //RAAAAAAAAAGH I GOT IT IT TOOK LIKE 2 HOURS
 
         //Kroneker Delta initialization test
-
-        glm::mat4 Kroneker;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; i < 3; i++) {
+        expression one = SymEngine::integer(1);
+        expression zero = SymEngine::integer(0);
+        glm::mat2 Kroneker;
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; i < 1; i++) {
                 if (i == j) {
-                    Kroneker[i][j] = 1;
+                    Kroneker[i][j] = 1;//one;
                 }else {
-                    Kroneker[i][j] = 0;
+                    Kroneker[i][j] = 0;//zero;
                 }
             }
         }
 
-        Tensor4 K(Kroneker, "Kroneker Delta", "Cartesian", 1, 1);
+        Tensor2 K(Kroneker, "Kroneker Delta", "Cartesian", 1, 1);
+
+        //create conversion functions
+        auto r = SymEngine::symbol("r");
+        auto θ = SymEngine::symbol("θ");
+        expression xPolar = SymEngine::mul(r, SymEngine::cos(θ));
+        expression yPolar = SymEngine::mul(r, SymEngine::sin(θ));
+        //test to see if it works
+        std::cout << *xPolar << '\n' << *yPolar << '\n';
+
+        //Tensor2 PolarMetric() = K.convertCoordinates();
 
 
 

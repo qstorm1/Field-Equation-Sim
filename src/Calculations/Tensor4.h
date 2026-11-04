@@ -29,8 +29,8 @@ public:
         CtrV = Ctr;
     }
 
-    void convertCoordinates(std::string name, expression &V1, expression &V2, expression &V3, expression &V4) {
-        
+    void convertCoordinates(expression &V1, expression &V2, expression &V3, expression &V4) {
+
     }
 
     //returns the matrix representation of the tensor
