@@ -31,16 +31,12 @@ class Tensor4 {
 
 public:
     //creates the tensor and seeds with 0's
-    expression** entries;
+    expression entries[4][4];
     Tensor4(std::string name, std::string coordinateSystem, short Co, short Ctr) {
         this->name = name;
         this->coordinateSystem = coordinateSystem;
         CoV = Co;
         CtrV = Ctr;
-        entries = new expression *[4];
-        for (int i = 0; i < 4; i++) {
-            entries[i] = new expression[4];
-        }
         for(int i = 0; i < 4; i++){
             for(int j = 0; j < 4; j++){
                 entries[i][j] = SymEngine::integer(0);

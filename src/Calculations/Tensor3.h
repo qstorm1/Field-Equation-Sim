@@ -31,16 +31,12 @@ class Tensor3 {
 
 public:
     //creates the tensor and seeds with 0's
-    expression** entries;
+    expression entries[3][3];
     Tensor3(std::string name, std::string coordinateSystem, short Co, short Ctr) {
         this->name = name;
         this->coordinateSystem = coordinateSystem;
         CoV = Co;
         CtrV = Ctr;
-        entries = new expression *[3];
-        for (int i = 0; i < 3; i++) {
-            entries[i] = new expression[3];
-        }
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 entries[i][j] = SymEngine::integer(0);

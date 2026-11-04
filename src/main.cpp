@@ -144,7 +144,16 @@ int main() {
 
         //test to see if conversion works
         Tensor2 PolarMetric = K2.convertCoordinates("Polar", rho, theta, xPolar, yPolar);
+        std::cout << "Polar Metric" << '\n';
         PolarMetric.printTensor();
+
+        //test Christoffel symbols
+        auto polarSymbols = PolarMetric.getChristoffelSymbol(PolarMetric, rho, theta);
+        std::cout << "0th symbol" << '\n';
+        polarSymbols[0]->printTensor();
+        std::cout << "1st symbol" << '\n';
+        polarSymbols[1]->printTensor();
+
 
         Tensor3 K3("Kronecker Delta", "Cartesian", 1, 1);
         K3.entries[0][0] = SymEngine::integer(1);
@@ -165,6 +174,7 @@ int main() {
         expression zSphere = SymEngine::mul(rho, SymEngine::cos(theta));
 
         Tensor3 SphereMetric = K3.convertCoordinates("Spherical", rho, theta, phi, xSphere, ySphere, zSphere);
+        std::cout << "Spherical Metric" << '\n';
         SphereMetric.printTensor();
 
 

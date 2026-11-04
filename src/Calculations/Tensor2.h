@@ -31,21 +31,47 @@ class Tensor2 {
 
 public:
     //creates the tensor and seeds with 0's
-    expression** entries;
-    Tensor2(std::string name, std::string coordinateSystem, short Co, short Ctr) {
+    expression entries[2][2];
+    Tensor2(std::string name, std::string coordinateSystem, unsigned short Co, unsigned short Ctr) {
         this->name = name;
         this->coordinateSystem = coordinateSystem;
         CoV = Co;
         CtrV = Ctr;
-        entries = new expression *[2];
-        for (int i = 0; i < 2; i++) {
-            entries[i] = new expression[2];
-        }
         for(int i = 0; i < 2; i++){
             for(int j = 0; j < 2; j++){
                 entries[i][j] = SymEngine::integer(0);
             }
         }
+    }
+
+
+    //calculates inverse tensor
+    Tensor2 getInverse() const {
+        const expression &a = entries[0][0];
+        const expression &b = entries[0][1];
+        const expression &c = entries[1][0];
+        const expression &d = entries[1][1];
+
+        // det = ad - bc
+        expression det = SymEngine::expand(
+            SymEngine::sub(SymEngine::mul(a, d), SymEngine::mul(b, c)));
+
+        //throws error if determinant is 0
+        if (SymEngine::eq(*det, *SymEngine::zero)) {
+            throw std::runtime_error("Tensor '" + name + "' is singular.");
+        }
+
+        // Inverting swaps covariant <-> contravariant (g_ij -> g^ij)
+        Tensor2 inv("Inverse " + name, coordinateSystem, CtrV, CoV);
+
+        // (1/det) * [ d  -b ]
+        //           [ -c  a ]
+        inv.entries[0][0] = SymEngine::expand(SymEngine::div(d, det));
+        inv.entries[0][1] = SymEngine::expand(SymEngine::div(SymEngine::neg(b), det));
+        inv.entries[1][0] = SymEngine::expand(SymEngine::div(SymEngine::neg(c), det));
+        inv.entries[1][1] = SymEngine::expand(SymEngine::div(a, det));
+
+        return inv;
     }
 
     //SUPPORTS COVARIANT TENSORS ONLY UNTIL I GET WORKING IMPLICIT FUNCTIONS
@@ -93,6 +119,37 @@ public:
         CtrV = 0;
 
         return *this;
+    }
+
+    //returns an array of symbol pointers
+    std::array<Tensor2*, 2> getChristoffelSymbol(Tensor2 &metric, variable &C1, variable &C2) {
+        variable vars[2]{C1, C2};
+        Tensor2 inv = metric.getInverse();
+
+        //creates an array of symbols
+        std::array<Tensor2*, 2> symbols{
+            new Tensor2("Christoffel Symbol 1", coordinateSystem, CoV, CtrV),
+            new Tensor2("Christoffel Symbol 2", coordinateSystem, CoV, CtrV)
+        };
+
+        for (int k = 0; k < 2; k++) {           //symbol number
+            for (int m = 0; m < 2; m++) {       //inner index
+                for (int v = 0; v < 2; v++) {   //outer index
+                    SymEngine::RCP<const SymEngine::Basic> sum = SymEngine::zero;
+                    for (int a = 0; a < 2; a++) {       //dummy summation index
+                        auto term = SymEngine::mul(
+                            inv.entries[k][a],
+                            SymEngine::sub(
+                                SymEngine::add(metric.entries[a][v]->diff(vars[m]),
+                                               metric.entries[a][m]->diff(vars[v])),
+                                metric.entries[m][v]->diff(vars[a])));
+                        sum = SymEngine::add(sum, term);
+                    }
+                    symbols[k]->entries[m][v] = SymEngine::div(sum, SymEngine::integer(2));
+                }
+            }
+        }
+        return symbols;
     }
 
     void printTensor() {

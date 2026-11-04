@@ -109,6 +109,7 @@ elseif(WIN32 OR WIN64)
             "src/main.cpp"
             src/Shader/shader.cpp
             src/Shader/shader.h
+            dependencies/windows/glad/glad.c
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 
