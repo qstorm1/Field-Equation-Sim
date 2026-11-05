@@ -120,6 +120,10 @@ elseif(WIN32 OR WIN64)
             opengl32
             symengine)
     #gdi32 doesn't work on linux so we shouldn't import it, you can still install it if it says it needs it but don't include it in any header files
+
+    #builds to build folder
+    set_target_properties(Gravitational_Lensing_Simulation PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/windows")
 endif ()
 
 target_include_directories(Gravitational_Lensing_Simulation PRIVATE
