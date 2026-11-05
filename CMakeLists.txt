@@ -9,6 +9,34 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(OpenGL REQUIRED)
 
 
+include(FetchContent)
+
+# ---- SymEngine (symbolic math) ----
+#I HATE cmake
+FetchContent_Declare(
+        boost_headers
+        URL https://github.com/boostorg/boost/releases/download/boost-1.86.0/boost-1.86.0-b2-nodocs.tar.xz
+        SOURCE_SUBDIR do_not_build_boost
+)
+FetchContent_MakeAvailable(boost_headers)
+set(Boost_INCLUDE_DIR "${boost_headers_SOURCE_DIR}" CACHE PATH "" FORCE)
+set(BOOST_ROOT "${boost_headers_SOURCE_DIR}" CACHE PATH "" FORCE)
+
+# SymEngine itself
+set(INTEGER_CLASS "boostmp" CACHE STRING "" FORCE)
+set(WITH_SYMENGINE_RCP ON CACHE BOOL "" FORCE)
+set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+
+FetchContent_Declare(
+        symengine
+        GIT_REPOSITORY https://github.com/symengine/symengine.git
+        GIT_TAG v0.14.0
+        GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(symengine)
+
 if(UNIX AND NOT APPLE)
 
     include(FetchContent)
@@ -34,19 +62,17 @@ if(UNIX AND NOT APPLE)
 
     add_executable(Gravitational_Lensing_Simulation
             src/main.cpp
-            src/config.h
-            src/Object/object3d.h
-            src/Logging/logger.h
-            src/Graphics/graphics.h
-            src/GlobalVariables.h
             src/Shader/shader.h
             src/Shader/shader.cpp
+            src/Calculations/TensorMath.h
     )
     target_link_libraries(Gravitational_Lensing_Simulation PUBLIC
             glfw
             glad
             OpenGL::GL
             glm::glm
+            #DOUBLE CHECK THIS WORKS PROPERLY ON LINUX
+            symengine
     )
 
     #got this from AI (CMake has trash documentation :/)
@@ -82,23 +108,28 @@ elseif(WIN32 OR WIN64)
 
     add_executable(Gravitational_Lensing_Simulation
             "src/main.cpp"
-            src/config.h
-            src/Object/object3d.h
-            src/Logging/logger.h
-            src/Graphics/graphics.h
-            src/GlobalVariables.h
-            dependencies/windows/glad/glad.c
             src/Shader/shader.cpp
             src/Shader/shader.h
-            #https://github.com/XingGao-cn/FreeMatrix-C
+            dependencies/windows/glad/glad.c
+            src/Calculations/TensorMath.h
     )
     target_include_directories(Gravitational_Lensing_Simulation PRIVATE dependencies/windows)
 
     target_link_libraries(Gravitational_Lensing_Simulation
             ${CMAKE_SOURCE_DIR}/dependencies/windows/GLFW/libglfw3.a
-            opengl32)
+            opengl32
+            symengine)
     #gdi32 doesn't work on linux so we shouldn't import it, you can still install it if it says it needs it but don't include it in any header files
+
+    #builds to build folder
+    set_target_properties(Gravitational_Lensing_Simulation PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/windows")
 endif ()
+
+target_include_directories(Gravitational_Lensing_Simulation PRIVATE
+        ${symengine_SOURCE_DIR}
+        ${symengine_BINARY_DIR}
+        ${boost_headers_SOURCE_DIR})
 
 #The location of the shader folder
 target_compile_definitions(Gravitational_Lensing_Simulation PRIVATE SHADER_DIR="${CMAKE_SOURCE_DIR}/src/Shader/shaders/")

@@ -1,16 +1,14 @@
 #include "config.h"
 
+//test symbol library   DOUBLE CHECK EVERYTHING WORKS ON LINUX
+//this library has random seg faults for whatever the fuck reason idk
+#include "configSym.h"
+
+using expression = SymEngine::RCP<const SymEngine::Basic>;
+using variable = SymEngine::RCP<const SymEngine::Symbol>;
 
 
 int main() {
-    //create files to write to
-    std::fstream errorLog;
-
-    errorLog.open("../ErrorLog.txt", std::ios::app);
-
-
-
-
 
     GLFWwindow* window= nullptr;
     try
@@ -21,7 +19,7 @@ int main() {
         if (!glfwInit())
         {
             std::string errorMessage = "Window Failed to Launch";
-            logErrorString(errorLog, errorMessage);
+            logErrorString(errorMessage);
             return 50;
         }
 
@@ -38,14 +36,14 @@ int main() {
         if (!window)
         {
             std::string errorMessage = "Window Failed to Launch";
-            logErrorString(errorLog, errorMessage);
+            logErrorString(errorMessage);
             glfwTerminate();
             return 50;
         }
     }
     catch (const std::exception& e)
     {
-        logError(errorLog, e);
+        logError(e);
         return 50;
     }
 
@@ -125,37 +123,86 @@ int main() {
     //try catch block to log everything that errors
     try {
 
-        //test objects for overlap checking
-        object3d Earth = {0, 0, 0, 5.97*pow(10, 24), 6371000, "Earth"};
-        object3d Person = {0, 6371002, 0, 70, 1};
+
+        //testing Tensors
 
 
-        glm::vec3 testVector = Person.calculateAccelerationField();
-        std::stringstream ss;
 
-        ss << testVector.x << ' ' << testVector.y << ' ' << testVector.z << std::endl;
-        std::string filepath = "../coutLog.txt";
-        logConsole(filepath, ss);
+        //Kroneker Delta initialization test
+        Tensor2 K2("Kronecker Delta", "Cartesian", 1, 1);
+        K2.entries[0][0] = SymEngine::integer(1);
+        K2.entries[1][1] = SymEngine::integer(1);
 
-        //OH MY GAWD WE GET LITTLE G IT WORKS
+        //create conversion functions
+        auto rho = SymEngine::symbol("r");
+        auto theta = SymEngine::symbol("t");
+        expression xPolar = SymEngine::mul(rho, SymEngine::cos(theta));
+        expression yPolar = SymEngine::mul(rho, SymEngine::sin(theta));
+        //test to see if it works
+        std::cout << *xPolar << '\n' << *yPolar << '\n';
+        K2.printTensor();
+
+        //test to see if conversion works
+        Tensor2 PolarMetric = K2.convertCoordinates("Polar", rho, theta, xPolar, yPolar);
+        std::cout << "Polar Metric" << '\n';
+        PolarMetric.printTensor();
+
+        //test Christoffel symbols
+        auto polarSymbols = PolarMetric.getChristoffelSymbols(PolarMetric, rho, theta);
+        std::cout << "0th symbol" << '\n';
+        polarSymbols[0]->printTensor();
+        std::cout << "1st symbol" << '\n';
+        polarSymbols[1]->printTensor();
+
+
+        Tensor3 K3("Kronecker Delta", "Cartesian", 1, 1);
+        K3.entries[0][0] = SymEngine::integer(1);
+        K3.entries[1][1] = SymEngine::integer(1);
+        K3.entries[2][2] = SymEngine::integer(1);
+
+        variable z = SymEngine::symbol("z");
+        expression zPolar = z;
+
+
+        //Tensor3 CylMetric = K3.convertCoordinates("Cylindrical", rho, theta, z, xPolar, yPolar, zPolar);
+        //K3.printTensor();
+
+        variable phi = SymEngine::symbol("p");
+
+        expression xSphere = SymEngine::mul(SymEngine::mul(SymEngine::cos(phi), SymEngine::sin(theta)), rho);
+        expression ySphere = SymEngine::mul(SymEngine::mul(SymEngine::sin(phi), SymEngine::sin(theta)), rho);
+        expression zSphere = SymEngine::mul(rho, SymEngine::cos(theta));
+
+        Tensor3 SphereMetric = K3.convertCoordinates("Spherical", rho, theta, phi, xSphere, ySphere, zSphere);
+        std::cout << "Spherical Metric" << "\n\n\n\n";
+        SphereMetric.printTensor();
+
+        auto SphereSymbols = SphereMetric.getChristoffelSymbols(SphereMetric, rho, theta, phi);
+        std::cout << "0th symbol" << '\n';
+        SphereSymbols[0]->printTensor();
+        std::cout << "1st symbol" << '\n';
+        SphereSymbols[1]->printTensor();
+        std::cout << "2nd symbol" << '\n';
+        SphereSymbols[2]->printTensor();
+
+        //bro the trig simplification :sob:
 
 
 
     }catch (const std::out_of_range &e) {
-        logError(errorLog, e);
+        logError(e);
         return 2;
     }catch(const std::invalid_argument& e) {
-        logError(errorLog, e);
+        logError(e);
         return 1;
     }catch(std::exception &e) {
-        logError(errorLog, e);
+        logError(e);
         return -2;
     }catch(...){
-        logError(errorLog);
+        logError();
         return -1;
     }
 
-    errorLog.close();
     return 0;
 
 }
