@@ -50,8 +50,8 @@ inline std::vector<float> generateSphere(const float radius, const int rows,cons
     std::vector<float> result;
     std::vector<float> r1;
 
-    constexpr auto stepAngleCol=static_cast<float>(std::numbers::pi/columns);
-    constexpr auto stepAngleRow=static_cast<float>(2.0*std::numbers::pi/rows);
+    const auto stepAngleCol=static_cast<float>(std::numbers::pi/columns);
+    const auto stepAngleRow=static_cast<float>(2.0*std::numbers::pi/rows);
 
 
     //start at one to prevent 0 division
