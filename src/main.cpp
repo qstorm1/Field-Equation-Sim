@@ -8,6 +8,8 @@ using expression = SymEngine::RCP<const SymEngine::Basic>;
 using variable = SymEngine::RCP<const SymEngine::Symbol>;
 
 
+std::vector<object3d*> world;
+
 int main() {
 
     GLFWwindow* window= nullptr;
@@ -74,8 +76,8 @@ int main() {
 
 
     //object used for testing
-    object3d testObj = {0, 0.5, 0, 2, 0.1, "test object M"};
-    object3d testObj2 = {2.0, 0, -3, 2, 0.1, "test object N"};
+    object3d testObj = {(&world),0, 0.5, 0, 2, 0.1, "test object M"};
+    object3d testObj2 = {(&world),2.0, 0, -3, 2, 0.1, "test object N"};
 
 
     //Set up the shaders (the code that is run on the graphics card) and link them to openGL
@@ -84,7 +86,7 @@ int main() {
     shader currentShade(SHADER_DIR "vertex-shader", SHADER_DIR "fragment-shader");
 
     //set up graphics card communication things
-    setUpVertices(object3d::getAllObjectsPosition().front());
+    setUpVertices(object3d::getAllObjectsPosition(&world).front());
 
 
 
@@ -108,7 +110,7 @@ int main() {
     glfwTerminate();
 
     //deletes all objects after window closes for test objects
-    object3d::deleteAllObjects();
+    object3d::deleteAllObjects(&world);
 
 
 
@@ -262,7 +264,7 @@ int setUpVertices(glm::vec3 objectPos)
     //TODO: normalize these vertices onto screen space
     //currently there are a dummy set of coordinates given the objectPositions vector will return a single object with position (0,0,0)
     //it's coordinates of (0,0,0) will turn into these coordinates (A square centered around whatever the point is) ->
-    const std::vector<float> vecCirc = generateSphere(1,15,15);
+    const std::vector<float> vecCirc = generateSphere(1,35,35);
     float sphere[vecCirc.size()];
     for (int i = 0; i < vecCirc.size(); i++)
     {
@@ -456,7 +458,7 @@ void runRenderLoop(const shader* currentShader)
 
 
     //loop through each object and render them
-    std::vector<glm::vec3> objectPositions = object3d::getAllObjectsPosition();
+    std::vector<glm::vec3> objectPositions = object3d::getAllObjectsPosition(&world);
     for (glm::vec3& objectPos : objectPositions)
     {
         //This matrix is responsible from moving objects at (0,0,0) to their correct positions in 3D space.

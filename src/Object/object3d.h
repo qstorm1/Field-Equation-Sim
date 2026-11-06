@@ -23,6 +23,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "glad/glad.h"
+
 #define G (6.6743 * pow(10,-11))
 
 //this should be in a .cpp file
@@ -39,10 +41,14 @@ class object3d {
     double x, y, z, mass, radius;   //METERS, METERS, METERS, KILOGRAMS, METERS FOR NOW
     unsigned int id;
 
+
+
+
     //checks if 2 objects overlap
-    bool isOverlapping(object3d &other) {
-        double distanceCenter = calculateDistance(other);
-        double radiusSum = this->radius + other.radius;
+    bool isOverlapping(const object3d &other) const
+    {
+        const double distanceCenter = calculateDistance(other);
+        const double radiusSum = this->radius + other.radius;
         return radiusSum > distanceCenter;
     }
 
@@ -50,10 +56,11 @@ class object3d {
 
 public:
 
+
     std::string name;
-    //constructor with default params using initialiser list
-    object3d(double x = 0, double y = 0, double z = 0,
-           double mass = 1, double radius = 1, std::string name = "")
+    //constructor with default params using an initializer list
+    object3d(std::vector<object3d*>* world,const double x = 0, const double y = 0, const double z = 0,
+           const double mass = 1, const double radius = 1, std::string name = "")
         : x(x), y(y), z(z), mass(mass), radius(radius)
     {
         //checks if user has met the preconditions
@@ -64,16 +71,19 @@ public:
             throw std::invalid_argument("radius must be positive");
         }
 
-        //throws an exception if 2 objects overlap during creation
-        auto it = objects.begin();
-        while (it != objects.end()) {
-            if (isOverlapping(*(it->second) ) ) {
-                std::stringstream errorMessage;
-                errorMessage << "objects cannot overlap: overlapping with: " << (*(it->second)).name + " id: " <<  (*(it->second)).id;
-                throw std::invalid_argument(errorMessage.str());
-            }
-            it++;
+        try
+        {
+            checkCollision(*world);
         }
+        catch (const std::invalid_argument& e)
+        {
+            throw;
+        }
+
+
+
+
+        //keeping id system because it might be useful IDK
 
         id = ++totalIDs;   // gives object custom ID
         //gives object of name "unnamed" if name parameter is left blank
@@ -82,35 +92,42 @@ public:
 
         //adds object to list of objects
         objects[id] = this;
+
+
+
+        world->push_back(this);
+
+
     }
 
     //normal functions
 
     //calculates euclidian distance
-    double calculateDistance(object3d &other) {
+    double calculateDistance(const object3d &other) const {
         return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
     }
 
     //return a distance vector from this to other
-     glm::vec3 calculateDistanceVector(object3d &other) {
-        glm::vec3 distance(other.x-x, other.y-y, other.z-z);
+
+    glm::vec3 calculateDistanceVector(const object3d &other) const {
+        const glm::vec3 distance(other.x-x, other.y-y, other.z-z);
         return distance;
     }
 
     //gets magnitude of newtonian force
-    double calculateNewtonForceMagnitude(object3d &other) {
+    double calculateNewtonForceMagnitude(object3d &other) const {
         return (mass * other.mass * G)/(calculateDistance(other) * calculateDistance(other));
     }
 
     //return a force vector to another object
-    glm::vec3 calculateNewtonForceVector(object3d &other) {
+    glm::vec3 calculateNewtonForceVector(object3d &other) const {
         glm::vec3 force = glm::normalize(calculateDistanceVector(other));
         force*=calculateNewtonForceMagnitude(other);
         return force;
     }
 
     //returns the net force being exerted on each object
-    glm::vec3 calculateGravitationalField() {
+    glm::vec3 calculateGravitationalField() const {
         glm::vec3 total(0.0, 0.0, 0.0);
         //adds each force vector to total
         for (auto& [otherId, other] : objects) {
@@ -122,115 +139,130 @@ public:
     }
 
     //returns net acceleration on the object
-    glm::vec3 calculateAccelerationField() {
+    glm::vec3 calculateAccelerationField() const {
         glm::vec3 force = calculateGravitationalField();
         force/=mass;
         return force;
     }
 
     //getter functions
-    unsigned int getID() {
+    unsigned int getID() const {
         return id;
     }
 
-    double getX() {
+    double getX() const {
         return x;
     }
 
-    double getY() {
+    double getY() const {
         return y;
     }
 
-    double getZ() {
+    double getZ() const {
         return z;
     }
 
-    glm::vec3 getPos()
+    glm::vec3 getPos() const
     {
         return glm::vec3(getX(),getY(),getZ());
     }
 
-    double getMass() {
+    double getMass() const {
         return mass;
     }
 
-    double getRadius(){
+    double getRadius() const{
         return radius;
     }
 
     //setter functions
 
-    void setX(double n) {
-        double oldX = x;
+    void setX(const std::vector<object3d*>& world,double n) {
+        const double oldX = x;
         x = n;
         //throw exception if 2 objects overlap
-        auto it = objects.begin();
-        while (it != objects.end()) {
-            if (isOverlapping(*(it->second) ) ) {
-                x = oldX;
-                std::stringstream errorMessage;
-                errorMessage << "objects cannot overlap: overlapping with: " << (*(it->second)).name + " id: " <<  (*(it->second)).id;
-                throw std::invalid_argument(errorMessage.str());
-            }
-            it++;
+        try
+        {
+            checkCollision(world);
+        }
+        catch (const std::invalid_argument& e)
+        {
+            x = oldX;
         }
     }
 
-    void setY(double n) {
-        double oldY = y;
+    void setY(const std::vector<object3d*>& world,double n) {
+        const double oldY = y;
         y = n;
         //throw exception if 2 objects overlap
-        auto it = objects.begin();
-        while (it != objects.end()) {
-            if (isOverlapping(*(it->second) ) ) {
-                y = oldY;
-                std::stringstream errorMessage;
-                errorMessage << "objects cannot overlap: overlapping with: " << (*(it->second)).name + " id: " <<  (*(it->second)).id;
-                throw std::invalid_argument(errorMessage.str());
-            }
-            it++;
+        try
+        {
+            checkCollision(world);
+        }
+        catch (const std::invalid_argument& e)
+        {
+            y = oldY;
         }
     }
 
-    void setZ(double n) {
-        double oldZ = z;
+    void setZ(const std::vector<object3d*>& world,double n) {
+        const double oldZ = z;
         z = n;
         //throw exception if 2 objects overlap during
-        auto it = objects.begin();
-        while (it != objects.end()) {
-            if (isOverlapping(*(it->second) ) ) {
-                z = oldZ;
-                std::stringstream errorMessage;
-                errorMessage << "objects cannot overlap: overlapping with: " << (*(it->second)).name + " id: " <<  (*(it->second)).id;
-                throw std::invalid_argument(errorMessage.str());
-            }
-            it++;
+        try
+        {
+            checkCollision(world);
+        }
+        catch (const std::invalid_argument& e)
+        {
+            z=oldZ;
         }
     }
 
-    void setRadius(double n) {
-        double oldRadius = radius;
+    void setRadius(const std::vector<object3d*>& world, const double n) {
+        const double oldRadius = radius;
         radius = n;
         //throw exception if 2 objects overlap during
-        auto it = objects.begin();
-        while (it != objects.end()) {
-            if (isOverlapping(*(it->second) ) ) {
-                radius = oldRadius;
-                std::stringstream errorMessage;
-                errorMessage << "objects cannot overlap: overlapping with: " << (*(it->second)).name + " id: " <<  (*(it->second)).id;
-                throw std::invalid_argument(errorMessage.str());
-            }
-            it++;
+        try
+        {
+            checkCollision(world);
+        }
+        catch (const std::invalid_argument& e)
+        {
+            radius = oldRadius;
         }
     }
 
-    void setMass(double n) {
+    void setMass(const double n) {
         mass = n;
     }
 
+
+
+    /**
+     * Throws invalid_argument error when failing collision check
+     * @param world the world of objects to check collisions with
+     */
+    void checkCollision(const std::vector<object3d*>& world) const noexcept(false)
+    {
+        for (const object3d* other : world)
+        {
+            if (isOverlapping(*other))
+            {
+                std::stringstream errorMessage;
+                errorMessage << "objects cannot overlap: overlapping with: " << other->name + " id: " <<  other->id;
+                throw std::invalid_argument(errorMessage.str());
+            }
+        }
+    }
+
+
+
+
+
     //operator overrides
 
-    bool operator==(object3d &other) {
+    bool operator==(const object3d &other) const {
         return x == other.x && y == other.y && z == other.z;
     }
 
@@ -245,40 +277,36 @@ public:
     //static methods
 
     //gets object by ID
-    static object3d& getObjectByID(unsigned int num) {
-        auto it = objects.find(num);
-        if (it == objects.end()) {
-            throw std::out_of_range("ID not found");
+    static object3d& getObjectByID(const std::vector<object3d*>* world,const unsigned int num) {
+        for (object3d* obj : *world)
+        {
+            if (obj->getID() == num)
+            {
+                return *obj;
+            }
         }
-        return *it->second;
-    }
-
-    static int getTotalNumbOfObjects()
-    {
-        return objects.size();
+        throw std::out_of_range("No such object");
     }
 
 
-    static std::vector<glm::vec3> getAllObjectsPosition()
+    static std::vector<glm::vec3> getAllObjectsPosition(const std::vector<object3d*>* world)
     {
         std::vector <glm::vec3> result;
-        auto it = objects.begin();
-        while (it != objects.end())
+        for (const object3d* obj : *world)
         {
-            result.push_back(it->second->getPos());//add the position to the end
-            ++it;//++ before just means that the result is ignored
+            result.push_back(obj->getPos());
         }
-
         return result;
     }
 
     //deletes all objects
-    static void deleteAllObjects() {
-        objects.clear();
+    static void deleteAllObjects(std::vector<object3d*>* world) {
+        world->clear();
     }
 
     //perhaps change this to have custom point struct as an argument
-    static double calculateMassDensity(double xStart, double yStart, double zStart, double xEnd, double yEnd, double zEnd) {
+    static double calculateMassDensity(const std::vector<object3d*>* world, const double xStart, const double yStart, const double zStart,
+        const double xEnd, const double yEnd, const double zEnd) {
         double mass = 0;
 
         if (xStart > xEnd) {
@@ -292,19 +320,19 @@ public:
         }
 
         //adds mass of objects
-        for (const std::pair<unsigned int, object3d*> &pair : objects) {
-            //checks if object is inside
-            if (pair.second->x > xStart && pair.second->x < xEnd) {
-                if (pair.second->y > yStart && pair.second->y < yEnd) {
-                    if (pair.second->z > zStart && pair.second->z < zEnd) {
-                        mass += pair.second->mass;
+        for (const object3d* obj: *world) {
+            //checks if object is inside given bounds
+            if (obj->x > xStart && obj->x < xEnd) {
+                if (obj->y > yStart && obj->y < yEnd) {
+                    if (obj->z > zStart && obj->z < zEnd) {
+                        mass += obj->mass;
                     }
                 }
             }
         }
         //Perhaps include calculation for circular segment IF NECESSARY
 
-        double volume = (xEnd - xStart) * (yEnd - yStart) * (zEnd - zStart);
+        const double volume = (xEnd - xStart) * (yEnd - yStart) * (zEnd - zStart);
 
         return mass/volume;
 
