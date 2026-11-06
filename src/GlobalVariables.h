@@ -17,6 +17,7 @@ struct GlobalVariables{
     inline static float backwardMoveExcel=0.5;
     inline static float sideMoveExcel=0.5;
     inline static float yMoveExcel=0.5;
+    inline static float camSpeed = 1;
     inline static float aspectRatio=static_cast<float>(initWidth)/static_cast<float>(initHeight);
 
     static void resetGlobalVariables()

@@ -542,34 +542,44 @@ void handleInput(GLFWwindow* window)
 {
     //move forwardMoveExcel distance in the camera forward vector
     if (glfwGetKey(window, GLFW_KEY_W)==GLFW_PRESS)
-        cameraPos+=(GlobalVariables::forwardMoveExcel * cameraDirection);
+        cameraPos+=(GlobalVariables::forwardMoveExcel * cameraDirection)*GlobalVariables::camSpeed;
 
     //move forwardMoveExcel distance in the camera forward vector
     if (glfwGetKey(window, GLFW_KEY_S)==GLFW_PRESS)
-        cameraPos-=(GlobalVariables::backwardMoveExcel*cameraDirection);
+        cameraPos-=(GlobalVariables::backwardMoveExcel*cameraDirection)*GlobalVariables::camSpeed;
 
     if (glfwGetKey(window, GLFW_KEY_SPACE)==GLFW_PRESS)
-        cameraPos+=(GlobalVariables::yMoveExcel*cameraUp);
+        cameraPos+=(GlobalVariables::yMoveExcel*cameraUp)*GlobalVariables::camSpeed;
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT)==GLFW_PRESS)
-        cameraPos-= (GlobalVariables::yMoveExcel*cameraUp);
+        cameraPos-= (GlobalVariables::yMoveExcel*cameraUp)*GlobalVariables::camSpeed;
 
             //move sideMoveExcel distance in the camera Right vector
     if (glfwGetKey(window, GLFW_KEY_A)==GLFW_PRESS)
-        cameraPos-=(GlobalVariables::sideMoveExcel*glm::cross(cameraDirection, cameraUp));
+        cameraPos-=(GlobalVariables::sideMoveExcel*glm::cross(cameraDirection, cameraUp))*GlobalVariables::camSpeed;
 
 
     //move sideMoveExcel distance in the camera Right vector
     if (glfwGetKey(window, GLFW_KEY_D)==GLFW_PRESS)
-        cameraPos+=(GlobalVariables::sideMoveExcel*glm::cross(cameraDirection, cameraUp));
+        cameraPos+=(GlobalVariables::sideMoveExcel*glm::cross(cameraDirection, cameraUp))*GlobalVariables::camSpeed;
 
 
-
+    std::cout << GlobalVariables::camSpeed << '\n';
 }
 
 
+double deltaTime = 0.0f;
+double lastFrame = 0.0f;
+
 void runSimulationLoop(GLFWwindow* window, const shader* currentShader)
 {
+
+
+    const double currentFrame = glfwGetTime();
+    deltaTime=currentFrame-lastFrame;
+    lastFrame=currentFrame;
+
+    GlobalVariables::camSpeed = static_cast<float>(deltaTime)*5.0f;
 
     handleInput(window);
     runRenderLoop(currentShader);
