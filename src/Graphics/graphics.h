@@ -13,7 +13,7 @@ struct GLFWwindow;
 
 
 
-inline unsigned int shaderProgram,VBO,VAO,EBO;
+inline unsigned int shaderProgram,sphereVBO,squareVBO,sphereVAO,squareVAO,EBO,numbOfTriangles;
 inline glm::vec3 cameraPos,cameraDirection,cameraUp;
 
 int setUpVertices(glm::vec3 objectPos);
@@ -28,10 +28,10 @@ inline std::vector<float> sphereToCartesian(const float radius, const float thet
 /**
  * this is just a helper function for the generateSphere thing
  */
-inline void generateSpherePoint(std::vector<float>* points, const float radius,const float stepAngleCol,const float stepAngleRow,
+inline void generateSpherePoint(std::vector<float>* points,const float stepAngleCol,const float stepAngleRow,  const float radius,
     const int i, const int j)
 {
-    std::vector<float> r =  sphereToCartesian(radius,stepAngleRow*static_cast<float>(i),static_cast<float>((std::numbers::pi/2.0)-(stepAngleCol*static_cast<float>(j))));
+    std::vector<float> r =  sphereToCartesian(radius,stepAngleCol*static_cast<float>(j),stepAngleRow*static_cast<float>(i));
     points->insert(points->end(), r.begin(), r.end());
 }
 

@@ -101,9 +101,9 @@ int main() {
 
 
     //de-allocate remaining processes
-    glDeleteVertexArrays(1, &VAO);
+    glDeleteVertexArrays(1, &sphereVAO);
     glDeleteBuffers(1, &EBO);
-    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &sphereVBO);
 
     glfwTerminate();
 
@@ -221,14 +221,10 @@ int setUpVertices(glm::vec3 objectPos)
 
 
 
-
-
-
     //A Vertex Array (VAO) it is the super array that handles all the type's of shader. This specific one is just for triangles
 
     //assign the specific ID that turns this int into a unique buffer
-    glGenVertexArrays(1, &VAO);
-
+    glGenVertexArrays(1, &sphereVAO);
 
 
 
@@ -237,7 +233,7 @@ int setUpVertices(glm::vec3 objectPos)
 
 
     //assign a specific ID that turns this int into a unique buffer
-    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &sphereVBO);
 
 
 
@@ -246,14 +242,14 @@ int setUpVertices(glm::vec3 objectPos)
 
 
     //tells openGL that we want to use this VAO
-    glBindVertexArray(VAO);
+    glBindVertexArray(sphereVAO);
 
 
 
-    //set openGL's vertex buffer to be VBO
+    //set openGL's vertex buffer to be VBO (or maybe whatever VAO is currently bound?).
     //GL_ARRAY_BUFFER just means it will send an array as a buffer
     //this means the graphics card will need to deal with an array when it gets the data
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, sphereVBO);
 
 
 
@@ -262,10 +258,64 @@ int setUpVertices(glm::vec3 objectPos)
 
 
 
+    //unit circle
     //TODO: normalize these vertices onto screen space
     //currently there are a dummy set of coordinates given the objectPositions vector will return a single object with position (0,0,0)
     //it's coordinates of (0,0,0) will turn into these coordinates (A square centered around whatever the point is) ->
+    const std::vector<float> vecCirc = generateSphere(1,15,15);
+    float sphere[vecCirc.size()];
+    for (int i = 0; i < vecCirc.size(); i++)
+    {
+        sphere[i] = vecCirc[i];
+    }
+    numbOfTriangles=vecCirc.size()/3;
 
+
+
+
+    //sends the data that is set in the VBO to the GPU
+    //change whatever the GL_ARRAY_BUFFER is (the VBO in the main function) to a buffer with our vertices
+    //GL_STATIC_DRAW is a configuration given to the graphics card that says the data(testVertices) will only be set once and used a bunch
+    //we will likely switch to GL_DYNAMIC_DRAW because we'll be using objects who's coordinates are moving
+    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(sphere)), sphere, GL_STATIC_DRAW);
+
+
+
+
+    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+
+    //tells openGL how to interpret the value from the VBO
+    //VBO definition in setupShaders()
+    //we assume the VBO is a long set of memory clumped together
+    //the first value is related to vertexShaderSource in graphics.h. it specifies that we want to set the aPos to be whatever the input is
+    //the second value states how many items we want for every aPos (x,y,z is 3 items total so 3)
+    //the third represents what the type of the items inside the value is (float)
+    //the fourth is weather we should normalize the point (ex: screen space = 500-500 , openGL space = 0.5,0.2 (not to scale))
+    //the fifth is the distance in memory before making a new aPos
+    //the sixth is the offset, meaning the memory distance from the start of the VBO
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), static_cast<void*>(nullptr));
+
+    //Enables the VBO located at index 0 of the VAO (makes the shader we just set turn on)
+    glEnableVertexAttribArray(0);
+
+
+    //unbind buffers
+    glBindBuffer(GL_ARRAY_BUFFER, 0);//this is allowed because we already have the VBO saved to the VOA
+    glBindVertexArray(0);
+
+
+
+
+    //setup for square (square's used for testing with multiple objects, likely remove in future updates)
+    glGenVertexArrays(1, &squareVAO);
+    glGenBuffers(1, &squareVBO);
+    glBindVertexArray(squareVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, squareVBO);
+
+    //unit square
     constexpr float square[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
          0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -310,41 +360,7 @@ int setUpVertices(glm::vec3 objectPos)
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
-    //     {
-    //     objectPos.x+0.5f, objectPos.y+0.5f, objectPos.z, // top right
-    //     objectPos.x+0.5f, objectPos.y-0.5f, objectPos.z, // bottom right
-    //     objectPos.x-0.5f, objectPos.y-0.5f, objectPos.z, // bottom left
-    //     objectPos.x-0.5f, objectPos.y+0.5f, objectPos.z  // top left
-    // };
-
-    // const unsigned int indices[] = {  // note that we start from 0!
-    //     0, 1, 3,  // first Triangle
-    //     1, 2, 3   // second Triangle
-    // };
-
-
-    //sends the data that is set in the VBO to the GPU
-    //change whatever the GL_ARRAY_BUFFER is (the VBO in the main function) to a buffer with our vertices
-    //GL_STATIC_DRAW is a configuration given to the graphics card that says the data(testVertices) will only be set once and used a bunch
-    //we will likely switch to GL_DYNAMIC_DRAW because we'll be using objects who's coordinates are moving
     glBufferData(GL_ARRAY_BUFFER, sizeof(square), square, GL_STATIC_DRAW);
-
-
-
-
-    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-
-
-    //tells openGL how to interpret the value from the VBO
-    //VBO definition in setupShaders()
-    //we assume the VBO is a long set of memory clumped together
-    //the first value is related to vertexShaderSource in graphics.h. it specifies that we want to set the aPos to be whatever the input is
-    //the second value states how many items we want for every aPos (x,y,z is 3 items total so 3)
-    //the third represents what the type of the items inside the value is (float)
-    //the fourth is weather we should normalize the point (ex: screen space = 500-500 , openGL space = 0.5,0.2 (not to scale))
-    //the fifth is the distance in memory before making a new aPos
-    //the sixth is the offset, meaning the memory distance from the start of the VBO
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), static_cast<void*>(nullptr));
 
     //Enables the VBO located at index 0 of the VAO (makes the shader we just set turn on)
@@ -356,6 +372,7 @@ int setUpVertices(glm::vec3 objectPos)
     glBindVertexArray(0);
 
 
+
     //set wireframe mode
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -364,6 +381,18 @@ int setUpVertices(glm::vec3 objectPos)
     glEnable(GL_DEPTH_TEST);
 
     return 0;
+
+    //     {
+    //     objectPos.x+0.5f, objectPos.y+0.5f, objectPos.z, // top right
+    //     objectPos.x+0.5f, objectPos.y-0.5f, objectPos.z, // bottom right
+    //     objectPos.x-0.5f, objectPos.y-0.5f, objectPos.z, // bottom left
+    //     objectPos.x-0.5f, objectPos.y+0.5f, objectPos.z  // top left
+    // };
+
+    // const unsigned int indices[] = {  // note that we start from 0!
+    //     0, 1, 3,  // first Triangle
+    //     1, 2, 3   // second Triangle
+    // };
 }
 
 void updateCurrentVertices()
@@ -373,6 +402,7 @@ void updateCurrentVertices()
 
 void runRenderLoop(const shader* currentShader)
 {
+
 
     //this sets the background color used when clearing
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -384,8 +414,13 @@ void runRenderLoop(const shader* currentShader)
 
     currentShader->use();
 
+
+
+
+
+
     //tells openGL to pull the data from the VAO inputted
-    glBindVertexArray(VAO);
+    glBindVertexArray(sphereVAO);
 
 
 
@@ -402,8 +437,6 @@ void runRenderLoop(const shader* currentShader)
 
 
 
-    const auto camX = static_cast<float>(sin(time)) ;
-    const auto camZ = static_cast<float>(cos(time)) ;
     //Moves all the stuff to where the camera is, this is done using the magic lookAt matrix which I have already done the math for in other projects.
     //The first is the position vector (where the camera is) the second is where the camera is looking at, and the third is where the camera's up direction is.
     auto transView = glm::lookAt(cameraPos,cameraPos+cameraDirection, cameraUp);
@@ -448,11 +481,13 @@ void runRenderLoop(const shader* currentShader)
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         //draw the triangles on the screen
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(numbOfTriangles));
 
 
 
     }
+
+
 
 
 
