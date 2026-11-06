@@ -34,15 +34,17 @@ class object3d {
     static inline unsigned int totalIDs = 0;
     //tracks current ID's of each object
 
-    //creates a map of objects that can be accessed from ID
-    static inline std::map<unsigned int, object3d*> objects;
+
 
     //declare attributes
     double x, y, z, mass, radius;   //METERS, METERS, METERS, KILOGRAMS, METERS FOR NOW
     unsigned int id;
 
 
-
+    //Only used for destructor due to it being kinda risky, I think
+    //tbh I might research if this is the best way to do this because
+    //I might not even need the vectors for world in the heads of the functions
+    std::vector<object3d*>* worldPTR;
 
     //checks if 2 objects overlap
     bool isOverlapping(const object3d &other) const
@@ -71,6 +73,8 @@ public:
             throw std::invalid_argument("radius must be positive");
         }
 
+
+        //check if the spawned object is colliding with another object, if it is an error will be thrown
         try
         {
             checkCollision(*world);
@@ -90,12 +94,13 @@ public:
         this->name = name.empty() ? "unnamed" + std::to_string(id)
                                   : std::move(name);
 
-        //adds object to list of objects
-        objects[id] = this;
 
 
-
+        //set the given world array to have this value (there will only be one from main that will hold all the data)
         world->push_back(this);
+
+        //this is only used for destructors right now, I need to research to see if this is safe TODO: that
+        worldPTR = world;
 
 
     }
@@ -115,7 +120,7 @@ public:
     }
 
     //gets magnitude of newtonian force
-    double calculateNewtonForceMagnitude(object3d &other) const {
+    double calculateNewtonForceMagnitude(const object3d &other) const {
         return (mass * other.mass * G)/(calculateDistance(other) * calculateDistance(other));
     }
 
@@ -127,20 +132,20 @@ public:
     }
 
     //returns the net force being exerted on each object
-    glm::vec3 calculateGravitationalField() const {
+    glm::vec3 calculateGravitationalField(const std::vector<object3d*>* world) const {
         glm::vec3 total(0.0, 0.0, 0.0);
         //adds each force vector to total
-        for (auto& [otherId, other] : objects) {
-            if (otherId == id) continue;
-            glm::vec3 force = calculateNewtonForceVector(*other);
+        for (object3d* obj: *world) {
+            if (obj->getID() == id) continue;
+            const glm::vec3 force = calculateNewtonForceVector(*obj);
             total+=force;
         }
         return total;
     }
 
     //returns net acceleration on the object
-    glm::vec3 calculateAccelerationField() const {
-        glm::vec3 force = calculateGravitationalField();
+    glm::vec3 calculateAccelerationField(std::vector<object3d*>* world) const {
+        glm::vec3 force = calculateGravitationalField(world);
         force/=mass;
         return force;
     }
@@ -268,7 +273,7 @@ public:
 
     //destructor
     ~object3d() {
-        objects.erase(id);
+        std::erase(*worldPTR,this);
         std::stringstream ss;
         ss << "Destroyed object: " << id << std::endl;
         logConsole(ss);

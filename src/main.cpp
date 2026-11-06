@@ -8,7 +8,7 @@ using expression = SymEngine::RCP<const SymEngine::Basic>;
 using variable = SymEngine::RCP<const SymEngine::Symbol>;
 
 
-std::vector<object3d*> world;
+
 
 int main() {
 
@@ -421,8 +421,7 @@ void runRenderLoop(const shader* currentShader)
 
 
 
-    //tells openGL to pull the data from the VAO inputted
-    glBindVertexArray(sphereVAO);
+
 
 
 
@@ -458,15 +457,19 @@ void runRenderLoop(const shader* currentShader)
 
 
     //loop through each object and render them
-    std::vector<glm::vec3> objectPositions = object3d::getAllObjectsPosition(&world);
-    for (glm::vec3& objectPos : objectPositions)
+    for (const object3d* objectPos : world)
     {
+
+        //tells openGL to pull the data from the VAO inputted
+        glBindVertexArray(sphereVAO);
+
+
         //This matrix is responsible from moving objects at (0,0,0) to their correct positions in 3D space.
         //For instance, if you want to rotate an object around it's center, you need to make sure the object
         //is centered around (0,0,0) before rotating. Then you can move the object to it's position in 3D space.
         auto transLocal = glm::mat4(1.0f);
         //first value = matrix we want to transform, second value = angle change, third value = which axis to transform about
-        transLocal = glm::translate(transLocal, objectPos);
+        transLocal = glm::translate(transLocal, objectPos->getPos());
         transLocal = glm::rotate(transLocal, glm::radians(static_cast<float>(time)*20.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         transLocal = glm::rotate(transLocal, glm::radians(static_cast<float>(time)*5.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 

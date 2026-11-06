@@ -28,4 +28,6 @@
 #include <vector>
 
 
+inline std::vector<object3d*> world;
+
 void runSimulationLoop(GLFWwindow* window, const shader* currentShader);
