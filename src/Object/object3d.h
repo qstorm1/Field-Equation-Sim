@@ -41,6 +41,17 @@ class object3d {
     unsigned int id;
 
 
+    /**
+     *What shape is rendered:
+     *  0 = cube
+     *  1 = low-polygon sphere
+     *  2 = mid-polygon sphere
+     *  3 = high-polygon sphere
+     *  TODO: make polygon's a setting
+    **/
+    int renderType=2;
+    //int color=0;
+
     //Only used for destructor due to it being kinda risky, I think
     //tbh I might research if this is the best way to do this because
     //I might not even need the vectors for world in the heads of the functions
@@ -179,6 +190,10 @@ public:
     double getRadius() const{
         return radius;
     }
+    int getShape() const
+    {
+        return renderType;
+    }
 
     //setter functions
 
@@ -242,7 +257,18 @@ public:
         mass = n;
     }
 
-
+    /**
+     * Set the shape of this object (will be scaled based on radius)
+     * @param shape the type of shape:\n
+     *  0 = cube                      \n
+     *  1 = low-polygon sphere        \n
+     *  2 = mid-polygon sphere        \n
+     *  3 = high-polygon sphere
+     */
+    void setShape(const int shape)
+    {
+        renderType = shape;
+    }
 
     /**
      * Throws invalid_argument error when failing collision check

@@ -13,7 +13,9 @@ struct GLFWwindow;
 
 
 
-inline unsigned int shaderProgram,sphereVBO,squareVBO,sphereVAO,squareVAO,EBO,numbOfTriangles;
+inline unsigned int shaderProgram,
+    sphereVBO,sphereVAO,numbOfTrianglesSphere,//mid-poly
+    squareVBO,squareVAO;
 inline glm::vec3 cameraPos,cameraDirection,cameraUp;
 
 int setUpVertices(glm::vec3 objectPos);

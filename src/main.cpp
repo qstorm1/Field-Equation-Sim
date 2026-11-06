@@ -77,7 +77,8 @@ int main() {
 
     //object used for testing
     object3d testObj = {(&world),0, 0.5, 0, 2, 0.1, "test object M"};
-    object3d testObj2 = {(&world),2.0, 0, -3, 2, 0.1, "test object N"};
+    testObj.setShape(0);
+    object3d testObj2 = {(&world),2.0, 0, -3, 2, 1, "test object N"};
 
 
     //Set up the shaders (the code that is run on the graphics card) and link them to openGL
@@ -104,7 +105,6 @@ int main() {
 
     //de-allocate remaining processes
     glDeleteVertexArrays(1, &sphereVAO);
-    glDeleteBuffers(1, &EBO);
     glDeleteBuffers(1, &sphereVBO);
 
     glfwTerminate();
@@ -219,7 +219,7 @@ int setUpVertices(glm::vec3 objectPos)
 
 
 
-
+    //Mid-Poly Sphere
 
 
 
@@ -270,7 +270,7 @@ int setUpVertices(glm::vec3 objectPos)
     {
         sphere[i] = vecCirc[i];
     }
-    numbOfTriangles=vecCirc.size()/3;
+    numbOfTrianglesSphere=vecCirc.size()/3;
 
 
 
@@ -306,6 +306,16 @@ int setUpVertices(glm::vec3 objectPos)
     //unbind buffers
     glBindBuffer(GL_ARRAY_BUFFER, 0);//this is allowed because we already have the VBO saved to the VOA
     glBindVertexArray(0);
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -375,6 +385,18 @@ int setUpVertices(glm::vec3 objectPos)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     //set wireframe mode
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -395,11 +417,6 @@ int setUpVertices(glm::vec3 objectPos)
     //     0, 1, 3,  // first Triangle
     //     1, 2, 3   // second Triangle
     // };
-}
-
-void updateCurrentVertices()
-{
-
 }
 
 void runRenderLoop(const shader* currentShader)
@@ -459,9 +476,21 @@ void runRenderLoop(const shader* currentShader)
     //loop through each object and render them
     for (const object3d* objectPos : world)
     {
+        if (objectPos == nullptr) continue;
 
         //tells openGL to pull the data from the VAO inputted
-        glBindVertexArray(sphereVAO);
+        if (const int s = objectPos->getShape(); s==1 || s==2 || s==3)
+        {
+            glBindVertexArray(sphereVAO);
+        }
+        else
+        {
+            glBindVertexArray(squareVAO);
+        }
+
+
+
+        const double radius = objectPos->getRadius();
 
 
         //This matrix is responsible from moving objects at (0,0,0) to their correct positions in 3D space.
@@ -469,6 +498,7 @@ void runRenderLoop(const shader* currentShader)
         //is centered around (0,0,0) before rotating. Then you can move the object to it's position in 3D space.
         auto transLocal = glm::mat4(1.0f);
         //first value = matrix we want to transform, second value = angle change, third value = which axis to transform about
+        transLocal = glm::scale(transLocal, glm::vec3(radius, radius, radius));
         transLocal = glm::translate(transLocal, objectPos->getPos());
         transLocal = glm::rotate(transLocal, glm::radians(static_cast<float>(time)*20.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         transLocal = glm::rotate(transLocal, glm::radians(static_cast<float>(time)*5.0f), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -486,7 +516,7 @@ void runRenderLoop(const shader* currentShader)
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         //draw the triangles on the screen
-        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(numbOfTriangles));
+        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(numbOfTrianglesSphere));
 
 
 
