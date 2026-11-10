@@ -119,6 +119,23 @@ public:
         return *this;
     }
 
+    //converts from tensor to mat3 with substitution
+    glm::mat3 toMat3(variable &C1, variable &C2, variable &C3, double n1, double n2, double n3) {
+        glm::mat3 m(0.0f);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                SymEngine::map_basic_basic rules;
+                rules[C1] = SymEngine::real_double(n1);
+                rules[C2] = SymEngine::real_double(n2);
+                rules[C3] = SymEngine::real_double(n3);
+                expression e = entries[i][j]->subs(rules);
+                //god dammit column major order
+                m[j][i] = static_cast<float>(SymEngine::eval_double(*e));
+            }
+        }
+        return m;
+    }
+
     static std::array<Tensor3*, 3> getChristoffelSymbols(Tensor3 &metric, variable &C1, variable &C2, variable &C3) {
         variable vars[3]{C1, C2, C3};
         Tensor3 inv = metric.getInverse();

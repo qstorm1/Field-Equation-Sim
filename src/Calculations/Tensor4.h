@@ -120,6 +120,24 @@ public:
         return *this;
     }
 
+    //converts from tensor to mat4 with substitution
+    glm::mat4 toMat4(variable &C1, variable &C2, variable &C3, variable &C4,double n1, double n2, double n3, double n4) {
+        glm::mat4 m(0.0f);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                SymEngine::map_basic_basic rules;
+                rules[C1] = SymEngine::real_double(n1);
+                rules[C2] = SymEngine::real_double(n2);
+                rules[C3] = SymEngine::real_double(n3);
+                rules[C4] = SymEngine::real_double(n4);
+                expression e = entries[i][j]->subs(rules);
+                //god dammit column major order
+                m[j][i] = static_cast<float>(SymEngine::eval_double(*e));
+            }
+        }
+        return m;
+    }
+
     //i'm going to pray this works since I don't really have test cases for it
     static std::array<Tensor4*, 4> getChristoffelSymbols(Tensor4 &metric, variable &C1, variable &C2, variable &C3, variable &C4) {
         variable vars[4]{C1, C2, C3, C4};

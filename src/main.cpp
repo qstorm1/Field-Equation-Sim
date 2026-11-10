@@ -140,9 +140,12 @@ int main() {
 
         Tensor2 RicciS2 = Tensor2::getRicciTensor(S2, theta, phi);
         std::cout << "Ricci Tensor!" << '\n';
-        RicciS2.printTensor();
+        //RicciS2.printTensor();
 
         //TEST CASE PASSED
+
+        glm::mat2 mRS2 = RicciS2.toMat2(theta, phi, 2.1415926/*1.5707963*/, 2);
+        std:: cout << glm::to_string(mRS2) << '\n';
 
 
 
@@ -168,7 +171,11 @@ int main() {
 
         std::cout << "Ricci Tensor Spherical!" << '\n';
         Tensor3 RicciS = Tensor3::getRicciTensor(SphereMetric, rho, theta, phi);
-        RicciS.printTensor();
+        //RicciS.printTensor();
+
+        glm::mat3 m1 = RicciS.toMat3(rho, theta, phi, 2, 22, 19.2);
+
+        std::cout << glm::to_string(m1) << '\n';
 
         //bro the trig simplification :sob:
         //wow this thing really hates cotangents

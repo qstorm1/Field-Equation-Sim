@@ -129,6 +129,22 @@ public:
         return *this;
     }
 
+    //converts from tensor to mat2 with substitution
+    glm::mat2 toMat2(variable &C1, variable &C2, double n1, double n2) {
+        glm::mat2 m(0.0f);
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                SymEngine::map_basic_basic rules;
+                rules[C1] = SymEngine::real_double(n1);
+                rules[C2] = SymEngine::real_double(n2);
+                expression e = entries[i][j]->subs(rules);
+                //god dammit column major order
+                m[j][i] = static_cast<float>(SymEngine::eval_double(*e));
+            }
+        }
+        return m;
+    }
+
     //returns an array of symbol pointers
     static std::array<Tensor2*, 2> getChristoffelSymbols(Tensor2 &metric, variable &C1, variable &C2) {
         variable vars[2]{C1, C2};
