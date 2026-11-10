@@ -130,14 +130,14 @@ public:
     }
 
     //returns an array of symbol pointers
-    std::array<Tensor2*, 2> getChristoffelSymbols(Tensor2 &metric, variable &C1, variable &C2) {
+    static std::array<Tensor2*, 2> getChristoffelSymbols(Tensor2 &metric, variable &C1, variable &C2) {
         variable vars[2]{C1, C2};
         Tensor2 inv = metric.getInverse();
 
         //creates an array of symbols
         std::array<Tensor2*, 2> symbols{
-            new Tensor2("Christoffel Symbol 1", coordinateSystem, CoV, CtrV),
-            new Tensor2("Christoffel Symbol 2", coordinateSystem, CoV, CtrV)
+            new Tensor2("Christoffel Symbol 1", metric.coordinateSystem, metric.CoV, metric.CtrV),
+            new Tensor2("Christoffel Symbol 2", metric.coordinateSystem, metric.CoV, metric.CtrV)
         };
 
         for (int k = 0; k < 2; k++) {           //symbol number

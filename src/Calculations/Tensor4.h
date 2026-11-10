@@ -38,7 +38,7 @@ class Tensor4 {
 public:
     //creates the tensor and seeds with 0's
     expression entries[4][4];
-    Tensor4(std::string name, std::string coordinateSystem, short Co, short Ctr) {
+    Tensor4(std::string name, std::string coordinateSystem, unsigned short Co, unsigned short Ctr) {
         this->name = name;
         this->coordinateSystem = coordinateSystem;
         CoV = Co;
@@ -121,15 +121,15 @@ public:
     }
 
     //i'm going to pray this works since I don't really have test cases for it
-    std::array<Tensor4*, 4> getChristoffelSymbols(Tensor4 &metric, variable &C1, variable &C2, variable &C3, variable &C4) {
+    static std::array<Tensor4*, 4> getChristoffelSymbols(Tensor4 &metric, variable &C1, variable &C2, variable &C3, variable &C4) {
         variable vars[4]{C1, C2, C3, C4};
         Tensor4 inv = metric.getInverse();
 
         //creates an array of symbols
         std::array<Tensor4*, 4> symbols{
-            new Tensor4("Christoffel Symbol 1", coordinateSystem, CoV, CtrV),
-            new Tensor4("Christoffel Symbol 2", coordinateSystem, CoV, CtrV),
-            new Tensor4("Christoffel Symbol 3", coordinateSystem, CoV, CtrV)
+            new Tensor4("Christoffel Symbol 1", metric.coordinateSystem, metric.CoV, metric.CtrV),
+            new Tensor4("Christoffel Symbol 2", metric.coordinateSystem, metric.CoV, metric.CtrV),
+            new Tensor4("Christoffel Symbol 3", metric.coordinateSystem, metric.CoV, metric.CtrV)
         };
 
         for (int k = 0; k < 4; k++) {           //symbol number

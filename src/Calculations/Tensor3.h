@@ -38,7 +38,7 @@ class Tensor3 {
 public:
     //creates the tensor and seeds with 0's
     expression entries[3][3];
-    Tensor3(std::string name, std::string coordinateSystem, short Co, short Ctr) {
+    Tensor3(std::string name, std::string coordinateSystem, unsigned short Co, unsigned short Ctr) {
         this->name = name;
         this->coordinateSystem = coordinateSystem;
         CoV = Co;
@@ -119,15 +119,15 @@ public:
         return *this;
     }
 
-    std::array<Tensor3*, 3> getChristoffelSymbols(Tensor3 &metric, variable &C1, variable &C2, variable &C3) {
+    static std::array<Tensor3*, 3> getChristoffelSymbols(Tensor3 &metric, variable &C1, variable &C2, variable &C3) {
         variable vars[3]{C1, C2, C3};
         Tensor3 inv = metric.getInverse();
 
         //creates an array of symbols
         std::array<Tensor3*, 3> symbols{
-            new Tensor3("Christoffel Symbol 1", coordinateSystem, CoV, CtrV),
-            new Tensor3("Christoffel Symbol 2", coordinateSystem, CoV, CtrV),
-            new Tensor3("Christoffel Symbol 3", coordinateSystem, CoV, CtrV)
+            new Tensor3("Christoffel Symbol 1", metric.coordinateSystem, metric.CoV, metric.CtrV),
+            new Tensor3("Christoffel Symbol 2", metric.coordinateSystem, metric.CoV, metric.CtrV),
+            new Tensor3("Christoffel Symbol 3", metric.coordinateSystem, metric.CoV, metric.CtrV)
         };
 
         for (int k = 0; k < 3; k++) {           //symbol number

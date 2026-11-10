@@ -150,7 +150,7 @@ int main() {
         PolarMetric.printTensor();
 
         //test Christoffel symbols
-        auto polarSymbols = PolarMetric.getChristoffelSymbols(PolarMetric, rho, theta);
+        auto polarSymbols = Tensor2::getChristoffelSymbols(PolarMetric, rho, theta);
         std::cout << "0th symbol" << '\n';
         polarSymbols[0]->printTensor();
         std::cout << "1st symbol" << '\n';
@@ -179,7 +179,7 @@ int main() {
         std::cout << "Spherical Metric" << "\n\n\n\n";
         SphereMetric.printTensor();
 
-        auto SphereSymbols = SphereMetric.getChristoffelSymbols(SphereMetric, rho, theta, phi);
+        auto SphereSymbols = Tensor3::getChristoffelSymbols(SphereMetric, rho, theta, phi);
         std::cout << "0th symbol" << '\n';
         SphereSymbols[0]->printTensor();
         std::cout << "1st symbol" << '\n';
