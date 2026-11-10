@@ -165,18 +165,13 @@ int main() {
         expression zSphere = SymEngine::mul(rho, SymEngine::cos(theta));
 
         Tensor3 SphereMetric = K3.convertCoordinates("Spherical", rho, theta, phi, xSphere, ySphere, zSphere);
-        std::cout << "Spherical Metric" << "\n\n\n\n";
-        SphereMetric.printTensor();
 
-        auto SphereSymbols = Tensor3::getChristoffelSymbols(SphereMetric, rho, theta, phi);
-        std::cout << "0th symbol" << '\n';
-        SphereSymbols[0]->printTensor();
-        std::cout << "1st symbol" << '\n';
-        SphereSymbols[1]->printTensor();
-        std::cout << "2nd symbol" << '\n';
-        SphereSymbols[2]->printTensor();
+        std::cout << "Ricci Tensor Spherical!" << '\n';
+        Tensor3 RicciS = Tensor3::getRicciTensor(SphereMetric, rho, theta, phi);
+        RicciS.printTensor();
 
         //bro the trig simplification :sob:
+        //wow this thing really hates cotangents
 
 
 

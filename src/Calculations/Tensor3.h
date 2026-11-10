@@ -150,6 +150,39 @@ public:
         return symbols;
     }
 
+    static Tensor3 getRicciTensor(Tensor3 &metric, variable &C1, variable &C2, variable &C3) {
+        Tensor3 Ricci("Ricci Curvature tensor", metric.coordinateSystem, metric.CoV, metric.CtrV);
+        auto symbols = getChristoffelSymbols(metric, C1, C2, C3);
+        variable vars[3]{C1, C2, C3};
+        for (int i =0; i <3; i++) {
+            for (int j = 0; j < 3; j++) {
+                expression sum = SymEngine::integer(0);
+                for (int k = 0; k < 3; k++) {
+                    auto term = (symbols[k]->entries[i][j])->diff(vars[k]);
+                    sum = SymEngine::add(sum, term);
+                }
+                for (int k = 0; k < 3; k++) {
+                    auto term = (symbols[k]->entries[i][k])->diff(vars[j]);
+                    sum = SymEngine::sub(sum, term);
+                }
+                for (int k = 0; k < 3; k++) {
+                    for (int m = 0; m < 3; m++) {
+                        auto term = SymEngine::mul(symbols[k]->entries[i][j], symbols[m]->entries[k][m]);
+                        sum = SymEngine::add(sum, term);
+                    }
+                }
+                for (int k = 0; k < 3; k++) {
+                    for (int m = 0; m < 3; m++) {
+                        auto term = SymEngine::mul(symbols[k]->entries[i][m], symbols[m]->entries[j][k]);
+                        sum = SymEngine::sub(sum, term);
+                    }
+                }
+                Ricci.entries[i][j] = sum;
+            }
+        }
+        return Ricci;
+    }
+
     void printTensor() {
         std::stringstream ss;
         for (int i = 0; i < 3; i++) {
