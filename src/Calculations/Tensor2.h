@@ -143,7 +143,7 @@ public:
         for (int k = 0; k < 2; k++) {           //symbol number
             for (int m = 0; m < 2; m++) {       //inner index
                 for (int v = 0; v < 2; v++) {   //outer index
-                    SymEngine::RCP<const SymEngine::Basic> sum = SymEngine::zero;
+                    expression sum = SymEngine::zero;
                     for (int a = 0; a < 2; a++) {       //dummy summation index
                         auto term = SymEngine::mul(
                             inv.entries[k][a],
@@ -158,6 +158,39 @@ public:
             }
         }
         return symbols;
+    }
+
+    static Tensor2 getRicciTensor(Tensor2 &metric, variable &C1, variable &C2) {
+        Tensor2 Ricci("Ricci Curvature tensor", metric.coordinateSystem, metric.CoV, metric.CtrV);
+        auto symbols = getChristoffelSymbols(metric, C1, C2);
+        variable vars[2]{C1, C2};
+        for (int i =0; i <2; i++) {
+            for (int j = 0; j < 2; j++) {
+                expression sum = SymEngine::integer(0);
+                for (int k = 0; k < 2; k++) {
+                    auto term = (symbols[k]->entries[i][j])->diff(vars[k]);
+                    sum = SymEngine::add(sum, term);
+                }
+                for (int k = 0; k < 2; k++) {
+                    auto term = (symbols[k]->entries[i][k])->diff(vars[j]);
+                    sum = SymEngine::sub(sum, term);
+                }
+                for (int k = 0; k < 2; k++) {
+                    for (int m = 0; m < 2; m++) {
+                        auto term = SymEngine::mul(symbols[k]->entries[i][j], symbols[m]->entries[k][m]);
+                        sum = SymEngine::add(sum, term);
+                    }
+                }
+                for (int k = 0; k < 2; k++) {
+                    for (int m = 0; m < 2; m++) {
+                        auto term = SymEngine::mul(symbols[k]->entries[i][m], symbols[m]->entries[j][k]);
+                        sum = SymEngine::sub(sum, term);
+                    }
+                }
+                Ricci.entries[i][j] = sum;
+            }
+        }
+        return Ricci;
     }
 
     void printTensor() {

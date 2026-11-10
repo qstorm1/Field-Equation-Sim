@@ -135,7 +135,7 @@ public:
         for (int k = 0; k < 4; k++) {           //symbol number
             for (int m = 0; m < 4; m++) {       //inner index
                 for (int v = 0; v < 4; v++) {   //outer index
-                    SymEngine::RCP<const SymEngine::Basic> sum = SymEngine::zero;
+                    expression sum = SymEngine::zero;
                     for (int a = 0; a < 4; a++) {       //dummy summation index
                         auto term = SymEngine::mul(
                             inv.entries[k][a],

@@ -3,6 +3,7 @@
 //test symbol library   DOUBLE CHECK EVERYTHING WORKS ON LINUX
 //this library has random seg faults for whatever the fuck reason idk
 #include "configSym.h"
+#include "symengine/polys/msymenginepoly.h"
 
 using expression = SymEngine::RCP<const SymEngine::Basic>;
 using variable = SymEngine::RCP<const SymEngine::Symbol>;
@@ -128,33 +129,21 @@ int main() {
 
         //testing Tensors
 
+        variable rho = SymEngine::symbol("r");
+        variable theta = SymEngine::symbol("t");
+        variable phi = SymEngine::symbol("p");
 
+        //2sphere test
+        Tensor2 S2 ("2-Sphere Metric", "2-Sphere", 2, 0);
+        S2.entries[0][0] = SymEngine::pow(rho, SymEngine::integer(2));
+        S2.entries[1][1] = SymEngine::mul(SymEngine::pow(rho, SymEngine::integer(2)), SymEngine::pow(SymEngine::sin(theta), SymEngine::integer(2)));
 
-        //Kroneker Delta initialization test
-        Tensor2 K2("Kronecker Delta", "Cartesian", 1, 1);
-        K2.entries[0][0] = SymEngine::integer(1);
-        K2.entries[1][1] = SymEngine::integer(1);
+        Tensor2 RicciS2 = Tensor2::getRicciTensor(S2, theta, phi);
+        std::cout << "Ricci Tensor!" << '\n';
+        RicciS2.printTensor();
 
-        //create conversion functions
-        auto rho = SymEngine::symbol("r");
-        auto theta = SymEngine::symbol("t");
-        expression xPolar = SymEngine::mul(rho, SymEngine::cos(theta));
-        expression yPolar = SymEngine::mul(rho, SymEngine::sin(theta));
-        //test to see if it works
-        std::cout << *xPolar << '\n' << *yPolar << '\n';
-        K2.printTensor();
+        //TEST CASE PASSED
 
-        //test to see if conversion works
-        Tensor2 PolarMetric = K2.convertCoordinates("Polar", rho, theta, xPolar, yPolar);
-        std::cout << "Polar Metric" << '\n';
-        PolarMetric.printTensor();
-
-        //test Christoffel symbols
-        auto polarSymbols = Tensor2::getChristoffelSymbols(PolarMetric, rho, theta);
-        std::cout << "0th symbol" << '\n';
-        polarSymbols[0]->printTensor();
-        std::cout << "1st symbol" << '\n';
-        polarSymbols[1]->printTensor();
 
 
         Tensor3 K3("Kronecker Delta", "Cartesian", 1, 1);
@@ -169,7 +158,7 @@ int main() {
         //Tensor3 CylMetric = K3.convertCoordinates("Cylindrical", rho, theta, z, xPolar, yPolar, zPolar);
         //K3.printTensor();
 
-        variable phi = SymEngine::symbol("p");
+
 
         expression xSphere = SymEngine::mul(SymEngine::mul(SymEngine::cos(phi), SymEngine::sin(theta)), rho);
         expression ySphere = SymEngine::mul(SymEngine::mul(SymEngine::sin(phi), SymEngine::sin(theta)), rho);

@@ -133,7 +133,7 @@ public:
         for (int k = 0; k < 3; k++) {           //symbol number
             for (int m = 0; m < 3; m++) {       //inner index
                 for (int v = 0; v < 3; v++) {   //outer index
-                    SymEngine::RCP<const SymEngine::Basic> sum = SymEngine::zero;
+                    expression sum = SymEngine::zero;
                     for (int a = 0; a < 3; a++) {       //dummy summation index
                         auto term = SymEngine::mul(
                             inv.entries[k][a],
