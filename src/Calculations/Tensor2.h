@@ -22,13 +22,13 @@ class Tensor2 {
     std::string coordinateSystem;
 
     //simplifies main trig identity, which not covered by SymEngine Library
-    expression trigSimplifyPythSin(const expression &e, const variable &angle) {
+    static expression trigSimplifyPythSin(const expression &e, const variable &angle) {
         SymEngine::map_basic_basic rules;
         rules[SymEngine::pow(SymEngine::sin(angle), SymEngine::integer(2))] = SymEngine::sub(SymEngine::one,SymEngine::pow(SymEngine::cos(angle), SymEngine::integer(2)));
         return SymEngine::expand(SymEngine::expand(e)->subs(rules));
     }
 
-    expression trigSimplifyPythCos(const expression &e, const variable &angle) {
+    static expression trigSimplifyPythCos(const expression &e, const variable &angle) {
         SymEngine::map_basic_basic rules;
         rules[SymEngine::pow(SymEngine::cos(angle), SymEngine::integer(2))] = SymEngine::sub(SymEngine::one,SymEngine::pow(SymEngine::sin(angle), SymEngine::integer(2)));
         return SymEngine::expand(SymEngine::expand(e)->subs(rules));
@@ -38,7 +38,7 @@ class Tensor2 {
 public:
     //creates the tensor and seeds with 0's
     expression entries[2][2];
-    Tensor2(std::string name, std::string coordinateSystem, unsigned short Co, unsigned short Ctr) {
+    Tensor2(const std::string &name, const std::string &coordinateSystem, unsigned short Co, unsigned short Ctr) {
         this->name = name;
         this->coordinateSystem = coordinateSystem;
         CoV = Co;
@@ -52,7 +52,7 @@ public:
 
 
     //calculates inverse tensor
-    Tensor2 getInverse() const {
+    [[nodiscard]] Tensor2 getInverse() const {
         const expression &a = entries[0][0];
         const expression &b = entries[0][1];
         const expression &c = entries[1][0];
@@ -81,7 +81,7 @@ public:
     }
 
     //SUPPORTS COVARIANT TENSORS ONLY UNTIL I GET WORKING IMPLICIT FUNCTIONS
-    Tensor2& convertCoordinates(std::string coordinateSystem, variable &C1, variable &C2, expression &V1, expression &V2) {
+    Tensor2& convertCoordinates(const std::string &newCoordinateSystem, const variable &C1, const variable &C2, const expression &V1, const expression &V2) {
         expression expr[2] {V1, V2};
         variable vars[2] {C1, C2};
 
@@ -118,7 +118,7 @@ public:
             }
         }
 
-        this->coordinateSystem = coordinateSystem;
+        this->coordinateSystem = newCoordinateSystem;
         if (this->name == "Kronecker Delta") {
             this->name = "Metric";
         }
@@ -130,7 +130,7 @@ public:
     }
 
     //converts from tensor to mat2 with substitution
-    glm::mat2 toMat2(variable &C1, variable &C2, double n1, double n2) {
+    glm::mat2 toMat2(const variable &C1, const variable &C2, double const n1, double const n2) const{
         glm::mat2 m(0.0f);
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
@@ -146,7 +146,7 @@ public:
     }
 
     //returns an array of symbol pointers
-    static std::array<Tensor2*, 2> getChristoffelSymbols(Tensor2 &metric, variable &C1, variable &C2) {
+    static std::array<Tensor2*, 2> getChristoffelSymbols(const Tensor2 &metric, const variable &C1, const variable &C2) {
         variable vars[2]{C1, C2};
         Tensor2 inv = metric.getInverse();
 
@@ -176,7 +176,7 @@ public:
         return symbols;
     }
 
-    static Tensor2 getRicciTensor(Tensor2 &metric, variable &C1, variable &C2) {
+    static Tensor2 getRicciTensor(const Tensor2 &metric, variable const &C1, variable const &C2) {
         Tensor2 Ricci("Ricci Curvature tensor", metric.coordinateSystem, metric.CoV, metric.CtrV);
         auto symbols = getChristoffelSymbols(metric, C1, C2);
         variable vars[2]{C1, C2};
@@ -209,7 +209,7 @@ public:
         return Ricci;
     }
 
-    void printTensor() {
+    void printTensor() const{
         std::stringstream ss;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {

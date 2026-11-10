@@ -22,13 +22,13 @@ class Tensor3 {
     std::string coordinateSystem;
 
     //simplifies main trig identity, which not covered by SymEngine Library
-    expression trigSimplifyPythSin(const expression &e, const variable &angle) {
+    static expression trigSimplifyPythSin(const expression &e, const variable &angle) {
         SymEngine::map_basic_basic rules;
         rules[SymEngine::pow(SymEngine::sin(angle), SymEngine::integer(2))] = SymEngine::sub(SymEngine::one,SymEngine::pow(SymEngine::cos(angle), SymEngine::integer(2)));
         return SymEngine::expand(SymEngine::expand(e)->subs(rules));
     }
 
-    expression trigSimplifyPythCos(const expression &e, const variable &angle) {
+    static expression trigSimplifyPythCos(const expression &e, const variable &angle) {
         SymEngine::map_basic_basic rules;
         rules[SymEngine::pow(SymEngine::cos(angle), SymEngine::integer(2))] = SymEngine::sub(SymEngine::one,SymEngine::pow(SymEngine::sin(angle), SymEngine::integer(2)));
         return SymEngine::expand(SymEngine::expand(e)->subs(rules));
@@ -38,7 +38,7 @@ class Tensor3 {
 public:
     //creates the tensor and seeds with 0's
     expression entries[3][3];
-    Tensor3(std::string name, std::string coordinateSystem, unsigned short Co, unsigned short Ctr) {
+    Tensor3(const std::string &name, const std::string &coordinateSystem, unsigned short Co, unsigned short Ctr) {
         this->name = name;
         this->coordinateSystem = coordinateSystem;
         CoV = Co;
@@ -50,7 +50,7 @@ public:
         }
     }
 
-    Tensor3 getInverse() const {
+    [[nodiscard]] Tensor3 getInverse() const {
         tensorMath::matrix m(3, std::vector<expression>(3));
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
@@ -68,7 +68,7 @@ public:
     }
 
     //SUPPORTS COVARIANT TENSORS ONLY UNTIL I GET WORKING IMPLICIT FUNCTIONS
-    Tensor3& convertCoordinates(std::string coordinateSystem, variable &C1, variable &C2, variable &C3, expression &V1, expression &V2, expression &V3) {
+    Tensor3& convertCoordinates(const std::string &newCoordinateSystem, const variable &C1, const variable &C2, const variable &C3, const expression &V1, const expression &V2, const expression &V3) {
         expression expr[3] {V1, V2, V3};
         variable vars[3] {C1, C2, C3};
 
@@ -108,7 +108,7 @@ public:
         }
 
         //sets new coordinate system and renamed if necessary
-        this->coordinateSystem = coordinateSystem;
+        this->coordinateSystem = newCoordinateSystem;
         if (this->name == "Kronecker Delta") {
             this->name = "Metric";
         }
@@ -120,7 +120,7 @@ public:
     }
 
     //converts from tensor to mat3 with substitution
-    glm::mat3 toMat3(variable &C1, variable &C2, variable &C3, double n1, double n2, double n3) {
+    [[nodiscard]] glm::mat3 toMat3(const variable &C1, const variable &C2, const variable &C3, const double n1, const double n2, double const n3) const{
         glm::mat3 m(0.0f);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -136,7 +136,7 @@ public:
         return m;
     }
 
-    static std::array<Tensor3*, 3> getChristoffelSymbols(Tensor3 &metric, variable &C1, variable &C2, variable &C3) {
+    static std::array<Tensor3*, 3> getChristoffelSymbols(const Tensor3 &metric, const variable &C1, const variable &C2, const variable &C3) {
         variable vars[3]{C1, C2, C3};
         Tensor3 inv = metric.getInverse();
 
@@ -167,7 +167,7 @@ public:
         return symbols;
     }
 
-    static Tensor3 getRicciTensor(Tensor3 &metric, variable &C1, variable &C2, variable &C3) {
+    static Tensor3 getRicciTensor(const Tensor3 &metric, const variable &C1, const variable &C2, const variable &C3) {
         Tensor3 Ricci("Ricci Curvature tensor", metric.coordinateSystem, metric.CoV, metric.CtrV);
         auto symbols = getChristoffelSymbols(metric, C1, C2, C3);
         variable vars[3]{C1, C2, C3};
@@ -200,7 +200,7 @@ public:
         return Ricci;
     }
 
-    void printTensor() {
+    void printTensor() const{
         std::stringstream ss;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {

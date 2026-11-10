@@ -58,7 +58,7 @@ class object3d {
     std::vector<object3d*>* worldPTR;
 
     //checks if 2 objects overlap
-    bool isOverlapping(const object3d &other) const
+    [[nodiscard]] bool isOverlapping(const object3d &other) const
     {
         const double distanceCenter = calculateDistance(other);
         const double radiusSum = this->radius + other.radius;
@@ -119,24 +119,24 @@ public:
     //normal functions
 
     //calculates euclidian distance
-    double calculateDistance(const object3d &other) const {
+    [[nodiscard]] double calculateDistance(const object3d &other) const {
         return sqrt(pow(this->x - other.x,2) + pow(this->y - other.y, 2) + pow(this->z - other.z, 2));
     }
 
     //return a distance vector from this to other
 
-    glm::vec3 calculateDistanceVector(const object3d &other) const {
+    [[nodiscard]] glm::vec3 calculateDistanceVector(const object3d &other) const {
         const glm::vec3 distance(other.x-x, other.y-y, other.z-z);
         return distance;
     }
 
     //gets magnitude of newtonian force
-    double calculateNewtonForceMagnitude(const object3d &other) const {
+    [[nodiscard]] double calculateNewtonForceMagnitude(const object3d &other) const {
         return (mass * other.mass * G)/(calculateDistance(other) * calculateDistance(other));
     }
 
     //return a force vector to another object
-    glm::vec3 calculateNewtonForceVector(object3d &other) const {
+    [[nodiscard]] glm::vec3 calculateNewtonForceVector(const object3d &other) const {
         glm::vec3 force = glm::normalize(calculateDistanceVector(other));
         force*=calculateNewtonForceMagnitude(other);
         return force;
@@ -155,42 +155,42 @@ public:
     }
 
     //returns net acceleration on the object
-    glm::vec3 calculateAccelerationField(std::vector<object3d*>* world) const {
+    glm::vec3 calculateAccelerationField(const std::vector<object3d*>* world) const {
         glm::vec3 force = calculateGravitationalField(world);
         force/=mass;
         return force;
     }
 
     //getter functions
-    unsigned int getID() const {
+    [[nodiscard]] unsigned int getID() const {
         return id;
     }
 
-    double getX() const {
+    [[nodiscard]] double getX() const {
         return x;
     }
 
-    double getY() const {
+    [[nodiscard]] double getY() const {
         return y;
     }
 
-    double getZ() const {
+    [[nodiscard]] double getZ() const {
         return z;
     }
 
-    glm::vec3 getPos() const
+    [[nodiscard]] glm::vec3 getPos() const
     {
-        return glm::vec3(getX(),getY(),getZ());
+        return glm::vec3{getX(),getY(),getZ()};
     }
 
-    double getMass() const {
+    [[nodiscard]] double getMass() const {
         return mass;
     }
 
-    double getRadius() const{
+    [[nodiscard]] double getRadius() const{
         return radius;
     }
-    int getShape() const
+    [[nodiscard]] int getShape() const
     {
         return renderType;
     }

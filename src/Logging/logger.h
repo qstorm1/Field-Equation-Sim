@@ -30,7 +30,7 @@ void logError(T &e) {
     file.close();
 }
 
-void logErrorString(std::string &str) {
+void inline logErrorString(const std::string &str) {
     std::fstream file;
     file.open("..\\src\\Logging\\ErrorLog.txt", std::ios::app);
     if (file.is_open()) {
@@ -42,7 +42,7 @@ void logErrorString(std::string &str) {
 }
 
 //puts console output also in file. USE THIS INSTEAD SO WE HAVE OUTPUT LOG OF CONSOLE IN CASE PROGRAM ENDS ABRUPTLY
-inline void logConsole(std::stringstream &stream) {
+inline void logConsole(const std::stringstream &stream) {
     //create file
     std::fstream file;
     file.open("..\\src\\Logging\\coutLog.txt", std::ios::app);
