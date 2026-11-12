@@ -1,3 +1,12 @@
+/*
+* ALL OF THESE METHODS ARE CLONES FROM TENSOR2 AND ADAPTED FOR HIGHER DIMENSIONS
+ * TO VIEW THE FULL DOCUMENTATION FOR EACH METHOD LOOK AT TENSOR 2
+ */
+
+#ifndef TENSOR4_H
+#define TENSOR4_H
+
+
 #include "../configSym.h"
 #include <vector>
 #include <sstream>
@@ -203,6 +212,19 @@ public:
         return Ricci;
     }
 
+    static expression getRicciScalar(const Tensor4 &metric, variable const &C1, variable const &C2, variable const &C3, variable const &C4) {
+        Tensor4 Ricci = getRicciTensor(metric, C1, C2, C3, C4);
+        Tensor4 inv = metric.getInverse();
+        expression sum = SymEngine::integer(0);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                expression term = SymEngine::mul(inv.entries[i][j], Ricci.entries[i][j]);
+                sum = SymEngine::add(sum, term);
+            }
+        }
+        return sum;
+    }
+
     void printTensor() const{
         std::stringstream ss;
         for (int i = 0; i < 4; i++) {
@@ -214,6 +236,8 @@ public:
         logConsole(ss);
     }
 
-    ~Tensor4() {    }
+    ~Tensor4() = default;
 
 };
+
+#endif

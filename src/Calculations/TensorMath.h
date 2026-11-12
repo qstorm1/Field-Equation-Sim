@@ -68,7 +68,7 @@ namespace tensorMath {
         matrix inv(n, std::vector<expression>(n));
         for (size_t i = 0; i < n; i++) {
             for (size_t j = 0; j < n; j++) {
-                expression cof = determinant(minorMatrix(m, j, i)); // note the (j, i) swap
+                expression cof = determinant(minorMatrix(m, j, i));
                 if ((i + j) % 2 == 1) cof = SymEngine::neg(cof);
                 inv[i][j] = SymEngine::expand(SymEngine::div(cof, det));
             }

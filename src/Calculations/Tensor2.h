@@ -1,3 +1,6 @@
+#ifndef TENSOR2_H
+#define TENSOR2_H
+
 #include "../configSym.h"
 #include <vector>
 #include <sstream>
@@ -130,7 +133,7 @@ public:
     }
 
     //converts from tensor to mat2 with substitution
-    glm::mat2 toMat2(const variable &C1, const variable &C2, double const n1, double const n2) const{
+    [[nodiscard]] glm::mat2 toMat2(const variable &C1, const variable &C2, double const n1, double const n2) const{
         glm::mat2 m(0.0f);
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
@@ -176,10 +179,15 @@ public:
         return symbols;
     }
 
+
+    //get Ricci tensor
     static Tensor2 getRicciTensor(const Tensor2 &metric, variable const &C1, variable const &C2) {
+        //creates dummy tensor
         Tensor2 Ricci("Ricci Curvature tensor", metric.coordinateSystem, metric.CoV, metric.CtrV);
+        //stores variables in a list
         auto symbols = getChristoffelSymbols(metric, C1, C2);
         variable vars[2]{C1, C2};
+        //loops through variables and dummy summation indexes to calculate entries from formula
         for (int i =0; i <2; i++) {
             for (int j = 0; j < 2; j++) {
                 expression sum = SymEngine::integer(0);
@@ -209,6 +217,20 @@ public:
         return Ricci;
     }
 
+    //get Ricci scalar
+    static expression getRicciScalar(const Tensor2 &metric, variable const &C1, variable const &C2) {
+        Tensor2 Ricci = getRicciTensor(metric, C1, C2);
+        Tensor2 inv = metric.getInverse();
+        expression sum = SymEngine::integer(0);
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                expression term = SymEngine::mul(inv.entries[i][j], Ricci.entries[i][j]);
+                sum = SymEngine::add(sum, term);
+            }
+        }
+        return sum;
+    }
+
     void printTensor() const{
         std::stringstream ss;
         for (int i = 0; i < 2; i++) {
@@ -220,6 +242,8 @@ public:
         logConsole(ss);
     }
 
-    ~Tensor2() {    }
+    ~Tensor2() = default;
 
 };
+
+#endif
