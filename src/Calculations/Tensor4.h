@@ -3,6 +3,8 @@
  * TO VIEW THE FULL DOCUMENTATION FOR EACH METHOD LOOK AT TENSOR 2
  */
 
+
+
 #ifndef TENSOR4_H
 #define TENSOR4_H
 
@@ -24,13 +26,10 @@
 
 
 class Tensor4 {
-    //number of covariant and contravariant indexes. Lowkey might be useless in the scope of this project but I'm putting them here just in case.
     unsigned short CoV, CtrV;
-    //type of tensor. Metric, Christoffel, Ricci, etc.
     std::string name;
     std::string coordinateSystem;
 
-    //simplifies main trig identity, which not covered by SymEngine Library
     static expression trigSimplifyPythSin(const expression &e, const variable &angle) {
         SymEngine::map_basic_basic rules;
         rules[SymEngine::pow(SymEngine::sin(angle), SymEngine::integer(2))] = SymEngine::sub(SymEngine::one,SymEngine::pow(SymEngine::cos(angle), SymEngine::integer(2)));
@@ -45,7 +44,6 @@ class Tensor4 {
 
 
 public:
-    //creates the tensor and seeds with 0's
     expression entries[4][4];
     Tensor4(const std::string &name, const std::string &coordinateSystem, const unsigned short Co, const unsigned short Ctr) {
         this->name = name;
@@ -80,14 +78,12 @@ public:
         expression expr[4] {V1, V2, V3, V4};
         variable vars[4] {C1, C2, C3, C4};
 
-        //creates tensor Jacobian
         expression J[4][4];
         for (int k = 0; k < 4; k++) {
             for (int i = 0; i < 4; i++) {
                 J[k][i] = expr[k]->diff(vars[i]);
             }
         }
-        //store old entries for future use
         expression oldEntries[4][4];
         for (int k = 0; k < 4; k++) {
             for (int m = 0; m < 4; m++) {
@@ -95,7 +91,6 @@ public:
             }
         }
 
-        //calculate indexes
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 expression sum = SymEngine::zero;
@@ -103,9 +98,7 @@ public:
                     for (int m = 0; m < 4; m++)
                         sum = SymEngine::add(sum,
                               SymEngine::mul(SymEngine::mul(J[k][i], J[m][j]), oldEntries[k][m]));
-                //simplifies normally
                 entries[i][j] = SymEngine::expand(sum);
-                //simplifies trig. ur basically gonna have to hard code any identity for all variables
                 entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[0]);
                 entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[1]);
                 entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[2]);
@@ -117,7 +110,6 @@ public:
             }
         }
 
-        //sets new coordinate system and renamed if necessary
         this->coordinateSystem = newCoordinateSystem;
         if (this->name == "Kronecker Delta") {
             this->name = "Metric";
@@ -129,7 +121,6 @@ public:
         return *this;
     }
 
-    //converts from tensor to mat4 with substitution
     [[nodiscard]] glm::mat4 toMat4(const variable &C1, const variable &C2, const variable &C3, const variable &C4,const double n1, const double n2, const double n3, const double n4) const{
         glm::mat4 m(0.0f);
         for (int i = 0; i < 4; i++) {
@@ -147,7 +138,10 @@ public:
         return m;
     }
 
-    //i'm going to pray this works since I don't really have test cases for it
+    Tensor4 getEnergyMomentumTensor() {
+
+    }
+
     static std::array<Tensor4*, 4> getChristoffelSymbols(const Tensor4 &metric, const variable &C1, const variable &C2, const variable &C3, const variable &C4) {
         variable vars[4]{C1, C2, C3, C4};
         Tensor4 inv = metric.getInverse();

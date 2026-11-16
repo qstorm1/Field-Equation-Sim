@@ -25,7 +25,9 @@
 
 #include "glad/glad.h"
 
-#define G (6.6743 * pow(10,-11))
+constexpr int c = 299792458;
+constexpr double G = 6.6743e-11;
+
 
 //this should be in a .cpp file
 class object3d {
@@ -38,6 +40,7 @@ class object3d {
 
     //declare attributes
     double x, y, z, mass, radius;   //METERS, METERS, METERS, KILOGRAMS, METERS FOR NOW
+    double Vx, Vy, Vz;      //coordinate velocities
     unsigned int id;
 
 
@@ -73,8 +76,8 @@ public:
     std::string name;
     //constructor with default params using an initializer list
     object3d(std::vector<object3d*>* world,const double x = 0, const double y = 0, const double z = 0,
-           const double mass = 1, const double radius = 1, std::string name = "")
-        : x(x), y(y), z(z), mass(mass), radius(radius)
+           const double mass = 1, const double radius = 1, std::string name = "", const double Vx = 0, const double Vy = 0, const double Vz = 0)
+        : x(x), y(y), z(z), mass(mass), radius(radius), Vx(Vx), Vy(Vy), Vz(Vz)
     {
         //checks if user has met the preconditions
         if (mass <= 0) {
@@ -82,6 +85,12 @@ public:
         }
         if (radius <= 0) {
             throw std::invalid_argument("radius must be positive");
+        }
+
+        //checks if velocity exceeds the speed of light
+
+        if (pow( pow(Vx, 2) + pow(Vy, 2) + pow(Vz, 2) , 0.5) >= c) {
+            throw std::invalid_argument("velocity faster than speed of light");
         }
 
 
@@ -183,6 +192,10 @@ public:
         return glm::vec3{getX(),getY(),getZ()};
     }
 
+    [[nodiscard]] glm::vec3 getVel() const {
+        return glm::vec3{getVx(), getVy(), getVz()};
+    }
+
     [[nodiscard]] double getMass() const {
         return mass;
     }
@@ -193,6 +206,15 @@ public:
     [[nodiscard]] int getShape() const
     {
         return renderType;
+    }
+    [[nodiscard]] double getVx() const {
+        return Vx;
+    }
+    [[nodiscard]] double getVy() const {
+        return Vy;
+    }
+    [[nodiscard]] double getVz() const {
+        return Vz;
     }
 
     //setter functions
@@ -257,6 +279,48 @@ public:
         mass = n;
     }
 
+    void setVx(const std::vector<object3d*>& world,double n) {
+        const double oldVx = Vx;
+        Vx = n;
+        //throw exception if 2 objects overlap
+        try
+        {
+            checkValidSpeed();
+        }
+        catch (const std::invalid_argument& e)
+        {
+            Vx = oldVx;
+        }
+    }
+
+    void setVy(const std::vector<object3d*>& world,double n) {
+        const double oldVy = Vy;
+        Vy = n;
+        //throw exception if 2 objects overlap
+        try
+        {
+            checkValidSpeed();
+        }
+        catch (const std::invalid_argument& e)
+        {
+            Vy = oldVy;
+        }
+    }
+
+    void setVz(const std::vector<object3d*>& world,double n) {
+        const double oldVz = Vz;
+        Vz = n;
+        //throw exception if 2 objects overlap
+        try
+        {
+            checkValidSpeed();
+        }
+        catch (const std::invalid_argument& e)
+        {
+            Vz = oldVz;
+        }
+    }
+
     /**
      * Set the shape of this object (will be scaled based on radius)
      * @param shape the type of shape:\n
@@ -287,6 +351,11 @@ public:
         }
     }
 
+    void checkValidSpeed() const noexcept(false){
+        if (pow( pow(Vx, 2) + pow(Vy, 2) + pow(Vz, 2) , 0.5) >= c) {
+            throw std::invalid_argument("velocity faster than speed of light");
+        }
+    }
 
 
 
@@ -326,6 +395,16 @@ public:
         for (const object3d* obj : *world)
         {
             result.push_back(obj->getPos());
+        }
+        return result;
+    }
+
+    static std::vector<glm::vec3>getAllObjectsVelocity(const std::vector<object3d*>* world)
+    {
+        std::vector <glm::vec3> result;
+        for (const object3d* obj : *world)
+        {
+            result.push_back(obj->getVel());
         }
         return result;
     }
