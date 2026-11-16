@@ -127,53 +127,28 @@ int main() {
     try {
 
 
-        //testing Tensors
+        //testing EMT for flat spacetime for particles at rest and moving ones.
+        object3d m{&world, 0, 0, 0, 1};
+        Tensor4 KroneckerEta{"Kronecker Eta", "Minkowski-Landau-Lifschitz", 2, 0};
+        KroneckerEta.entries[0][0] = SymEngine::one;
+        KroneckerEta.entries[1][1] = SymEngine::integer(-1);
+        KroneckerEta.entries[2][2] = SymEngine::integer(-1);
+        KroneckerEta.entries[3][3] = SymEngine::integer(-1);
+        Tensor4 EMT = Tensor4::getEnergyMomentumTensor(KroneckerEta);
+        EMT.printTensor();
 
-        variable rho = SymEngine::symbol("r");
-        variable theta = SymEngine::symbol("t");
-        variable phi = SymEngine::symbol("p");
+        m.setVx(world, 240000001);
+        EMT = Tensor4::getEnergyMomentumTensor(KroneckerEta);
+        EMT.printTensor();
 
-        //2sphere test
-        Tensor2 S2 ("2-Sphere Metric", "2-Sphere", 2, 0);
-        S2.entries[0][0] = SymEngine::pow(rho, SymEngine::integer(2));
-        S2.entries[1][1] = SymEngine::mul(SymEngine::pow(rho, SymEngine::integer(2)), SymEngine::pow(SymEngine::sin(theta), SymEngine::integer(2)));
+        //just for fun
+        m.setVy(world, 20000001);
+        m.setVz(world, 20000001);
 
-        expression RicciS2 = Tensor2::getRicciScalar(S2, theta, phi);
-        std::cout << "Ricci Scalar!" << '\n';
-        std::cout << *RicciS2 << '\n';
+        object3d n{&world, 20, 20, 20, 5, 5, "", 9, 18, 22};
 
-        //TEST CASE PASSED
-
-
-
-
-        Tensor3 K3("Kronecker Delta", "Cartesian", 1, 1);
-        K3.entries[0][0] = SymEngine::integer(1);
-        K3.entries[1][1] = SymEngine::integer(1);
-        K3.entries[2][2] = SymEngine::integer(1);
-
-        variable z = SymEngine::symbol("z");
-        expression zPolar = z;
-
-
-
-
-        expression xSphere = SymEngine::mul(SymEngine::mul(SymEngine::cos(phi), SymEngine::sin(theta)), rho);
-        expression ySphere = SymEngine::mul(SymEngine::mul(SymEngine::sin(phi), SymEngine::sin(theta)), rho);
-        expression zSphere = SymEngine::mul(rho, SymEngine::cos(theta));
-
-        Tensor3 SphereMetric = K3.convertCoordinates("Spherical", rho, theta, phi, xSphere, ySphere, zSphere);
-
-        std::cout << "Ricci Scalar Spherical!" << '\n';
-        expression RicciS = Tensor3::getRicciScalar(SphereMetric, rho, theta, phi);
-        //RicciS.printTensor();
-
-        std::cout << *RicciS << '\n';
-
-        //bro the trig simplification :sob:
-        //wow this thing really hates cotangents
-
-
+        EMT = Tensor4::getEnergyMomentumTensor(KroneckerEta);
+        EMT.printTensor();
 
     }catch (const std::out_of_range &e) {
         logError(e);
