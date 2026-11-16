@@ -22,6 +22,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../Logging/logger.h"
 #include "TensorMath.h"
+#include "../GlobalVariables.h"
 
 
 
@@ -138,8 +139,52 @@ public:
         return m;
     }
 
-    Tensor4 getEnergyMomentumTensor() {
+    static Tensor4 getEnergyMomentumTensor(const Tensor4& metric) {
+        tensorMath::matrix m(4, std::vector<expression>(4));
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                m[i][j] = metric.entries[i][j];
+            }
+        }
 
+        expression gDet = tensorMath::determinant(m);
+        expression sqrtNegG = SymEngine::sqrt(SymEngine::neg(gDet));
+
+        Tensor4 EM("Energy-Momentum Tensor", metric.coordinateSystem, 0, 2);
+
+        for (size_t a = 0; a < world.size(); a++) {
+            const auto& obj = world[a];
+
+            const expression V[4] = {
+                SymEngine::integer(c),
+                SymEngine::real_double(obj->getVx()),
+                SymEngine::real_double(obj->getVy()),
+                SymEngine::real_double(obj->getVz())
+            };
+
+            expression interval = SymEngine::zero;
+            for (int alpha = 0; alpha < 4; alpha++) {
+                for (int beta = 0; beta < 4; beta++) {
+                    interval = SymEngine::add(interval,
+                        SymEngine::mul(metric.entries[alpha][beta],
+                                       SymEngine::mul(V[alpha], V[beta])));
+                }
+            }
+            expression denominator = SymEngine::mul(sqrtNegG, SymEngine::sqrt(interval));
+
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    expression numerator = SymEngine::mul(SymEngine::integer(c),
+                                               SymEngine::mul(SymEngine::real_double(obj->getMass()),
+                                                   SymEngine::mul(V[i], V[j])));
+
+                    EM.entries[i][j] = SymEngine::add(EM.entries[i][j],
+                                                      SymEngine::div(numerator, denominator));
+                }
+            }
+        }
+
+        return EM;
     }
 
     static std::array<Tensor4*, 4> getChristoffelSymbols(const Tensor4 &metric, const variable &C1, const variable &C2, const variable &C3, const variable &C4) {
@@ -150,7 +195,8 @@ public:
         std::array<Tensor4*, 4> symbols{
             new Tensor4("Christoffel Symbol 1", metric.coordinateSystem, metric.CoV, metric.CtrV),
             new Tensor4("Christoffel Symbol 2", metric.coordinateSystem, metric.CoV, metric.CtrV),
-            new Tensor4("Christoffel Symbol 3", metric.coordinateSystem, metric.CoV, metric.CtrV)
+            new Tensor4("Christoffel Symbol 3", metric.coordinateSystem, metric.CoV, metric.CtrV),
+            new Tensor4("Christoffel Symbol 4", metric.coordinateSystem, metric.CoV, metric.CtrV)
         };
 
         for (int k = 0; k < 4; k++) {           //symbol number

@@ -29,6 +29,6 @@
 #include <vector>
 
 
-inline std::vector<object3d*> world;
+//I moved world to GlobalVariables so I can use it in my other classes
 
 void runSimulationLoop(GLFWwindow* window, const shader* currentShader);

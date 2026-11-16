@@ -217,6 +217,10 @@ public:
         return Vz;
     }
 
+    [[nodiscard]] glm::dvec4 get4Vel() const {
+        return glm::dvec4{c, Vx, Vy, Vz};
+    }
+
     //setter functions
 
     void setX(const std::vector<object3d*>& world,double n) {

@@ -1,7 +1,8 @@
 #ifndef GLOABLVARIBLES_H
 #define GLOABLVARIBLES_H
 
-#endif //GLOABLVARIBLES_H
+//I moved world to GlobalVariables so I can use it in my other classes
+inline std::vector<object3d*> world;
 
 struct GlobalVariables{
     //TODO: make settings menu to change the variables that may need changing
@@ -32,3 +33,6 @@ struct GlobalVariables{
         sideMoveExcel=10;
     }
 };
+
+#endif //GLOABLVARIBLES_H
+
