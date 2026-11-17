@@ -38,7 +38,7 @@ class Tensor4 {
     unsigned short CoV, CtrV;
 
 
-    std::string name;
+
     std::string coordinateSystem;
 
     //double check for built in trig simplification method
@@ -56,6 +56,7 @@ class Tensor4 {
 
 
 public:
+    std::string name;
     expression entries[4][4];
     Tensor4(const std::string &name, const std::string &coordinateSystem, const unsigned short Co, const unsigned short Ctr) {
         this->name = name;
@@ -69,7 +70,22 @@ public:
             }
         }
     }
-    //ToDo: default constructor with Minkowski metric
+
+    Tensor4() {
+        name = "Minkowski Metric";
+        coordinateSystem = "Minkowski";
+        CoV = 2;
+        CtrV = 0;
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                entries[i][j] = SymEngine::integer(0);
+            }
+        }
+        entries[0][0] = SymEngine::one;
+        entries[1][1] = SymEngine::integer(-1);
+        entries[2][2] = SymEngine::integer(-1);
+        entries[3][3] = SymEngine::integer(-1);
+    }
 
     //gets inverse
     [[nodiscard]] Tensor4 getInverse() const {
@@ -78,7 +94,7 @@ public:
             for (int j = 0; j < 4; j++)
                 m[i][j] = entries[i][j];
 
-        tensorMath::matrix invM = tensorMath::inverse(m, name);
+        const tensorMath::matrix invM = tensorMath::inverse(m, name);
 
         Tensor4 inv("Inverse " + name, coordinateSystem, CtrV, CoV);
         for (int i = 0; i < 4; i++)
@@ -91,13 +107,13 @@ public:
     //SUPPORTS COVARIANT TENSORS ONLY UNTIL I GET  IMPLICIT FUNCTIONS WORKING IN SYMENGINE
     //converts from one coordinate system to the other
     Tensor4& convertCoordinates(const std::string & newCoordinateSystem, const variable &C1, const variable &C2, const variable &C3, const variable &C4, const expression &V1, const expression &V2, const expression &V3, const expression &V4) {
-        expression expr[4] {V1, V2, V3, V4};
-        variable vars[4] {C1, C2, C3, C4};
+        const expression* expr[4] {&V1, &V2, &V3, &V4};
+        const variable* vars[4] {&C1, &C2, &C3, &C4};
 
         expression J[4][4];
         for (int k = 0; k < 4; k++) {
             for (int i = 0; i < 4; i++) {
-                J[k][i] = expr[k]->diff(vars[i]);
+                J[k][i] = (*expr[k])->diff(*vars[i]);
             }
         }
         expression oldEntries[4][4];
@@ -117,25 +133,16 @@ public:
 
                 //might remove these if becomes too time expensive
                 entries[i][j] = SymEngine::expand(sum);
-                entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[0]);
-                entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[1]);
-                entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[2]);
-                entries[i][j] = trigSimplifyPythSin(entries[i][j], vars[3]);
-                entries[i][j] = trigSimplifyPythCos(entries[i][j], vars[0]);
-                entries[i][j] = trigSimplifyPythCos(entries[i][j], vars[1]);
-                entries[i][j] = trigSimplifyPythCos(entries[i][j], vars[2]);
-                entries[i][j] = trigSimplifyPythCos(entries[i][j], vars[3]);
+                entries[i][j] = trigSimplifyPythSin(entries[i][j], *vars[0]);
+                entries[i][j] = trigSimplifyPythSin(entries[i][j], *vars[1]);
+                entries[i][j] = trigSimplifyPythSin(entries[i][j], *vars[2]);
+                entries[i][j] = trigSimplifyPythSin(entries[i][j], *vars[3]);
+                entries[i][j] = trigSimplifyPythCos(entries[i][j], *vars[0]);
+                entries[i][j] = trigSimplifyPythCos(entries[i][j], *vars[1]);
+                entries[i][j] = trigSimplifyPythCos(entries[i][j], *vars[2]);
+                entries[i][j] = trigSimplifyPythCos(entries[i][j], *vars[3]);
             }
         }
-
-        //unnecessary might remove and have rename method
-        this->coordinateSystem = newCoordinateSystem;
-        if (this->name == "Kronecker Delta") {
-            this->name = "Metric";
-        }
-
-        CoV = 2;
-        CtrV = 0;
 
         return *this;
     }
@@ -159,6 +166,38 @@ public:
         return m;
     }
 
+    //gets partial derivative of tensor
+    [[nodiscard]]tensorMath::matrix derivative(const variable &V) const {
+        tensorMath::matrix m(4, std::vector<expression>(4));
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                m[i][j] = this->entries[i][j]->diff(V);
+            }
+        }
+        return m;
+    }
+
+
+    //takes covariant derivative of tensor respect to a variable (covariant tensors only)
+    [[nodiscard]]Tensor4 covariantDerivative(const Tensor4 &metric, const variable &C1, const variable &C2, const variable &C3, const variable &C4, const int V) const{
+        Tensor4 T = *this;
+        const variable* vars[4](&C1, &C2, &C3, &C4);
+        //take normal derivatives and symbols
+        const auto D = T.derivative(*vars[V]);
+        const auto symbols = getChristoffelSymbols(metric, C1, C2, C3, C4);
+        for (int a = 0; a < 4; a++) {   //index 1
+            for (int b = 0; b < 4; b++) {   //index 2
+                expression term = SymEngine::zero;
+                for (int l = 0; l < 4; l++) {   //dummy lambda
+                    term = SymEngine::sub(term, SymEngine::mul(symbols[l]->entries[V][a], this->entries[l][b]));
+                    term = SymEngine::sub(term, SymEngine::mul(symbols[l]->entries[V][b], this->entries[a][l]));
+                }
+                T.entries[a][b] = SymEngine::sub(D[a][b], term);
+            }
+        }
+        return T;
+    }
+
     //calculates the average energy momentum tensor over the entire spacetime
     //formula listed in bibliography
     static Tensor4 getEnergyMomentumTensor(const Tensor4& metric) {
@@ -172,8 +211,8 @@ public:
             }
         }
 
-        expression gDet = tensorMath::determinant(m);
-        expression sqrtNegG = SymEngine::sqrt(SymEngine::neg(gDet));
+        const expression gDet = tensorMath::determinant(m);
+        const expression sqrtNegG = SymEngine::sqrt(SymEngine::neg(gDet));
 
         //create dummy tensor
         Tensor4 EM("Energy-Momentum Tensor", metric.coordinateSystem, 0, 2);
@@ -222,12 +261,12 @@ public:
     //calculates Christoffel Symbols of covariant tensors
     static std::array<Tensor4*, 4> getChristoffelSymbols(const Tensor4 &metric, const variable &C1, const variable &C2, const variable &C3, const variable &C4) {
         //seeds array of variables
-        variable vars[4]{C1, C2, C3, C4};
+        const variable* vars[4]{&C1, &C2, &C3, &C4};
         //gets inverse
-        Tensor4 inv = metric.getInverse();
+        const Tensor4 inv = metric.getInverse();
 
         //creates an array of symbols
-        std::array<Tensor4*, 4> symbols{
+        const std::array<Tensor4*, 4> symbols{
             new Tensor4("Christoffel Symbol 1", metric.coordinateSystem, metric.CoV, metric.CtrV),
             new Tensor4("Christoffel Symbol 2", metric.coordinateSystem, metric.CoV, metric.CtrV),
             new Tensor4("Christoffel Symbol 3", metric.coordinateSystem, metric.CoV, metric.CtrV),
@@ -242,9 +281,9 @@ public:
                         auto term = SymEngine::mul(
                             inv.entries[k][a],
                             SymEngine::sub(
-                                SymEngine::add(metric.entries[a][v]->diff(vars[m]),
-                                               metric.entries[a][m]->diff(vars[v])),
-                                metric.entries[m][v]->diff(vars[a])));
+                                SymEngine::add(metric.entries[a][v]->diff(*vars[m]),
+                                               metric.entries[a][m]->diff(*vars[v])),
+                                metric.entries[m][v]->diff(*vars[a])));
                         sum = SymEngine::add(sum, term);
                     }
                     symbols[k]->entries[m][v] = SymEngine::div(sum, SymEngine::integer(2));
@@ -259,17 +298,17 @@ public:
     static Tensor4 getRicciTensor(const Tensor4 &metric, const variable &C1, const variable &C2, const variable &C3, variable const &C4) {
         Tensor4 Ricci("Ricci Curvature tensor", metric.coordinateSystem, metric.CoV, metric.CtrV);
         //stores Christoffel Symbols and variables in array
-        auto symbols = getChristoffelSymbols(metric, C1, C2, C3, C4);
-        variable vars[4]{C1, C2, C3, C4};
+        const std::array<Tensor4*, 4> symbols = getChristoffelSymbols(metric, C1, C2, C3, C4);
+        const variable* vars[4]{&C1, &C2, &C3, &C4};
         for (int i =0; i <4; i++) {     //ith component of tensor
             for (int j = 0; j < 4; j++) {   //jth component of tensor
                 expression sum = SymEngine::integer(0);
                 for (int k = 0; k < 4; k++) {   //+ derivatives of Gammas
-                    auto term = (symbols[k]->entries[i][j])->diff(vars[k]);
+                    auto term = (symbols[k]->entries[i][j])->diff(*vars[k]);
                     sum = SymEngine::add(sum, term);
                 }
                 for (int k = 0; k < 4; k++) {   //- derivatives of Gammas
-                    auto term = (symbols[k]->entries[i][k])->diff(vars[j]);
+                    auto term = (symbols[k]->entries[i][k])->diff(*vars[j]);
                     sum = SymEngine::sub(sum, term);
                 }
                 for (int k = 0; k < 4; k++) {
@@ -293,8 +332,8 @@ public:
     //calculates Ricci scalar from covariant metric and Ricci tensor
     static expression getRicciScalar(const Tensor4 &metric, variable const &C1, variable const &C2, variable const &C3, variable const &C4) {
         //store variables and get inverse
-        Tensor4 Ricci = getRicciTensor(metric, C1, C2, C3, C4);
-        Tensor4 inv = metric.getInverse();
+        const Tensor4 Ricci = getRicciTensor(metric, C1, C2, C3, C4);
+        const Tensor4 inv = metric.getInverse();
         expression sum = SymEngine::integer(0);
         //sums and loops
         for (int i = 0; i < 4; i++) {
@@ -316,6 +355,55 @@ public:
             ss << '\n';
         }
         logConsole(ss);
+    }
+
+    //checks if 2 tensors are the same in the same coordinate system
+    //ToDo: check for trig simplification and other test cases
+    bool operator==(const Tensor4 &other) const{
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                SymEngine::expand(this->entries[i][j]);
+                SymEngine::expand(other.entries[i][j]);
+                if (!SymEngine::eq(*this->entries[i][j], *other.entries[i][j])) {
+                    return false;
+                }
+            }
+        }
+        return this->coordinateSystem == other.coordinateSystem && this->CoV == other.CoV && this->CtrV == other.CtrV;
+    }
+
+    //addition and subtraction of tensors (index per index)
+    void operator+(const Tensor4 &other) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                this->entries[i][j] = SymEngine::add(this->entries[i][j], other.entries[i][j]) ;
+            }
+        }
+    }
+
+    void operator-(const Tensor4 &other) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                this->entries[i][j] = SymEngine::sub(this->entries[i][j], other.entries[i][j]) ;
+            }
+        }
+    }
+
+    //multiplication and division by a scalar
+    void operator*(const double n) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                this->entries[i][j] = SymEngine::mul(this->entries[i][j], SymEngine::real_double(n)) ;
+            }
+        }
+    }
+
+    void operator/(const double n) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                this->entries[i][j] = SymEngine::div(this->entries[i][j], SymEngine::real_double(n)) ;
+            }
+        }
     }
 
     ~Tensor4() = default;
