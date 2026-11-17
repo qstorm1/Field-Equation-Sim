@@ -1,3 +1,7 @@
+/*
+* This class only includes simple test cases. To view full documentation, see Tensor4.h
+ */
+
 #ifndef TENSOR2_H
 #define TENSOR2_H
 

@@ -1,6 +1,5 @@
 /*
- * ALL OF THESE METHODS ARE CLONES FROM TENSOR2 AND ADAPTED FOR HIGHER DIMENSIONS
- * TO VIEW THE FULL DOCUMENTATION FOR EACH METHOD LOOK AT TENSOR 2
+* This class only includes simple test cases. To view full documentation, see Tensor4.h
  */
 
 #ifndef TENSOR3_H
