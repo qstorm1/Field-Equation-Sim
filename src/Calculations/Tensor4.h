@@ -180,8 +180,9 @@ public:
 
     //takes covariant derivative of tensor respect to a variable (covariant tensors only)
     [[nodiscard]]Tensor4 covariantDerivative(const Tensor4 &metric, const variable &C1, const variable &C2, const variable &C3, const variable &C4, const int V) const{
+        if (V < 0 || V >=4) throw std::invalid_argument("Variable Index DNE");
         Tensor4 T = *this;
-        const variable* vars[4](&C1, &C2, &C3, &C4);
+        const variable* vars[4]{&C1, &C2, &C3, &C4};
         //take normal derivatives and symbols
         const auto D = T.derivative(*vars[V]);
         const auto symbols = getChristoffelSymbols(metric, C1, C2, C3, C4);
@@ -189,8 +190,8 @@ public:
             for (int b = 0; b < 4; b++) {   //index 2
                 expression term = SymEngine::zero;
                 for (int l = 0; l < 4; l++) {   //dummy lambda
-                    term = SymEngine::sub(term, SymEngine::mul(symbols[l]->entries[V][a], this->entries[l][b]));
-                    term = SymEngine::sub(term, SymEngine::mul(symbols[l]->entries[V][b], this->entries[a][l]));
+                    term = SymEngine::add(term, SymEngine::mul(symbols[l]->entries[V][a], this->entries[l][b]));
+                    term = SymEngine::add(term, SymEngine::mul(symbols[l]->entries[V][b], this->entries[a][l]));
                 }
                 T.entries[a][b] = SymEngine::sub(D[a][b], term);
             }

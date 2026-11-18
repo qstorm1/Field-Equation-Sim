@@ -129,23 +129,27 @@ int main() {
 
         //testing EMT for flat spacetime for particles at rest and moving ones.
         object3d m{&world, 0, 0, 0, 1};
-        Tensor4 KroneckerEta{"Kronecker Eta", "Minkowski-Landau-Lifschitz", 2, 0};
-        KroneckerEta.entries[0][0] = SymEngine::one;
-        KroneckerEta.entries[1][1] = SymEngine::integer(-1);
-        KroneckerEta.entries[2][2] = SymEngine::integer(-1);
-        KroneckerEta.entries[3][3] = SymEngine::integer(-1);
 
-        variable t = SymEngine::symbol("t");
-        variable x = SymEngine::symbol("x");
-        variable y = SymEngine::symbol("y");
-        variable z = SymEngine::symbol("z");
+        variable ct = SymEngine::symbol("ct");
+        variable r = SymEngine::symbol("r");
+        variable theta = SymEngine::symbol("t");
+        variable phi = SymEngine::symbol("p");
 
-        Tensor4 Ricci = Tensor4::getRicciTensor(KroneckerEta, t, x, y, z);
-        Ricci.printTensor();
-        expression Scalar = Tensor4::getRicciScalar(KroneckerEta, t, x, y, z);
-        std::cout << *Scalar << '\n';
+        Tensor4 KroneckerEta{"Test", "Test", 2, 0};
+        KroneckerEta.entries[0][0] = SymEngine::integer(1);
+        KroneckerEta.entries[1][1] = SymEngine::pow(ct, SymEngine::integer(2));
+        KroneckerEta.entries[2][2] = SymEngine::mul(SymEngine::pow(r, SymEngine::integer(2)), SymEngine::integer(-1));
+        KroneckerEta.entries[3][3] = SymEngine::mul(SymEngine::pow(r, SymEngine::integer(2)), SymEngine::mul(SymEngine::integer(-1), SymEngine::pow(SymEngine::sin(theta),2)));
 
-        std::cout << (KroneckerEta == KroneckerEta) << '\n';
+        auto diff = KroneckerEta.covariantDerivative(KroneckerEta, ct, r, theta, phi, 2);
+        diff.printTensor();
+
+        Tensor4 Ricci = Tensor4::getRicciTensor(KroneckerEta, ct, r, theta, phi);
+        //Ricci.printTensor();
+        expression Scalar = Tensor4::getRicciScalar(KroneckerEta, ct, r, theta, phi);
+        //std::cout << *Scalar << '\n';
+
+        //std::cout << (KroneckerEta == KroneckerEta) << '\n';
 
     }catch (const std::out_of_range &e) {
         logError(e);
