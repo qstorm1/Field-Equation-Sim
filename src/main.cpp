@@ -134,21 +134,18 @@ int main() {
         KroneckerEta.entries[1][1] = SymEngine::integer(-1);
         KroneckerEta.entries[2][2] = SymEngine::integer(-1);
         KroneckerEta.entries[3][3] = SymEngine::integer(-1);
-        Tensor4 EMT = Tensor4::getEnergyMomentumTensor(KroneckerEta);
-        EMT.printTensor();
 
-        m.setVx(world, 240000001);
-        EMT = Tensor4::getEnergyMomentumTensor(KroneckerEta);
-        EMT.printTensor();
+        variable t = SymEngine::symbol("t");
+        variable x = SymEngine::symbol("x");
+        variable y = SymEngine::symbol("y");
+        variable z = SymEngine::symbol("z");
 
-        //just for fun
-        m.setVy(world, 20000001);
-        m.setVz(world, 20000001);
+        Tensor4 Ricci = Tensor4::getRicciTensor(KroneckerEta, t, x, y, z);
+        Ricci.printTensor();
+        expression Scalar = Tensor4::getRicciScalar(KroneckerEta, t, x, y, z);
+        std::cout << *Scalar << '\n';
 
-        object3d n{&world, 20, 20, 20, 5, 5, "", 9, 18, 22};
-
-        EMT = Tensor4::getEnergyMomentumTensor(KroneckerEta);
-        EMT.printTensor();
+        std::cout << (KroneckerEta == KroneckerEta) << '\n';
 
     }catch (const std::out_of_range &e) {
         logError(e);

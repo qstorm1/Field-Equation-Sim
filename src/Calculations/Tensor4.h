@@ -326,6 +326,7 @@ public:
                 Ricci.entries[i][j] = sum;
             }
         }
+        for (Tensor4* symbol : symbols) symbol->~Tensor4();
         return Ricci;
     }
 
@@ -342,6 +343,8 @@ public:
                 sum = SymEngine::add(sum, term);
             }
         }
+        //Ricci.~Tensor4();
+        //inv.~Tensor4();
         return sum;
     }
 
@@ -373,37 +376,41 @@ public:
     }
 
     //addition and subtraction of tensors (index per index)
-    void operator+(const Tensor4 &other) {
+    Tensor4& operator+(const Tensor4 &other) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 this->entries[i][j] = SymEngine::add(this->entries[i][j], other.entries[i][j]) ;
             }
         }
+        return *this;
     }
 
-    void operator-(const Tensor4 &other) {
+    Tensor4& operator-(const Tensor4 &other) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 this->entries[i][j] = SymEngine::sub(this->entries[i][j], other.entries[i][j]) ;
             }
         }
+        return *this;
     }
 
     //multiplication and division by a scalar
-    void operator*(const double n) {
+    Tensor4& operator*(const double n) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 this->entries[i][j] = SymEngine::mul(this->entries[i][j], SymEngine::real_double(n)) ;
             }
         }
+        return *this;
     }
 
-    void operator/(const double n) {
+    Tensor4& operator/(const double n) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 this->entries[i][j] = SymEngine::div(this->entries[i][j], SymEngine::real_double(n)) ;
             }
         }
+        return *this;
     }
 
     ~Tensor4() = default;
