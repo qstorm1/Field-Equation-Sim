@@ -27,6 +27,8 @@
 
 constexpr int c = 299792458;
 constexpr double G = 6.6743e-11;
+constexpr double pi = 3.14159265;
+constexpr double lambda = 2.07665e-43;
 
 
 //this should be in a .cpp file

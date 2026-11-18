@@ -17,4 +17,5 @@ Develop algorithm for getting metric tensor from Stress-Energy Tensor
 DUE NOV 28TH
 
 Make a bibliography for math/physics research
+Create Test Cases for Einstein Tensor
 DUE SOON

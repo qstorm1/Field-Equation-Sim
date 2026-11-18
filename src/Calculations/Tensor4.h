@@ -349,6 +349,36 @@ public:
         return sum;
     }
 
+
+    //Calculates Einstein Tensor from metric
+    static Tensor4 getEinsteinTensor(const Tensor4& metric, const Tensor4& Ricci, const expression& Scalar) {
+        Tensor4 E = Ricci - metric * SymEngine::div(Scalar, SymEngine::integer(2)); //definition of Einstein Tensor
+        return E;
+    }
+
+    //calculates Einstein Tensor from EMT
+    //DA: false = no dark energy, true = dark energy
+    static Tensor4 getEinsteinTensor(const Tensor4& metric, const Tensor4& EMT, bool DA = false) {
+        Tensor4 EMTCoV{metric.name, metric.coordinateSystem, metric.CoV, metric.CtrV};
+        for (int m = 0; m < 4; m++) {   //outer index of tensor
+            for (int n = 0; n < 4; n++) {   //inter index of tensor
+                expression sum = SymEngine::zero;
+                for (int a = 0; a < 4; a++) {   //contraction dummy index 1
+                    for (int b = 0; b < 4; b++) {   //contraction dummy index 2
+                        expression term = SymEngine::mul(metric.entries[m][a], SymEngine::mul(metric.entries[m][b], EMT.entries[a][b]));
+                        sum = SymEngine::add(sum, term);
+                    }
+                }
+                EMTCoV.entries[m][n] = sum;
+            }
+        }
+        //Einstein Gravitational Constant
+        EMTCoV = EMTCoV * ((8 * pi * G) / (pow(c, 4)));
+        //adds dark energy (if included)
+        if (DA) EMTCoV = EMTCoV - metric * lambda;
+        return EMTCoV;
+    }
+
     //print tensor in Row-Major order
     void printTensor() const{
         std::stringstream ss;
@@ -377,41 +407,66 @@ public:
     }
 
     //addition and subtraction of tensors (index per index)
-    Tensor4& operator+(const Tensor4 &other) {
+    Tensor4& operator+(const Tensor4 &other) const{
+        Tensor4 result(this->name, this->coordinateSystem, this->CoV, this->CtrV);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                this->entries[i][j] = SymEngine::add(this->entries[i][j], other.entries[i][j]) ;
+                result.entries[i][j] = SymEngine::add(this->entries[i][j], other.entries[i][j]) ;
             }
         }
-        return *this;
+        return result;
     }
 
-    Tensor4& operator-(const Tensor4 &other) {
+    Tensor4& operator-(const Tensor4 &other) const{
+        Tensor4 result(this->name, this->coordinateSystem, this->CoV, this->CtrV);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                this->entries[i][j] = SymEngine::sub(this->entries[i][j], other.entries[i][j]) ;
+                result.entries[i][j] = SymEngine::sub(this->entries[i][j], other.entries[i][j]) ;
             }
         }
-        return *this;
+        return result;
     }
 
     //multiplication and division by a scalar
-    Tensor4& operator*(const double n) {
+    Tensor4& operator*(const double n) const{
+        Tensor4 result(this->name, this->coordinateSystem, this->CoV, this->CtrV);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                this->entries[i][j] = SymEngine::mul(this->entries[i][j], SymEngine::real_double(n)) ;
+                result.entries[i][j] = SymEngine::mul(this->entries[i][j], SymEngine::real_double(n)) ;
             }
         }
-        return *this;
+        return result;
     }
 
-    Tensor4& operator/(const double n) {
+    Tensor4& operator/(const double n) const{
+        Tensor4 result(this->name, this->coordinateSystem, this->CoV, this->CtrV);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                this->entries[i][j] = SymEngine::div(this->entries[i][j], SymEngine::real_double(n)) ;
+                result.entries[i][j] = SymEngine::div(this->entries[i][j], SymEngine::real_double(n)) ;
             }
         }
-        return *this;
+        return result;
+    }
+
+    //multiplication and division by a scalar
+    Tensor4& operator*(const expression& n) const{
+        Tensor4 result(this->name, this->coordinateSystem, this->CoV, this->CtrV);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result.entries[i][j] = SymEngine::mul(this->entries[i][j], n) ;
+            }
+        }
+        return result;
+    }
+
+    Tensor4& operator/(const expression& n) const{
+        Tensor4 result(this->name, this->coordinateSystem, this->CoV, this->CtrV);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result.entries[i][j] = SymEngine::div(this->entries[i][j], n) ;
+            }
+        }
+        return result;
     }
 
     ~Tensor4() = default;
